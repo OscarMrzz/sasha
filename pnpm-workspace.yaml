@@ -1,0 +1,8 @@
+allowBuilds:
+  '@heroui/shared-utils': false
+  '@tailwindcss/oxide': true
+  core-js: false
+  msw: false
+  sharp: true
+  supabase: false
+  unrs-resolver: false

@@ -1,0 +1,20 @@
+{
+  "edicion": {
+    "permiso_denegado": "Tu rol no tiene permiso para editar bandas. Si necesitas hacer cambios, contacta al administrador de tu federación.",
+    "sin_internet": "No hay conexión a internet. Revisa tu red e inténtalo de nuevo.",
+    "sin_conexion_servidor": "No se pudo conectar con el servidor. Intenta de nuevo en unos momentos.",
+    "sin_federacion_perfil": "No se encontró la federación de tu perfil. Recarga la página e inicia sesión de nuevo.",
+    "federacion_invalida": "No puedes editar bandas de otra federación.",
+    "banda_no_encontrada": "La banda no existe o ya no pertenece a tu federación.",
+    "desconocido": "No se pudieron guardar los cambios de la banda. Inténtalo de nuevo."
+  },
+  "logo": {
+    "permiso_denegado": "No tienes permiso para cambiar el logo de esta banda.",
+    "sin_internet": "No hay conexión a internet. No se pudo subir el logo.",
+    "sin_conexion_servidor": "No se pudo conectar con el servidor para guardar el logo.",
+    "archivo_invalido": "No se pudo actualizar el logo. Verifica que sea una imagen válida.",
+    "desconocido": "Ocurrió un error al actualizar el logo de la banda."
+  },
+  "creacion": {},
+  "eliminacion": {}
+}

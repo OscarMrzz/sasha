@@ -1,0 +1,1 @@
+-- DEPRECADO: en politicas.sql descomenta la sección 6) Opcional (permisos por email).

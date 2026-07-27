@@ -1,0 +1,1 @@
+export { useEventosAsistidosPorBanda } from "./useEventosAsistidosPorBanda";

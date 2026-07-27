@@ -1,0 +1,1 @@
+export { useBandaYCategoriaDesdePerfil } from "./useBandaYCategoriaDesdePerfil";

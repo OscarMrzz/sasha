@@ -1,0 +1,9 @@
+-- =============================================================================
+-- Orden de ejecución en SQL Editor (Supabase)
+-- =============================================================================
+-- 1) COPIAR_1_tabla.sql          (o 01_tabla_auditoria.sql)
+-- 2) COPIAR_2_funciones.sql      (o 02 + 07 + 06)
+-- 3) COPIAR_3_triggers.sql       (o 03 + 04 + 05)
+--
+-- App: controladoresServices.ts ya llama fn_cambiar_acceso_evento_categoria.
+-- =============================================================================

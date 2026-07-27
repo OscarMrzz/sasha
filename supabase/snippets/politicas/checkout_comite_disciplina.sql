@@ -1,0 +1,1 @@
+-- DEPRECADO: ejecuta solo supabase/snippets/politicas/politicas.sql (bloque CHECKOUT al final).

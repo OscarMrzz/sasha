@@ -1,0 +1,92 @@
+-- Vista: vista_resultados_temporada
+-- Requisitos en registroEventos para que aparezcan filas:
+--   • tipo_evento = 'regional' (misma región que la banda) O 'nacional'
+--   • fechaEvento del año actual (CURRENT_DATE)
+--   • evaluaciones en registroCumplimientoEvaluaciones
+-- Sanciones: registro_sanciones del mismo año (fecha o created_at).
+-- Si la vista está vacía, revisar diagnostico_vista_resultados_temporada.sql
+--
+-- IMPORTANTE: si la vista ya existe con la columna "total", CREATE OR REPLACE falla
+-- al renombrar columnas (42P16). Hay que DROP y volver a crear (como en 20260518032608).
+-- Ejecutar este archivo completo en el SQL Editor de Supabase.
+
+DROP VIEW IF EXISTS public.vista_resultados_temporada;
+
+CREATE VIEW public.vista_resultados_temporada
+WITH (security_invoker = on) AS
+WITH eventos_banda AS (
+    SELECT
+        bandas."idBanda",
+        bandas."nombreBanda",
+        categorias."idCategoria",
+        categorias."nombreCategoria",
+        SUM("registroCumplimientoEvaluaciones"."puntosObtenidos") AS total_evento
+    FROM public."registroCumplimientoEvaluaciones"
+    JOIN public."registroEventos"
+        ON "registroEventos"."idEvento" = "registroCumplimientoEvaluaciones"."idForaneaEvento"
+    JOIN public.bandas
+        ON bandas."idBanda" = "registroCumplimientoEvaluaciones"."idForaneaBanda"
+    JOIN public.regiones
+        ON regiones."idRegion" = "registroEventos"."idForaneaRegion"
+    JOIN public.categorias
+        ON categorias."idCategoria" = bandas."idForaneaCategoria"
+    WHERE (
+            ("registroEventos".tipo_evento = 'regional'
+             AND "registroEventos"."idForaneaRegion" = bandas."idForaneaRegion")
+            OR "registroEventos".tipo_evento = 'nacional'
+        )
+        AND EXTRACT(YEAR FROM "registroEventos"."fechaEvento") = EXTRACT(YEAR FROM CURRENT_DATE)
+    GROUP BY
+        "registroEventos"."idEvento",
+        "registroEventos"."LugarEvento",
+        regiones."idRegion",
+        regiones."nombreRegion",
+        "registroEventos".tipo_evento,
+        "registroEventos"."fechaEvento",
+        bandas."idBanda",
+        bandas."nombreBanda",
+        categorias."idCategoria",
+        categorias."nombreCategoria"
+),
+puntos_banda AS (
+    SELECT
+        "idBanda",
+        "nombreBanda",
+        "idCategoria",
+        "nombreCategoria",
+        SUM(total_evento) AS total_antes_sanciones,
+        AVG(total_evento) AS promedio
+    FROM eventos_banda
+    GROUP BY "idBanda", "nombreBanda", "idCategoria", "nombreCategoria"
+),
+sanciones_banda AS (
+    SELECT
+        rs.id_foranea_banda AS "idBanda",
+        COALESCE(SUM(s.puntos_sancion), 0) AS sanciones
+    FROM public.registro_sanciones rs
+    JOIN public.sanciones s ON s.id_sancion = rs.id_foranea_sancion
+    WHERE EXTRACT(YEAR FROM COALESCE(rs.fecha, rs.created_at::date))
+          = EXTRACT(YEAR FROM CURRENT_DATE)
+    GROUP BY rs.id_foranea_banda
+)
+SELECT
+    p."idBanda",
+    p."nombreBanda",
+    p."idCategoria",
+    p."nombreCategoria",
+    DENSE_RANK() OVER (
+        PARTITION BY p."idCategoria"
+        ORDER BY (p.total_antes_sanciones - COALESCE(s.sanciones, 0)) DESC
+    ) AS rankin,
+    p.promedio,
+    p.total_antes_sanciones,
+    COALESCE(s.sanciones, 0) AS sanciones,
+    (p.total_antes_sanciones - COALESCE(s.sanciones, 0)) AS total_despues_sanciones
+FROM puntos_banda p
+LEFT JOIN sanciones_banda s ON s."idBanda" = p."idBanda";
+
+ALTER VIEW public.vista_resultados_temporada OWNER TO postgres;
+
+GRANT ALL ON TABLE public.vista_resultados_temporada TO anon;
+GRANT ALL ON TABLE public.vista_resultados_temporada TO authenticated;
+GRANT ALL ON TABLE public.vista_resultados_temporada TO service_role;

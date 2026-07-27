@@ -1,0 +1,8 @@
+-- Ver migración oficial: ../../migrations/20260501120000_drop_vistas_circulares_daniadas.sql
+--
+-- Si necesitas ejecutar a mano (SQL Editor), usa siempre CASCADE:
+--   DROP VIEW IF EXISTS public.vista_daniada1 CASCADE;
+--   DROP VIEW IF EXISTS public.vista_daniada2 CASCADE;
+--
+-- Sin CASCADE verás errores tipo "cannot drop view … because other objects depend on it",
+-- porque las dos vistas se referencian mutuamente.

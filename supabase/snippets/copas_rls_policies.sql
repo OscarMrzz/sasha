@@ -1,0 +1,3 @@
+-- Las políticas RLS de copas viven en supabase/seed.sql (bloque "Políticas RLS: copas").
+-- Ejecuta `supabase db reset` o vuelve a correr el seed en tu entorno.
+-- Este archivo se mantiene solo como referencia; no dupliques políticas aquí.
