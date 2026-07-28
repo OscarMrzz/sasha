@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "changelog-generator": {
+      "source": "composiohq/awesome-claude-skills",
+      "sourceType": "github",
+      "skillPath": "changelog-generator/SKILL.md",
+      "computedHash": "f84bcb773a67ade28878d63103e3d4dc1f5031d6103be5107ff99c15b8d4a992"
+    },
     "playwright": {
       "source": "openai/skills",
       "sourceType": "github",
