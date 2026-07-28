@@ -8,6 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "db:diff": "supabase db diff --local --schema public",
     "db:diff:latest": "npx --yes supabase@latest db diff --local --schema public",
     "db:diff:pgschema": "supabase db diff --local --schema public --use-pg-schema"
@@ -50,13 +53,17 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitejs/plugin-react": "^6.0.4",
+    "@vitest/coverage-v8": "^4.1.10",
     "eslint": "^9",
     "eslint-config-next": "^16.1.6",
+    "jsdom": "^30.0.0",
     "png-to-ico": "^3.0.1",
     "sharp": "^0.34.5",
     "supabase": "^2.98.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.10"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
