@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { safeLocalStorageGetJSON, safeLocalStorageSetJSON, isClient } from '@/lib/utils/clientUtils';
-import { perfilInterface, RegistroEventoInterface, categoriaInterface } from '@/interfaces/interfaces';
+import { safeLocalStorageGetJSON, safeLocalStorageSetJSON, isClient } from '@/helpers/utils/clientUtils';
+import { perfilInterface, RegistroEventoInterface, categoriaInterface } from '@/models';
 
 /**
  * Custom hook for safely using localStorage with SSR support

@@ -1,6 +1,6 @@
-import { categoriaInterface } from "@/interfaces/interfaces";
-import CategoriasServices from "@/lib/services/categoriaServices";
-import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
+import { categoriaInterface } from "@/models";
+import CategoriasServices from "@/services/categoriaServices";
+import { useCategoriasStore } from "@/store/CategoriasStore/listCategoriaStore";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useListaCategoriaFiltro() {

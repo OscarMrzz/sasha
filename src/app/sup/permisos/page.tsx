@@ -1,7 +1,7 @@
 "use client";
-import Switches from "@/component/UI/toggle switches/Switches";
-import { rolInterface } from "@/interfaces/interfaces";
-import RolesServices from "@/lib/services/rolServices";
+import Switches from "@/components/UI/toggle switches/Switches";
+import { rolInterface } from "@/models";
+import RolesServices from "@/services/rolServices";
 import { div } from "framer-motion/client";
 import React, { useEffect, useRef, useState } from "react";
 

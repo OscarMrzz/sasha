@@ -1,7 +1,7 @@
 
 
-import { categoriaInterface } from '@/interfaces/interfaces';
-import { useCategoriasStore } from '@/Store/CategoriasStore/listCategoriaStore';
+import { categoriaInterface } from '@/models';
+import { useCategoriasStore } from '@/store/CategoriasStore/listCategoriaStore';
 import  { useEffect, useState } from 'react'
 
 

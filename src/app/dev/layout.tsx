@@ -1,6 +1,6 @@
 "use client";
 
-import BuscadorGeneralComponent from "@/component/buscador/BuscadorGeneralComponent";
+import BuscadorGeneralComponent from "@/components/buscador/BuscadorGeneralComponent";
 import { AtajosProvider } from "@/providers/AtajosProvider";
 import { ReactNode } from "react";
 

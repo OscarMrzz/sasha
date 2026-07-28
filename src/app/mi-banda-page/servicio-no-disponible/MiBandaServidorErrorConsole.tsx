@@ -3,7 +3,7 @@
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-/** Debe coincidir con `PARAM_DEBUG_ERROR` en `@/lib/mi-banda/servidorMiBandaHealth`. */
+/** Debe coincidir con `PARAM_DEBUG_ERROR` en `@/helpers/mi-banda/servidorMiBandaHealth`. */
 const QUERY_DEBUG_ERROR = "d";
 
 export function MiBandaServidorErrorConsole() {

@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { cerrarSesionYLimpiar, limpiarSesionLocal } from "@/lib/utils/sesion";
+import { cerrarSesionYLimpiar, limpiarSesionLocal } from "@/helpers/utils/sesion";
 
 interface ErrorPageShellProps {
     icon: ReactNode;

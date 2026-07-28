@@ -1,32 +1,32 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
 import React from "react";
-import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
+import OverleyModalFormulario from "@/components/modales/OverleyModalFormulario/Page";
 import { PlusIcon } from "@heroicons/react/16/solid";
-import { perfilDatosAmpleosInterface, rolInterface } from "@/interfaces/interfaces";
+import { perfilDatosAmpleosInterface, rolInterface } from "@/models";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import {} from "@/feacture/overleys/overleySlice";
-import OverleyModal from "@/component/modales/OverleyModal/Page";
+import {} from "@/features/overleys/overleySlice";
+import OverleyModal from "@/components/modales/OverleyModal/Page";
 import {
   activarOverleyFormularioAgregarPerfiles,
   activarOverleyInformacionPerfiles,
   desactivarOverleyFormularioAgregarPerfiles,
   desactivarOverleyFormularioEditarPerfiles,
   desactivarOverleyInformacionPerfiles,
-} from "@/feacture/Perfil/overleyPerfil";
-import { desactivarRefrescarDataPerfiles } from "@/feacture/Perfil/refrescadorPerfiles";
-import PerfilesServices from "@/lib/services/perfilesServices";
-import InformacionUsuarioComponent from "@/component/informacion/informacionUsuarioComponent/InformacionUsuarioComponent";
-import FormularioAgregarUsuario from "@/component/formularios/Perfil/Agregar/FormularioAgregarUsuario";
-import FormularioEditarUsuario from "@/component/formularios/Perfil/editar/FormularioEditarUsuario";
-import TablaRegistroPerfilesComponent from "@/component/Tablas/TablaUsuariosComponent/TablaUsuariosComponent";
+} from "@/features/Perfil/overleyPerfil";
+import { desactivarRefrescarDataPerfiles } from "@/features/Perfil/refrescadorPerfiles";
+import PerfilesServices from "@/services/perfilesServices";
+import InformacionUsuarioComponent from "@/components/informacion/informacionUsuarioComponent/InformacionUsuarioComponent";
+import FormularioAgregarUsuario from "@/components/formularios/Perfil/Agregar/FormularioAgregarUsuario";
+import FormularioEditarUsuario from "@/components/formularios/Perfil/editar/FormularioEditarUsuario";
+import TablaRegistroPerfilesComponent from "@/components/Tablas/TablaUsuariosComponent/TablaUsuariosComponent";
 import { div } from "framer-motion/client";
-import { setPerfilSeleccionado } from "@/feacture/Perfil/PerfilSlice";
+import { setPerfilSeleccionado } from "@/features/Perfil/PerfilSlice";
 import { EllipsisVerticalIcon } from "@heroicons/react/16/solid";
-import RolesServices from "@/lib/services/rolServices";
+import RolesServices from "@/services/rolServices";
 
 export default function PerfilesHomePage() {
   const dispatch = useDispatch();

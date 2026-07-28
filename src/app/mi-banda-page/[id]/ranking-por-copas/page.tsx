@@ -1,11 +1,11 @@
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from "@/lib/mi-banda/servidorMiBandaHealth";
-import { getVistaCopasGlobal } from "@/lib/services/servidor/copasServices";
-import { getAllBandasIds } from "@/lib/services/servidor/resultadosServices";
-import { getSupabaseAdmin } from "@/lib/services/servidor/supabaseAdmin";
-import type { vistaCopasGlobalInterface } from "@/interfaces/interfaces";
+} from "@/helpers/mi-banda/servidorMiBandaHealth";
+import { getVistaCopasGlobal } from "@/services/servidor/copasServices";
+import { getAllBandasIds } from "@/services/servidor/resultadosServices";
+import { getSupabaseAdmin } from "@/services/servidor/supabaseAdmin";
+import type { vistaCopasGlobalInterface } from "@/models";
 import { cn } from "@/lib/utils";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";

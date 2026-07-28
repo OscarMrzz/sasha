@@ -1,7 +1,7 @@
 "use client";
 
-import type { categoriaInterface } from "@/interfaces/interfaces";
-import CriteriosServices from "@/lib/services/criteriosServices";
+import type { categoriaInterface } from "@/models";
+import CriteriosServices from "@/services/criteriosServices";
 import { useQuery } from "@tanstack/react-query";
 
 /** Criterios de evaluación asociados a una categoría. */

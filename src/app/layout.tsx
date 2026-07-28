@@ -7,29 +7,29 @@ import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import Providers from "@/app/Provider";
 
-import NavBard from "@/component/NavBard/Page";
-import Sidebar from "@/component/sidebar/Sidebar";
-import { rolTieneNavegacion } from "@/lib/navegacion/navigationConfig";
-import RegionService from "@/lib/services/regionesServices";
-import { useRegionesStore } from "@/Store/listRegionesStore";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
-import CategoriasServices from "@/lib/services/categoriaServices";
-import RubricasServices from "@/lib/services/rubricasServices";
-import BandasServices from "@/lib/services/bandasServices";
-import { useCategoriasStore } from "@/Store/CategoriasStore/listCategoriaStore";
-import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
-import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
-import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
-import RegistroEquipoEvaluadorServices from "@/lib/services/registroEquipoEvaluadorServices";
-import PerfilesServices from "@/lib/services/perfilesServices";
-import { validarAccesoPerfil } from "@/lib/usuarios/validarAccesoPerfil";
+import NavBard from "@/components/NavBard/Page";
+import Sidebar from "@/components/sidebar/Sidebar";
+import { rolTieneNavegacion } from "@/config/navegacion/navigationConfig";
+import RegionService from "@/services/regionesServices";
+import { useRegionesStore } from "@/store/listRegionesStore";
+import RegistroEventossServices from "@/services/registroEventosServices";
+import { useEventosStore } from "@/store/EventosStore/listEventosStore";
+import CategoriasServices from "@/services/categoriaServices";
+import RubricasServices from "@/services/rubricasServices";
+import BandasServices from "@/services/bandasServices";
+import { useCategoriasStore } from "@/store/CategoriasStore/listCategoriaStore";
+import { useRubicasStore } from "@/store/RubricasStore/listRubicasStore";
+import { useBandasStore } from "@/store/BandasStore/listBandaStore";
+import { useInicioSesionStore } from "@/store/PerfilStore/InicioSesionStore";
+import RegistroEquipoEvaluadorServices from "@/services/registroEquipoEvaluadorServices";
+import PerfilesServices from "@/services/perfilesServices";
+import { validarAccesoPerfil } from "@/helpers/usuarios/validarAccesoPerfil";
 import { usePathname } from "next/navigation";
 import {
   perfilDatosAmpleosInterface,
   perfilInterface,
   registroEquipoEvaluadorDatosAmpleosInterface,
-} from "@/interfaces/interfaces";
+} from "@/models";
 
 /** Rutas públicas que NO requieren cookie de perfil ni revalidación. */
 const RUTAS_PUBLICAS = [

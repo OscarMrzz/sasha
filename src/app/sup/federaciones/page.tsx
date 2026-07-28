@@ -1,14 +1,14 @@
 "use client";
 
-import FederacionesService from "@/lib/services/federacionesServices";
+import FederacionesService from "@/services/federacionesServices";
 import { useEffect, useState } from "react";
-import { federacionInterface } from "@/interfaces/interfaces";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
+import { federacionInterface } from "@/models";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
 import React from "react";
 
-import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
+import OverleyModalFormulario from "@/components/modales/OverleyModalFormulario/Page";
 import { PlusIcon } from "@heroicons/react/16/solid";
-import FormularioAgregarFederacionComponent from "@/component/formularios/formulariosFederaciones/formularioAgregarFederacionComponent/Page";
+import FormularioAgregarFederacionComponent from "@/components/formularios/formulariosFederaciones/formularioAgregarFederacionComponent/Page";
 
 const FederacionesHomePage = () => {
   const [federaciones, setFederaciones] = useState<federacionInterface[]>([]);

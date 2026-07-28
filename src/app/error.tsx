@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { cerrarSesionYLimpiar } from "@/lib/utils/sesion";
+import { cerrarSesionYLimpiar } from "@/helpers/utils/sesion";
 
 interface ErrorBoundaryProps {
     error: Error & { digest?: string };

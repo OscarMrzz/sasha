@@ -1,4 +1,4 @@
-import {  RegistroEventoInterface } from '@/interfaces/interfaces';
+import {  RegistroEventoInterface } from '@/models';
 import { create } from 'zustand';
 
 interface storetInterface{

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { RegistroEventoInterface } from "@/interfaces/interfaces";
-import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
+import { RegistroEventoInterface } from "@/models";
+import { useEventosStore } from "@/store/EventosStore/listEventosStore";
 import { useEffect, useState } from "react";
 
 

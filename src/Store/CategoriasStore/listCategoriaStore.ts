@@ -1,4 +1,4 @@
-import {  categoriaInterface } from '@/interfaces/interfaces';
+import {  categoriaInterface } from '@/models';
 import { create } from 'zustand';
 
 interface storetInterface{

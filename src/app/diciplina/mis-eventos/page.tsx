@@ -2,14 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import CardRowEventos from "@/component/CardRow/CardRowEventos";
-import ModalVerEvento from "@/component/informacion/ifnromacionEventoComponent/ModalVerEvento";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import CardRowEventos from "@/components/CardRow/CardRowEventos";
+import ModalVerEvento from "@/components/informacion/ifnromacionEventoComponent/ModalVerEvento";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
 import { useEventosDisciplina } from "@/hooks/diciplina/useEventosDisciplina";
-import { fechaHoyISO, normalizarFechaEvento } from "@/component/diciplina/checkoutUtils";
-import type { regionesInterface, registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
-import RegionService from "@/lib/services/regionesServices";
+import { fechaHoyISO, normalizarFechaEvento } from "@/components/diciplina/checkoutUtils";
+import type { regionesInterface, registroEventoDatosAmpleosInterface } from "@/models";
+import RegionService from "@/services/regionesServices";
 
 const selectBaseClass =
   "h-11 w-full rounded-lg border border-slate-600 bg-slate-700/50 px-3 text-sm text-slate-100 transition-[border-color,box-shadow] focus:border-[var(--color-primario)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)]";

@@ -1,11 +1,11 @@
 "use client";
 
-import EvaluarBaseRubricaComponet from "@/component/EvaluarComponents/EvaluarBaseRubricaComponet";
-import ApprovateMessage from "@/component/Message/ApprovateMessage";
-import LoadingMessage1 from "@/component/Message/LoadingMessage1";
-import ErrorMessage from "@/component/Message/ErrorMessage";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import SalaEsperaEvento from "@/component/eventos/SalaEsperaEvento";
+import EvaluarBaseRubricaComponet from "@/components/EvaluarComponents/EvaluarBaseRubricaComponet";
+import ApprovateMessage from "@/components/Message/ApprovateMessage";
+import LoadingMessage1 from "@/components/Message/LoadingMessage1";
+import ErrorMessage from "@/components/Message/ErrorMessage";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import SalaEsperaEvento from "@/components/eventos/SalaEsperaEvento";
 import {
   bandaInterface,
   categoriaInterface,
@@ -13,21 +13,21 @@ import {
   RegistroEventoInterface,
   rubricaInterface,
   vistaBandasEventoInterface,
-} from "@/interfaces/interfaces";
-import { coincideBusqueda } from "@/lib/busqueda/normalizarTextoBusqueda";
-import { esEventoDelDia } from "@/lib/fechas/eventosDelDia";
-import { formatearFechaEvento } from "@/lib/fechas/formatearFechaEvento";
+} from "@/models";
+import { coincideBusqueda } from "@/helpers/busqueda/normalizarTextoBusqueda";
+import { esEventoDelDia } from "@/helpers/fechas/eventosDelDia";
+import { formatearFechaEvento } from "@/helpers/fechas/formatearFechaEvento";
 import {
   deleteEvaluarDraftCookie,
   deleteEvaluarSession,
   readEvaluarSession,
   setEvaluarSession,
 } from "@/lib/evaluarPersistence";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import RegistroComentariosServices from "@/lib/services/RegistroComentariosServices";
-import RubricasServices from "@/lib/services/rubricasServices";
-import { useBandasStore } from "@/Store/BandasStore/listBandaStore";
-import { useRubicasStore } from "@/Store/RubricasStore/listRubicasStore";
+import RegistroEventossServices from "@/services/registroEventosServices";
+import RegistroComentariosServices from "@/services/RegistroComentariosServices";
+import RubricasServices from "@/services/rubricasServices";
+import { useBandasStore } from "@/store/BandasStore/listBandaStore";
+import { useRubicasStore } from "@/store/RubricasStore/listRubicasStore";
 import { useEventosAsignadosActualizados } from "@/hooks/eventos/useEventosAsignadosActualizados";
 import { useListaCategoriaFiltro } from "@/hooks/useListaCategoriasFiltro";
 import {

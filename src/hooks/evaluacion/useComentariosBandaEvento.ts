@@ -3,8 +3,8 @@
 import type {
   bandaInterface,
   RegistroEventoInterface,
-} from "@/interfaces/interfaces";
-import RegistroComentariosServices from "@/lib/services/RegistroComentariosServices";
+} from "@/models";
+import RegistroComentariosServices from "@/services/RegistroComentariosServices";
 import { useQuery } from "@tanstack/react-query";
 
 /** Comentarios de evaluación ligados a una banda y un evento concretos. */

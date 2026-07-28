@@ -1,11 +1,11 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
 import React from "react";
-import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
+import OverleyModalFormulario from "@/components/modales/OverleyModalFormulario/Page";
 import { PlusIcon } from "@heroicons/react/16/solid";
-import { regionesInterface, registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { regionesInterface, registroEventoDatosAmpleosInterface } from "@/models";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
@@ -14,25 +14,25 @@ import {
   activarOverleyFormularioEditarEventos,
   desactivarOverleyFormularioAgregarEventos,
   desactivarOverleyFormularioEditarEventos,
-} from "@/feacture/Eventos/overleysEventosSlice";
+} from "@/features/Eventos/overleysEventosSlice";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import RegistroEquipoEvaluadorServices from "@/lib/services/registroEquipoEvaluadorServices";
-import ConfirmDeleteModal from "@/component/modales/ConfirmDeleteModal/ConfirmDeleteModal";
+import RegistroEventossServices from "@/services/registroEventosServices";
+import RegistroEquipoEvaluadorServices from "@/services/registroEquipoEvaluadorServices";
+import ConfirmDeleteModal from "@/components/modales/ConfirmDeleteModal/ConfirmDeleteModal";
 
-import FormularioEditarEventoComponet from "@/component/formularios/FormularioEventos/Editar";
-import FormularioAgregarEventoComponet from "@/component/formularios/FormularioEventos/Agregar";
-import RegionService from "@/lib/services/regionesServices";
-import ModalVerEvento from "@/component/informacion/ifnromacionEventoComponent/ModalVerEvento";
-import ModalJurados from "@/component/informacion/ifnromacionEventoComponent/ModalJurados";
-import ModalFiscal from "@/component/informacion/ifnromacionEventoComponent/ModalFiscal";
-import ModalDisciplina from "@/component/informacion/ifnromacionEventoComponent/ModalDisciplina";
-import ModalMesa from "@/component/informacion/ifnromacionEventoComponent/ModalMesa";
+import FormularioEditarEventoComponet from "@/components/formularios/FormularioEventos/Editar";
+import FormularioAgregarEventoComponet from "@/components/formularios/FormularioEventos/Agregar";
+import RegionService from "@/services/regionesServices";
+import ModalVerEvento from "@/components/informacion/ifnromacionEventoComponent/ModalVerEvento";
+import ModalJurados from "@/components/informacion/ifnromacionEventoComponent/ModalJurados";
+import ModalFiscal from "@/components/informacion/ifnromacionEventoComponent/ModalFiscal";
+import ModalDisciplina from "@/components/informacion/ifnromacionEventoComponent/ModalDisciplina";
+import ModalMesa from "@/components/informacion/ifnromacionEventoComponent/ModalMesa";
 
-import { setEventoSelecionado } from "@/feacture/Eventos/eventosSlice";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import CardRowEventos from "@/component/CardRow/CardRowEventos";
-import { revalidarBandasDeEvento } from "@/lib/actions/revalidarResultadosEvento";
+import { setEventoSelecionado } from "@/features/Eventos/eventosSlice";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import CardRowEventos from "@/components/CardRow/CardRowEventos";
+import { revalidarBandasDeEvento } from "@/actions/revalidarResultadosEvento";
 import useAtajoPagina from "@/hooks/useAtajoPagina";
 
 const selectBaseClass =

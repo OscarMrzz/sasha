@@ -5,10 +5,10 @@ import {
   perfilDatosAmpleosInterface,
   RegistroEventoInterface,
   registroEquipoEvaluadorDatosAmpleosInterface,
-} from "@/interfaces/interfaces";
-import { filtrarEventosDelDia } from "@/lib/fechas/eventosDelDia";
-import RegistroEquipoEvaluadorServices from "@/lib/services/registroEquipoEvaluadorServices";
-import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
+} from "@/models";
+import { filtrarEventosDelDia } from "@/helpers/fechas/eventosDelDia";
+import RegistroEquipoEvaluadorServices from "@/services/registroEquipoEvaluadorServices";
+import { useEventosStore } from "@/store/EventosStore/listEventosStore";
 
 type RefrescarEventosOptions = {
   detectarInicio?: boolean;

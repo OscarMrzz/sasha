@@ -1,19 +1,19 @@
 "use client";
 
-import SeccionAccesos from "@/component/dashboard/SeccionAccesos";
-import SeccionBandasConfirmadas from "@/component/dashboard/SeccionBandasConfirmadas";
-import SeccionEventosDelDia from "@/component/dashboard/SeccionEventosDelDia";
-import SeccionSolicitudesDashboard from "@/component/dashboard/SeccionSolicitudesDashboard";
-import InformacionEventoComponent from "@/component/informacion/ifnromacionEventoComponent/InformacionEventoComponet";
-import OverleyModal from "@/component/modales/OverleyModal/Page";
+import SeccionAccesos from "@/components/dashboard/SeccionAccesos";
+import SeccionBandasConfirmadas from "@/components/dashboard/SeccionBandasConfirmadas";
+import SeccionEventosDelDia from "@/components/dashboard/SeccionEventosDelDia";
+import SeccionSolicitudesDashboard from "@/components/dashboard/SeccionSolicitudesDashboard";
+import InformacionEventoComponent from "@/components/informacion/ifnromacionEventoComponent/InformacionEventoComponet";
+import OverleyModal from "@/components/modales/OverleyModal/Page";
 import { RootState } from "@/app/store";
 import {
   activarOverleyFormularioEditarEventos,
   desactivarOverleyInformacionEventos,
   activarOverleyInformacionEventos,
-} from "@/feacture/Eventos/overleysEventosSlice";
-import { setEventoSelecionado } from "@/feacture/Eventos/eventosSlice";
-import { registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
+} from "@/features/Eventos/overleysEventosSlice";
+import { setEventoSelecionado } from "@/features/Eventos/eventosSlice";
+import { registroEventoDatosAmpleosInterface } from "@/models";
 import { useDashboardData } from "@/hooks/dashboard/useDashboardData";
 import { useGestionEstadoEvento } from "@/hooks/eventos/useGestionEstadoEvento";
 import { useRouter } from "next/navigation";

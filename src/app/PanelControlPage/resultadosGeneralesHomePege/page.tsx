@@ -1,16 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
 import React from "react";
-import { RegistroEventoInterface, resultadosGeneralesInterface } from "@/interfaces/interfaces";
+import { RegistroEventoInterface, resultadosGeneralesInterface } from "@/models";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
-import TablaResultadosGeneralesComponent from "@/component/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
-import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
-import { desactivarOverleyInformacionResultados } from "@/feacture/resultadosGenerales/overlayResultados";
-import { useEventosStore } from "@/Store/EventosStore/listEventosStore";
+import RegistroCumplimientoServices from "@/services/RegistroCumplimientosServices";
+import TablaResultadosGeneralesComponent from "@/components/Tablas/tablaResultadosgenerales/tablaResultadosGenerales";
+import ModalInformacionResultados from "@/components/informacion/informacionResultados/ModalInformacionResultados";
+import { desactivarOverleyInformacionResultados } from "@/features/resultadosGenerales/overlayResultados";
+import { useEventosStore } from "@/store/EventosStore/listEventosStore";
 export default function ResultadosGeneralesHomePage() {
   const registroCumpliminetoServices = useRef(new RegistroCumplimientoServices());
 

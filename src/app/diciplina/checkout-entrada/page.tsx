@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEventosDisciplinaHoy } from "@/hooks/diciplina/useEventosDisciplinaHoy";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
-import WizardCheckoutEntrada from "@/component/diciplina/WizardCheckoutEntrada";
-import ErrorMessage from "@/component/Message/ErrorMessage";
-import ApprovateMessage from "@/component/Message/ApprovateMessage";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
+import WizardCheckoutEntrada from "@/components/diciplina/WizardCheckoutEntrada";
+import ErrorMessage from "@/components/Message/ErrorMessage";
+import ApprovateMessage from "@/components/Message/ApprovateMessage";
 
 export default function CheckoutEntradaPage() {
   const queryClient = useQueryClient();

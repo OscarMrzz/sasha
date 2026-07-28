@@ -1,5 +1,5 @@
-import { regionesInterface } from '@/interfaces/interfaces';
-import { useRegionesStore } from '@/Store/listRegionesStore';
+import { regionesInterface } from '@/models';
+import { useRegionesStore } from '@/store/listRegionesStore';
 import React, { useEffect } from 'react'
 
 export default function useListaRegionesFiltro() {

@@ -1,21 +1,21 @@
-import { EstadisticasDescriptivas } from "@/component/miBanda/EstadisticasDescriptivas";
-import EventosParticipados from "@/component/miBanda/EventosParticipados";
-import { HeroPosicion } from "@/component/miBanda/HeroPosicion";
-import NumeroPenalizaciones from "@/component/miBanda/NumeroPenalizaciones";
-import { Podios } from "@/component/miBanda/Podios";
-import RendimientoPorRubricagrup from "@/component/miBanda/RendimientoPorRubricagrup";
-import TotalTemporada from "@/component/miBanda/TotalTemporada";
+import { EstadisticasDescriptivas } from "@/components/miBanda/EstadisticasDescriptivas";
+import EventosParticipados from "@/components/miBanda/EventosParticipados";
+import { HeroPosicion } from "@/components/miBanda/HeroPosicion";
+import NumeroPenalizaciones from "@/components/miBanda/NumeroPenalizaciones";
+import { Podios } from "@/components/miBanda/Podios";
+import RendimientoPorRubricagrup from "@/components/miBanda/RendimientoPorRubricagrup";
+import TotalTemporada from "@/components/miBanda/TotalTemporada";
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from "@/lib/mi-banda/servidorMiBandaHealth";
-import { getVistaCopasGlobalByIdBanda } from "@/lib/services/servidor/copasServices";
+} from "@/helpers/mi-banda/servidorMiBandaHealth";
+import { getVistaCopasGlobalByIdBanda } from "@/services/servidor/copasServices";
 import {
   getAllBandasIds,
   getEstadisticasByIdBanda,
   getResultadosByIdBanda,
   getVistaRendimientoPorRubricaTemporadaActualByIdBanda,
-} from "@/lib/services/servidor/resultadosServices";
+} from "@/services/servidor/resultadosServices";
 import { cn } from "@/lib/utils";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";

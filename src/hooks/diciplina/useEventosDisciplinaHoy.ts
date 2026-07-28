@@ -2,10 +2,10 @@
 
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { cargarEventosDisciplinaAsignados } from "@/lib/eventos/cargarEventosDisciplinaAsignados";
+import { cargarEventosDisciplinaAsignados } from "@/helpers/eventos/cargarEventosDisciplinaAsignados";
 import { EVENTOS_DISCIPLINA_QUERY_KEY } from "@/hooks/diciplina/useEventosDisciplina";
-import PerfilesServices from "@/lib/services/perfilesServices";
-import { fechaHoyISO, normalizarFechaEvento } from "@/component/diciplina/checkoutUtils";
+import PerfilesServices from "@/services/perfilesServices";
+import { fechaHoyISO, normalizarFechaEvento } from "@/components/diciplina/checkoutUtils";
 
 export function useEventosDisciplinaHoy() {
   const hoy = fechaHoyISO();

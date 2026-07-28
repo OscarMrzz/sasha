@@ -4,7 +4,7 @@ import type {
   criterioEvaluacionInterface,
   rubricaInterface,
   vistaResultadosModel,
-} from "@/interfaces/interfaces";
+} from "@/models";
 import { useEffect, useMemo, useState } from "react";
 
 /**

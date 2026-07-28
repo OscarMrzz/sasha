@@ -1,4 +1,4 @@
-import {  rubricaInterface } from '@/interfaces/interfaces';
+import {  rubricaInterface } from '@/models';
 import { create } from 'zustand';
 
 interface storetInterface{

@@ -1,23 +1,23 @@
 import { configureStore } from "@reduxjs/toolkit";
 // Make sure the path and filename are correct; for example, if the folder is named 'overlays' and the file is 'overlaySlice.ts':
-import overleyReducer from "@/feacture/overleys/overleySlice";
-import rubricaReducer from "@/feacture/Rubrica/rubricaSlice";
-import refrescadorData from "@/feacture/RefrescadorData/refrescadorDataSlice";
-import criteriosReducer from "@/feacture/Criterios/CriteriosSlice";
-import cumplimientosReducer from "@/feacture/cumplimientos/cumplimientosSlice";
-import perfilActivo from "@/feacture/Perfil/PerfilSlice";
-import overleyPerfileSlice from "@/feacture/Perfil/overleyPerfil";
-import refrescadorDataPerfiles from "@/feacture/Perfil/refrescadorPerfiles";
-import refrescadorDataEventos from "@/feacture/Eventos/refrescadorDataEventos";
-import OverleyEventos from "@/feacture/Eventos/overleysEventosSlice"
-import EventosReducer from "@/feacture/Eventos/eventosSlice";
-import  PerfilSlice from "@/feacture/Perfil/PerfilSlice";
-import registrosEquipoEvaliadorSlice from "@/feacture/EquipoEvaluador/EquipoEvaluadorSlice";
-import refrescadorDataRegistroEquipoEvaluador from "@/feacture/EquipoEvaluador/RefrescadorEquipoRegistroEvaluador";
-import OverleyRegsitroEquipoEvaluador from "@/feacture/EquipoEvaluador/OverleyEquipoEvaluador"
-import evaluarCriterioSlice from "@/feacture/evaluar/evaluarSlice";
-import resultadosGeneralesReducer from "@/feacture/resultadosGenerales/ResultadosGeneralesSlice";
-import overletResultados from "@/feacture/resultadosGenerales/overlayResultados";
+import overleyReducer from "@/features/overleys/overleySlice";
+import rubricaReducer from "@/features/Rubrica/rubricaSlice";
+import refrescadorData from "@/features/RefrescadorData/refrescadorDataSlice";
+import criteriosReducer from "@/features/Criterios/CriteriosSlice";
+import cumplimientosReducer from "@/features/cumplimientos/cumplimientosSlice";
+import perfilActivo from "@/features/Perfil/PerfilSlice";
+import overleyPerfileSlice from "@/features/Perfil/overleyPerfil";
+import refrescadorDataPerfiles from "@/features/Perfil/refrescadorPerfiles";
+import refrescadorDataEventos from "@/features/Eventos/refrescadorDataEventos";
+import OverleyEventos from "@/features/Eventos/overleysEventosSlice"
+import EventosReducer from "@/features/Eventos/eventosSlice";
+import  PerfilSlice from "@/features/Perfil/PerfilSlice";
+import registrosEquipoEvaliadorSlice from "@/features/EquipoEvaluador/EquipoEvaluadorSlice";
+import refrescadorDataRegistroEquipoEvaluador from "@/features/EquipoEvaluador/RefrescadorEquipoRegistroEvaluador";
+import OverleyRegsitroEquipoEvaluador from "@/features/EquipoEvaluador/OverleyEquipoEvaluador"
+import evaluarCriterioSlice from "@/features/evaluar/evaluarSlice";
+import resultadosGeneralesReducer from "@/features/resultadosGenerales/ResultadosGeneralesSlice";
+import overletResultados from "@/features/resultadosGenerales/overlayResultados";
 
 
 

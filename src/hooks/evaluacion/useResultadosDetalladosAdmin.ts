@@ -1,7 +1,7 @@
 "use client";
 
-import type { bandaInterface, RegistroEventoInterface } from "@/interfaces/interfaces";
-import { ResultadosService } from "@/lib/services/resultadosServices";
+import type { bandaInterface, RegistroEventoInterface } from "@/models";
+import { ResultadosService } from "@/services/resultadosServices";
 import { useQuery } from "@tanstack/react-query";
 
 /**

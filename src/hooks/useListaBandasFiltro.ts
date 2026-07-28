@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { bandaInterface } from "@/interfaces/interfaces";
-import BandasServices from "@/lib/services/bandasServices";
+import { bandaInterface } from "@/models";
+import BandasServices from "@/services/bandasServices";
 
 import { useEffect, useState } from "react";
 

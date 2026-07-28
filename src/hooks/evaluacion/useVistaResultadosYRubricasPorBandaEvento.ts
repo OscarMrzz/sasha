@@ -4,9 +4,9 @@ import type {
   bandaInterface,
   categoriaInterface,
   RegistroEventoInterface,
-} from "@/interfaces/interfaces";
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
-import RubricasServices from "@/lib/services/rubricasServices";
+} from "@/models";
+import RegistroCumplimientoServices from "@/services/RegistroCumplimientosServices";
+import RubricasServices from "@/services/rubricasServices";
 import { useQuery } from "@tanstack/react-query";
 
 /**

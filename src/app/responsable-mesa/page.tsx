@@ -1,34 +1,34 @@
 "use client";
 
-import SeccionAccesos from "@/component/dashboard/SeccionAccesos";
-import SeccionBandasConfirmadas from "@/component/dashboard/SeccionBandasConfirmadas";
-import SeccionEventosDelDia from "@/component/dashboard/SeccionEventosDelDia";
-import SeccionSolicitudesDashboard from "@/component/dashboard/SeccionSolicitudesDashboard";
-import SeccionSolicitudesCopaDashboard from "@/component/dashboard/SeccionSolicitudesCopaDashboard";
-import InformacionEventoComponent from "@/component/informacion/ifnromacionEventoComponent/InformacionEventoComponet";
-import InformacionRegistroEquipoEvaluadorComponent from "@/component/informacion/informacionRegistroEquipoEvaluador/InformacionRegistroEquipoEvaluador";
-import FormularioEquipoEvaluadorAgregar from "@/component/formularios/FormularioEquipoEvaluador/FormularioEquipoEvaluadorAgregar";
-import FormularioEquipoEvaluadorEditar from "@/component/formularios/FormularioEquipoEvaluador/FormularioEquipoEvaluadorEditar";
-import OverleyModal from "@/component/modales/OverleyModal/Page";
-import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
+import SeccionAccesos from "@/components/dashboard/SeccionAccesos";
+import SeccionBandasConfirmadas from "@/components/dashboard/SeccionBandasConfirmadas";
+import SeccionEventosDelDia from "@/components/dashboard/SeccionEventosDelDia";
+import SeccionSolicitudesDashboard from "@/components/dashboard/SeccionSolicitudesDashboard";
+import SeccionSolicitudesCopaDashboard from "@/components/dashboard/SeccionSolicitudesCopaDashboard";
+import InformacionEventoComponent from "@/components/informacion/ifnromacionEventoComponent/InformacionEventoComponet";
+import InformacionRegistroEquipoEvaluadorComponent from "@/components/informacion/informacionRegistroEquipoEvaluador/InformacionRegistroEquipoEvaluador";
+import FormularioEquipoEvaluadorAgregar from "@/components/formularios/FormularioEquipoEvaluador/FormularioEquipoEvaluadorAgregar";
+import FormularioEquipoEvaluadorEditar from "@/components/formularios/FormularioEquipoEvaluador/FormularioEquipoEvaluadorEditar";
+import OverleyModal from "@/components/modales/OverleyModal/Page";
+import OverleyModalFormulario from "@/components/modales/OverleyModalFormulario/Page";
 import { RootState } from "@/app/store";
 import {
   activarOverleyFormularioEditarEventos,
   desactivarOverleyInformacionEventos,
   activarOverleyInformacionEventos,
-} from "@/feacture/Eventos/overleysEventosSlice";
+} from "@/features/Eventos/overleysEventosSlice";
 import {
   desactivarOverleyFormularioAgregarRegistroEquipoEvaluador,
   desactivarOverleyFormularioEditarRegistroEquipoEvaluador,
   desactivarOverleyInformacionRegistroEquipoEvaluador,
-} from "@/feacture/EquipoEvaluador/OverleyEquipoEvaluador";
-import { setEventoSelecionado } from "@/feacture/Eventos/eventosSlice";
+} from "@/features/EquipoEvaluador/OverleyEquipoEvaluador";
+import { setEventoSelecionado } from "@/features/Eventos/eventosSlice";
 import {
   RESPONSABLE_MESA_DASHBOARD_EVENTOS_QUERY_KEY,
   useResponsableMesaDashboardData,
 } from "@/hooks/dashboard/useResponsableMesaDashboardData";
 import { useGestionEstadoEvento } from "@/hooks/eventos/useGestionEstadoEvento";
-import { registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { registroEventoDatosAmpleosInterface } from "@/models";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";

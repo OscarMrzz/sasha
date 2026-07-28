@@ -1,18 +1,18 @@
 "use client";
 
-import FormularioCambiarPassword from "@/component/formularios/Perfil/CambierContraseña/CambiarPassword";
-import CambiarFotoPerfil from "@/component/formularios/Perfil/CambiarFotoPerfil/CambiarFotoPerfil";
-import FormularioEditarMiPerfil from "@/component/formularios/Perfil/EditarMiPerfil/EditarMiPerfil";
-import ApprovateMessage from "@/component/Message/ApprovateMessage";
-import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
+import FormularioCambiarPassword from "@/components/formularios/Perfil/CambierContraseña/CambiarPassword";
+import CambiarFotoPerfil from "@/components/formularios/Perfil/CambiarFotoPerfil/CambiarFotoPerfil";
+import FormularioEditarMiPerfil from "@/components/formularios/Perfil/EditarMiPerfil/EditarMiPerfil";
+import ApprovateMessage from "@/components/Message/ApprovateMessage";
+import OverleyModalFormulario from "@/components/modales/OverleyModalFormulario/Page";
 import {
   activarOverleyFormularioCambiarPassword,
   activarOverleyFormularioEditarPerfiles,
   desactivarOverleyFormularioCambiarPassword,
   desactivarOverleyFormularioEditarPerfiles,
-} from "@/feacture/Perfil/overleyPerfil";
-import { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
-import PerfilesServices from "@/lib/services/perfilesServices";
+} from "@/features/Perfil/overleyPerfil";
+import { perfilDatosAmpleosInterface } from "@/models";
+import PerfilesServices from "@/services/perfilesServices";
 import {
   BuildingLibraryIcon,
   CalendarDaysIcon,
@@ -25,13 +25,13 @@ import {
   ShieldCheckIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import FotoPerfilImage from "@/component/FotoPerfil/FotoPerfilImage";
+import FotoPerfilImage from "@/components/FotoPerfil/FotoPerfilImage";
 import loading2 from "@/animacionesJson/Loading2.json";
 import Lottie from "lottie-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store";
-import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
+import { useInicioSesionStore } from "@/store/PerfilStore/InicioSesionStore";
 
 function textoO(texto: string | null | undefined, fallback = "Pendiente") {
   const t = texto?.trim();

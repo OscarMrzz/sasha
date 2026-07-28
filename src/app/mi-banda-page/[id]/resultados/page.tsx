@@ -1,20 +1,20 @@
-import ResultadosPorEventoShell from "@/component/miBanda/ResultadosPorEventoShell";
+import ResultadosPorEventoShell from "@/components/miBanda/ResultadosPorEventoShell";
 import type {
   RegistroEventoInterface,
   rubricaInterface,
   vistaResultadosModel,
   vistaResultadosPorEventoInterface,
-} from "@/interfaces/interfaces";
+} from "@/models";
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from "@/lib/mi-banda/servidorMiBandaHealth";
+} from "@/helpers/mi-banda/servidorMiBandaHealth";
 import {
   getAllBandasIds,
   getComentariosBandaEventoServidor,
   getPrecargaResultadosPorEvento,
   getVistaResultadosPorBanda,
-} from "@/lib/services/servidor/resultadosServices";
+} from "@/services/servidor/resultadosServices";
 import React from "react";
 
 export const dynamicParams = true;

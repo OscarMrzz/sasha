@@ -1,7 +1,7 @@
 "use client";
 
-import type { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
-import PerfilesServices from "@/lib/services/perfilesServices";
+import type { perfilDatosAmpleosInterface } from "@/models";
+import PerfilesServices from "@/services/perfilesServices";
 import { useQuery } from "@tanstack/react-query";
 
 /** Perfil del usuario autenticado (servicio getUsuarioLogiado). Reutilizable fuera de Mi Banda. */

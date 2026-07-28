@@ -1,5 +1,5 @@
-import { perfilDatosAmpleosInterface, perfilInterface } from "@/interfaces/interfaces";
-import { validarAccesoPerfil } from "@/lib/usuarios/validarAccesoPerfil";
+import { perfilDatosAmpleosInterface, perfilInterface } from "@/models";
+import { validarAccesoPerfil } from "@/helpers/usuarios/validarAccesoPerfil";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 

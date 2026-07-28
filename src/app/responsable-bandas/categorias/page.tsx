@@ -1,6 +1,6 @@
 "use client";
 
-import CategoriasCrud from "@/component/categorias/CategoriasCrud";
+import CategoriasCrud from "@/components/categorias/CategoriasCrud";
 
 export default function ResponsableBandasCategoriasPage() {
   return <CategoriasCrud />;

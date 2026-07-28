@@ -1,6 +1,6 @@
 "use client";
 
-import { revalidarBandasDeEvento } from "@/lib/actions/revalidarResultadosEvento";
+import { revalidarBandasDeEvento } from "@/actions/revalidarResultadosEvento";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 import type { DashboardEventosPayload } from "@/hooks/dashboard/useDashboardData";

@@ -5,17 +5,17 @@ import {
   detalleSolicitudCopaInterface,
   registroEventoDatosAmpleosInterface,
   vistaSolicitudRevicionInterface,
-} from "@/interfaces/interfaces";
-import ConfirmacionAsistenciaServices from "@/lib/services/confirmacionAsistenciaServices";
-import BandasServices from "@/lib/services/bandasServices";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import SolicitudRevicionServices from "@/lib/services/solicitudRevicionServices";
-import { getDetalleSolicitudesCopas } from "@/lib/services/solicitudCopasServices";
+} from "@/models";
+import ConfirmacionAsistenciaServices from "@/services/confirmacionAsistenciaServices";
+import BandasServices from "@/services/bandasServices";
+import RegistroEventossServices from "@/services/registroEventosServices";
+import SolicitudRevicionServices from "@/services/solicitudRevicionServices";
+import { getDetalleSolicitudesCopas } from "@/services/solicitudCopasServices";
 import {
   filtrarSolicitudesRevisionActivas,
   mapaEstadoEventos,
-} from "@/lib/solicitudesRevicion/filtrarSolicitudesActivas";
-import { filtrarSolicitudesCopaActivas } from "@/lib/solicitudCopa/filtrarSolicitudesCopaActivas";
+} from "@/helpers/solicitudesRevicion/filtrarSolicitudesActivas";
+import { filtrarSolicitudesCopaActivas } from "@/helpers/solicitudCopa/filtrarSolicitudesCopaActivas";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 

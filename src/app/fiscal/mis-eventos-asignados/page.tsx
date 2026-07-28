@@ -1,9 +1,9 @@
 "use client";
 
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import CardEventoAsignado from "@/component/eventos/CardEventoAsignado";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import CardEventoAsignado from "@/components/eventos/CardEventoAsignado";
 import { useEventosAsignadosActualizados } from "@/hooks/eventos/useEventosAsignadosActualizados";
-import { coincideBusqueda } from "@/lib/busqueda/normalizarTextoBusqueda";
+import { coincideBusqueda } from "@/helpers/busqueda/normalizarTextoBusqueda";
 import Link from "next/link";
 import React, { useMemo, useState } from "react";
 

@@ -1,7 +1,7 @@
 /* Ultimo usuario agregado */
 
 
-import { perfilInterface } from '@/interfaces/interfaces';
+import { perfilInterface } from '@/models';
 import { create } from 'zustand';
 
 interface storetInterface {

@@ -1,6 +1,6 @@
 "use client";
 
-import SecretariaEventosGestor from "@/component/secretaria/SecretariaEventosGestor";
+import SecretariaEventosGestor from "@/components/secretaria/SecretariaEventosGestor";
 
 export default function Page() {
   return <SecretariaEventosGestor />;

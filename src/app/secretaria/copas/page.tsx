@@ -1,4 +1,4 @@
-import TablaCopasTemporada from "@/component/copas/TablaCopasTemporada";
+import TablaCopasTemporada from "@/components/copas/TablaCopasTemporada";
 
 export default function Page() {
   return <TablaCopasTemporada titulo="Ranking de copas" />;

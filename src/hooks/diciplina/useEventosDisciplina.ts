@@ -1,7 +1,7 @@
 "use client";
 
-import type { registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
-import { cargarEventosDisciplinaAsignados } from "@/lib/eventos/cargarEventosDisciplinaAsignados";
+import type { registroEventoDatosAmpleosInterface } from "@/models";
+import { cargarEventosDisciplinaAsignados } from "@/helpers/eventos/cargarEventosDisciplinaAsignados";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 

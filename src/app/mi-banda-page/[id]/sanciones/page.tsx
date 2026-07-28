@@ -1,10 +1,10 @@
-import CardRowAplicacionSancionLectura from "@/component/CardRow/lectura/CardRowAplicacionSancionLectura";
+import CardRowAplicacionSancionLectura from "@/components/CardRow/lectura/CardRowAplicacionSancionLectura";
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from "@/lib/mi-banda/servidorMiBandaHealth";
-import { getAllBandasIds } from "@/lib/services/servidor/resultadosServices";
-import { getAplicacionSancionesByIdBandaServidor } from "@/lib/services/servidor/sancionesServidorServices";
+} from "@/helpers/mi-banda/servidorMiBandaHealth";
+import { getAllBandasIds } from "@/services/servidor/resultadosServices";
+import { getAplicacionSancionesByIdBandaServidor } from "@/services/servidor/sancionesServidorServices";
 import Link from "next/link";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import React from "react";

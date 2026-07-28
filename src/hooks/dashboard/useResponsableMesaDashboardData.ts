@@ -5,14 +5,14 @@ import type {
   detalleSolicitudCopaInterface,
   registroEventoDatosAmpleosInterface,
   vistaSolicitudRevicionInterface,
-} from "@/interfaces/interfaces";
-import ConfirmacionAsistenciaServices from "@/lib/services/confirmacionAsistenciaServices";
-import BandasServices from "@/lib/services/bandasServices";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import RegistroEquipoEvaluadorServices from "@/lib/services/registroEquipoEvaluadorServices";
-import SolicitudRevicionServices from "@/lib/services/solicitudRevicionServices";
-import { getDetalleSolicitudesCopas } from "@/lib/services/solicitudCopasServices";
-import { filtrarSolicitudesCopaActivas } from "@/lib/solicitudCopa/filtrarSolicitudesCopaActivas";
+} from "@/models";
+import ConfirmacionAsistenciaServices from "@/services/confirmacionAsistenciaServices";
+import BandasServices from "@/services/bandasServices";
+import RegistroEventossServices from "@/services/registroEventosServices";
+import RegistroEquipoEvaluadorServices from "@/services/registroEquipoEvaluadorServices";
+import SolicitudRevicionServices from "@/services/solicitudRevicionServices";
+import { getDetalleSolicitudesCopas } from "@/services/solicitudCopasServices";
+import { filtrarSolicitudesCopaActivas } from "@/helpers/solicitudCopa/filtrarSolicitudesCopaActivas";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 import {

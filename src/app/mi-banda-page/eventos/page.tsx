@@ -3,17 +3,17 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
-import RegionService from "@/lib/services/regionesServices";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
-import ConfirmacionAsistenciaServices from "@/lib/services/confirmacionAsistenciaServices";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
+import RegionService from "@/services/regionesServices";
+import RegistroEventossServices from "@/services/registroEventosServices";
+import ConfirmacionAsistenciaServices from "@/services/confirmacionAsistenciaServices";
 import {
   regionesInterface,
   registroEventoDatosAmpleosInterface,
   confirmacionAsistenciaInterface,
-} from "@/interfaces/interfaces";
-import CardRowAgendaBanda from "@/component/CardRow/CardRowAgendaBanda";
+} from "@/models";
+import CardRowAgendaBanda from "@/components/CardRow/CardRowAgendaBanda";
 import Link from "next/link";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 

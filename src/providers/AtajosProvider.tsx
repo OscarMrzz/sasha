@@ -10,16 +10,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { ATAJOS } from "@/lib/atajos/config";
-import "@/lib/atajos/installAtajosListener";
-import { debeIgnorarAtajo, matchShortcut } from "@/lib/atajos/matchShortcut";
+import { ATAJOS } from "@/config/atajos/config";
+import "@/config/atajos/installAtajosListener";
+import { debeIgnorarAtajo, matchShortcut } from "@/config/atajos/matchShortcut";
 import {
   filtrarPaginasPorRol,
   obtenerPaginasPorSeccion,
   obtenerRolDesdeCookie,
   type PaginaNavegable,
   type SeccionAtajos,
-} from "@/lib/atajos/navPorSeccion";
+} from "@/config/atajos/navPorSeccion";
 
 interface AtajosContextValue {
   paginasFiltradas: PaginaNavegable[];

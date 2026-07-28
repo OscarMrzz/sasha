@@ -1,15 +1,15 @@
 "use client";
 
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import CardRowEventos from "@/component/CardRow/CardRowEventos";
-import ModalVerEvento from "@/component/informacion/ifnromacionEventoComponent/ModalVerEvento";
-import ModalJurados from "@/component/informacion/ifnromacionEventoComponent/ModalJurados";
-import ModalFiscal from "@/component/informacion/ifnromacionEventoComponent/ModalFiscal";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import CardRowEventos from "@/components/CardRow/CardRowEventos";
+import ModalVerEvento from "@/components/informacion/ifnromacionEventoComponent/ModalVerEvento";
+import ModalJurados from "@/components/informacion/ifnromacionEventoComponent/ModalJurados";
+import ModalFiscal from "@/components/informacion/ifnromacionEventoComponent/ModalFiscal";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
 import { useEventosResponsableMesa } from "@/hooks/responsableMesa/useEventosResponsableMesa";
-import type { regionesInterface, registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
-import RegionService from "@/lib/services/regionesServices";
-import { useEventosResponsableMesaFiltrosStore } from "@/Store/responsableMesa/useEventosResponsableMesaFiltrosStore";
+import type { regionesInterface, registroEventoDatosAmpleosInterface } from "@/models";
+import RegionService from "@/services/regionesServices";
+import { useEventosResponsableMesaFiltrosStore } from "@/store/responsableMesa/useEventosResponsableMesaFiltrosStore";
 import React, { useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 

@@ -3,8 +3,8 @@
 import type {
   perfilDatosAmpleosInterface,
   RegistroEventoInterface,
-} from "@/interfaces/interfaces";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
+} from "@/models";
+import RegistroEventossServices from "@/services/registroEventosServices";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 

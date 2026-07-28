@@ -1,12 +1,12 @@
-import CardRowPosicionRegional from "@/component/CardRow/CardRowPosicionRegional";
+import CardRowPosicionRegional from "@/components/CardRow/CardRowPosicionRegional";
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from "@/lib/mi-banda/servidorMiBandaHealth";
+} from "@/helpers/mi-banda/servidorMiBandaHealth";
 import {
   getAllBandasIds,
   getTablaPosicionesByIdBanda,
-} from "@/lib/services/servidor/resultadosServices";
+} from "@/services/servidor/resultadosServices";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 

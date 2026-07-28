@@ -1,9 +1,9 @@
-import MiBandaNavMovil from '@/component/miBanda/MiBandaNavMovil'
+import MiBandaNavMovil from '@/components/miBanda/MiBandaNavMovil'
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from '@/lib/mi-banda/servidorMiBandaHealth'
-import { getAllBandasIds, getResultadosByIdBanda } from '@/lib/services/servidor/resultadosServices'
+} from '@/helpers/mi-banda/servidorMiBandaHealth'
+import { getAllBandasIds, getResultadosByIdBanda } from '@/services/servidor/resultadosServices'
 import React from 'react'
 
 /** Permite entrar al servidor y redirigir a aviso si falla Supabase (p. ej. sin env en build). */

@@ -33,10 +33,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/hooks/useListaCategoriaFiltroConMemoria.ts",
     ".next/dev/types/**/*.ts",
     "src/types/**/*.d.ts"
-, "src/lib/scripts/scriptListarProyectosSupabase.mjs", "src/component/circuloAnimado/CirculoOlnda.tsx"  ],
+  ],
   "exclude": [
     "node_modules"
   ]

@@ -1,12 +1,12 @@
-import TablaRubricasConsulta from "@/component/rubricas/TablaRubricasConsulta";
+import TablaRubricasConsulta from "@/components/rubricas/TablaRubricasConsulta";
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from "@/lib/mi-banda/servidorMiBandaHealth";
+} from "@/helpers/mi-banda/servidorMiBandaHealth";
 import {
   getAllBandasIds,
   getPrecargaResultadosPorEvento,
-} from "@/lib/services/servidor/resultadosServices";
+} from "@/services/servidor/resultadosServices";
 import Link from "next/link";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 

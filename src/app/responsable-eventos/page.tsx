@@ -1,6 +1,6 @@
 "use client";
 
-import EventosCrud from "@/component/eventos/EventosCrud";
+import EventosCrud from "@/components/eventos/EventosCrud";
 
 export default function ResponsableEventosPage() {
   return <EventosCrud />;

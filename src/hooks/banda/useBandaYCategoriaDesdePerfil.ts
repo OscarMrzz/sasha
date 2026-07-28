@@ -4,9 +4,9 @@ import type {
   bandaInterface,
   categoriaInterface,
   perfilDatosAmpleosInterface,
-} from "@/interfaces/interfaces";
-import BandasServices from "@/lib/services/bandasServices";
-import CategoriasServices from "@/lib/services/categoriaServices";
+} from "@/models";
+import BandasServices from "@/services/bandasServices";
+import CategoriasServices from "@/services/categoriaServices";
 import { useQuery } from "@tanstack/react-query";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";

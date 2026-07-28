@@ -1,15 +1,15 @@
 "use client";
 
-import { ResultadosEventoReporteContenido } from "@/component/miBanda/ResultadosEventoReporteContenido";
-import { ResultadosEventoReportePdf } from "@/component/miBanda/ResultadosEventoReportePdf";
-import { ComboBoxBandas } from "@/component/ComboBox/ComboBoxBandas";
-import { ComboBoxEventos } from "@/component/ComboBox/ComboBoxEventos";
+import { ResultadosEventoReporteContenido } from "@/components/miBanda/ResultadosEventoReporteContenido";
+import { ResultadosEventoReportePdf } from "@/components/miBanda/ResultadosEventoReportePdf";
+import { ComboBoxBandas } from "@/components/ComboBox/ComboBoxBandas";
+import { ComboBoxEventos } from "@/components/ComboBox/ComboBoxEventos";
 import { uselistaBandasEventoCategoriaFiltro } from "@/hooks/useListaBandasFiltro";
 import { useListaCategoriaFiltro } from "@/hooks/useListaCategoriasFiltro";
 import { useListaEventosFederacionAdmin } from "@/hooks/useListaEventosFiltro";
 import { useResultadosDetalladosAdmin } from "@/hooks/evaluacion";
 import { usePerfilUsuarioLogueado } from "@/hooks/perfil";
-import { generarPdfDesdeElemento } from "@/lib/helpers/generadorPDF";
+import { generarPdfDesdeElemento } from "@/helpers/generadorPDF";
 import { ArrowDownTrayIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import React, { useRef } from "react";
 

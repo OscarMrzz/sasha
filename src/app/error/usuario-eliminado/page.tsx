@@ -3,7 +3,7 @@
 import { Suspense } from "react";
 import { UserMinusIcon } from "@heroicons/react/24/outline";
 import ErrorPageShell from "../_components/ErrorPageShell";
-import { MENSAJE_USUARIO_ELIMINADO } from "@/lib/usuarios/validarAccesoPerfil";
+import { MENSAJE_USUARIO_ELIMINADO } from "@/helpers/usuarios/validarAccesoPerfil";
 
 const Page = () => {
   return (

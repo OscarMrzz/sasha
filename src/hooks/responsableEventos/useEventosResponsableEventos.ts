@@ -1,7 +1,7 @@
 "use client";
 
-import type { registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
+import type { registroEventoDatosAmpleosInterface } from "@/models";
+import RegistroEventossServices from "@/services/registroEventosServices";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 

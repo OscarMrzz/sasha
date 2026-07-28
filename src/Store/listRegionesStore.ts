@@ -1,4 +1,4 @@
-import { regionesInterface } from '@/interfaces/interfaces';
+import { regionesInterface } from '@/models';
 import { create } from 'zustand';
 
 interface regionStoretInterface{

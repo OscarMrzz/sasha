@@ -1,7 +1,7 @@
 "use client";
 
-import GestorCopas from "@/component/copas/GestorCopas";
-import RegistroEventossServices from "@/lib/services/registroEventosServices";
+import GestorCopas from "@/components/copas/GestorCopas";
+import RegistroEventossServices from "@/services/registroEventosServices";
 import { useQuery } from "@tanstack/react-query";
 import { useRef } from "react";
 

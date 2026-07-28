@@ -2,16 +2,16 @@
 
 import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getHistorialCheckout } from "@/lib/services/chekoutServices";
-import CategoriasServices from "@/lib/services/categoriaServices";
+import { getHistorialCheckout } from "@/services/chekoutServices";
+import CategoriasServices from "@/services/categoriaServices";
 import { useEventosDisciplinaHoy } from "@/hooks/diciplina/useEventosDisciplinaHoy";
 import { useCheckoutRealtime } from "@/hooks/checkout";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
-import CardRowHistorialCheckout from "@/component/CardRow/CardRowHistorialCheckout";
-import OverleyModal from "@/component/modales/OverleyModal/Page";
-import ModalVerCheckout from "@/component/diciplina/ModalVerCheckout";
-import { CheckoutDetalleInterface } from "@/interfaces/interfaces";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
+import CardRowHistorialCheckout from "@/components/CardRow/CardRowHistorialCheckout";
+import OverleyModal from "@/components/modales/OverleyModal/Page";
+import ModalVerCheckout from "@/components/diciplina/ModalVerCheckout";
+import { CheckoutDetalleInterface } from "@/models";
 
 const selectClass =
   "h-11 w-full rounded-lg border border-slate-600 bg-slate-700/50 px-3 text-sm text-slate-100";

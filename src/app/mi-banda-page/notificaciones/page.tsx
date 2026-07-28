@@ -2,21 +2,21 @@
 
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckoutDetalleInterface } from "@/interfaces/interfaces";
+import { CheckoutDetalleInterface } from "@/models";
 import {
   getCheckoutNotificacionesIngreso,
   getCheckoutNotificacionesLlegada,
-} from "@/lib/services/chekoutServices";
-import PerfilesServices from "@/lib/services/perfilesServices";
+} from "@/services/chekoutServices";
+import PerfilesServices from "@/services/perfilesServices";
 import { useCheckoutRealtime } from "@/hooks/checkout";
-import CardRowCheckoutNotificacion from "@/component/CardRow/CardRowCheckoutNotificacion";
-import OverleyModal from "@/component/modales/OverleyModal/Page";
-import OverleyModalFormulario from "@/component/modales/OverleyModalFormulario/Page";
-import ModalVerCheckout from "@/component/diciplina/ModalVerCheckout";
-import ModalResponderCheckout from "@/component/diciplina/ModalResponderCheckout";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
-import ErrorMessage from "@/component/Message/ErrorMessage";
-import ApprovateMessage from "@/component/Message/ApprovateMessage";
+import CardRowCheckoutNotificacion from "@/components/CardRow/CardRowCheckoutNotificacion";
+import OverleyModal from "@/components/modales/OverleyModal/Page";
+import OverleyModalFormulario from "@/components/modales/OverleyModalFormulario/Page";
+import ModalVerCheckout from "@/components/diciplina/ModalVerCheckout";
+import ModalResponderCheckout from "@/components/diciplina/ModalResponderCheckout";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
+import ErrorMessage from "@/components/Message/ErrorMessage";
+import ApprovateMessage from "@/components/Message/ApprovateMessage";
 
 export default function NotificacionesPage() {
   const queryClient = useQueryClient();

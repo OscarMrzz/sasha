@@ -1,10 +1,10 @@
 "use client";
 
-import { categoriaInterface, registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
+import { categoriaInterface, registroEventoDatosAmpleosInterface } from "@/models";
 import {
   estaActivadoAccesoPorEventoCategoria,
   getCategoriasPorEvento,
-} from "@/lib/services/controladoresServices";
+} from "@/services/controladoresServices";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback, useMemo } from "react";
 

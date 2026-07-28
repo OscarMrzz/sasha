@@ -1,0 +1,282 @@
+"use client";
+
+import { useMemo, useRef, useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { PlusIcon } from "@heroicons/react/16/solid";
+import {
+  bandaInterface,
+  categoriaDatosAmpleosInterface,
+  regionesDatosAmpleosInterface,
+  vistaDetalleSolicitudSancionInterface,
+} from "@/models";
+import { getDetalleSolicitudesSancion } from "@/services/solicituSancion";
+import BandasServices from "@/services/bandasServices";
+import CategoriasServices from "@/services/categoriaServices";
+import RegionesServices from "@/services/regionesServices";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
+import CardRowSolicitudSancion from "@/components/CardRow/CardRowSolicitudSancion";
+import OverleyModalFormulario from "@/components/modales/OverleyModalFormulario/Page";
+import ErrorMessage from "@/components/Message/ErrorMessage";
+import ApprovateMessage from "@/components/Message/ApprovateMessage";
+import InformacionSolicitudSancion from "@/components/informacionSolicitudSancion/Page";
+import FormularioAgregarSolicitudSancion from "@/components/formularios/formularioAgregarSolicitudSancion/Page";
+import ResponderSolicitudSancion from "@/components/responderSolicitudSancion/Page";
+import { getEstadoSolicitudKey } from "@/components/solicitudSancion/estadoSolicitudPill";
+import { ComboBoxBandas } from "@/components/ComboBox/ComboBoxBandas";
+
+const selectClass =
+  "h-11 w-full rounded-lg border border-slate-600 bg-slate-700/50 px-3 text-sm text-slate-100";
+
+type Props = {
+  titulo: string;
+  mostrarAgregar?: boolean;
+  permitirResponder?: boolean;
+};
+
+export default function SolicitudSancionLista({
+  titulo,
+  mostrarAgregar = false,
+  permitirResponder = false,
+}: Props) {
+  const queryClient = useQueryClient();
+  const bandasServices = useRef(new BandasServices());
+  const categoriasServices = useRef(new CategoriasServices());
+  const regionesServices = useRef(new RegionesServices());
+
+  const [busqueda, setBusqueda] = useState("");
+  const [idBanda, setIdBanda] = useState("");
+  const [idCategoria, setIdCategoria] = useState("");
+  const [idRegion, setIdRegion] = useState("");
+  const [filtroEstado, setFiltroEstado] = useState("");
+
+  const [openAgregar, setOpenAgregar] = useState(false);
+  const [openVer, setOpenVer] = useState(false);
+  const [openResponder, setOpenResponder] = useState(false);
+  const [seleccionada, setSeleccionada] =
+    useState<vistaDetalleSolicitudSancionInterface | null>(null);
+
+  const [openError, setOpenError] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
+  const [openExito, setOpenExito] = useState(false);
+  const [mensajeExito, setMensajeExito] = useState("");
+
+  const { data: solicitudes = [], isPending, isError, error } = useQuery({
+    queryKey: ["solicitudes_sancion_detalle"],
+    queryFn: getDetalleSolicitudesSancion,
+  });
+
+  const { data: bandas = [] as bandaInterface[] } = useQuery({
+    queryKey: ["bandas-filtro-solicitud-sancion"],
+    queryFn: async () => {
+      await bandasServices.current.initPerfil();
+      return (await bandasServices.current.get()) as bandaInterface[];
+    },
+  });
+
+  const { data: categoriasList = [] as categoriaDatosAmpleosInterface[] } =
+    useQuery({
+      queryKey: ["categorias"],
+      queryFn: () => categoriasServices.current.getDatosAmpleos(),
+    });
+
+  const { data: regionesList = [] as regionesDatosAmpleosInterface[] } =
+    useQuery({
+      queryKey: ["regiones"],
+      queryFn: () => regionesServices.current.getDatosAmpleos(),
+    });
+
+  const mostrarError = (msg: string) => {
+    setMensajeError(msg);
+    setOpenError(true);
+  };
+
+  const mostrarExito = (msg: string) => {
+    setMensajeExito(msg);
+    setOpenExito(true);
+  };
+
+  const refrescar = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["solicitudes_sancion_detalle"] });
+  };
+
+  const filtradas = useMemo(() => {
+    const q = busqueda.trim().toLowerCase();
+    return solicitudes.filter((s) => {
+      if (idBanda && s.idBanda !== idBanda) return false;
+      if (idCategoria && s.idCategoria !== idCategoria) return false;
+      if (idRegion && s.idRegion !== idRegion) return false;
+      if (filtroEstado && getEstadoSolicitudKey(s.estado) !== filtroEstado) {
+        return false;
+      }
+      if (!q) return true;
+      return (
+        (s.nombreBanda ?? "").toLowerCase().includes(q) ||
+        (s.nombreCategoria ?? "").toLowerCase().includes(q) ||
+        (s.nombreRegion ?? "").toLowerCase().includes(q) ||
+        (s.detalles_sancion ?? "").toLowerCase().includes(q) ||
+        (s.justificacion ?? "").toLowerCase().includes(q)
+      );
+    });
+  }, [solicitudes, busqueda, idBanda, idCategoria, idRegion, filtroEstado]);
+
+  const abrirVer = (s: vistaDetalleSolicitudSancionInterface) => {
+    setSeleccionada(s);
+    setOpenVer(true);
+  };
+
+  const abrirResponder = (s: vistaDetalleSolicitudSancionInterface) => {
+    setSeleccionada(s);
+    setOpenResponder(true);
+  };
+
+  useEffect(() => {
+    if (isError) {
+      const msg =
+        error instanceof Error
+          ? error.message
+          : "Error al cargar solicitudes de sanción.";
+      setMensajeError(msg);
+      setOpenError(true);
+    }
+  }, [isError, error]);
+
+  return (
+    <div>
+      <ErrorMessage
+        titulo="Error"
+        open={openError}
+        onClose={() => setOpenError(false)}
+        texto={mensajeError}
+      />
+      <ApprovateMessage
+        titulo="Éxito"
+        open={openExito}
+        onClose={() => setOpenExito(false)}
+        texto={mensajeExito}
+      />
+
+      <OverleyModalFormulario open={openVer} onClose={() => setOpenVer(false)}>
+        {seleccionada ? (
+          <InformacionSolicitudSancion
+            solicitud={seleccionada}
+            onClose={() => setOpenVer(false)}
+          />
+        ) : null}
+      </OverleyModalFormulario>
+
+      <OverleyModalFormulario open={openAgregar} onClose={() => setOpenAgregar(false)}>
+        <FormularioAgregarSolicitudSancion
+          onClose={() => setOpenAgregar(false)}
+          onError={mostrarError}
+          onSuccess={async () => {
+            mostrarExito("Solicitud creada correctamente.");
+            await refrescar();
+          }}
+        />
+      </OverleyModalFormulario>
+
+      <OverleyModalFormulario
+        open={openResponder}
+        onClose={() => setOpenResponder(false)}
+      >
+        {seleccionada ? (
+          <ResponderSolicitudSancion
+            solicitud={seleccionada}
+            onClose={() => setOpenResponder(false)}
+            onError={mostrarError}
+            onSuccess={async (msg) => {
+              mostrarExito(msg);
+              await refrescar();
+            }}
+          />
+        ) : null}
+      </OverleyModalFormulario>
+
+      <section className="mb-4 flex flex-col gap-4">
+        <h1 className="text-2xl font-bold">{titulo}</h1>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <BuscadorRow
+            filtrarBuscador={(e) => setBusqueda(e.target.value)}
+          />
+          {mostrarAgregar ? (
+            <button
+              type="button"
+              onClick={() => setOpenAgregar(true)}
+              className="flex cursor-pointer items-center gap-2 rounded-lg bg-slate-100 px-4 py-2 text-slate-700 hover:bg-slate-300"
+            >
+              <PlusIcon className="h-5 w-5" />
+              Agregar
+            </button>
+          ) : null}
+        </div>
+      </section>
+
+      <section className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <ComboBoxBandas
+          bandas={bandas}
+          value={idBanda}
+          onChange={setIdBanda}
+          placeholder="Todas las bandas"
+        />
+        <select
+          value={idCategoria}
+          onChange={(e) => setIdCategoria(e.target.value)}
+          className={selectClass}
+        >
+          <option value="">Todas las categorías</option>
+          {categoriasList.map((c) => (
+            <option key={c.idCategoria} value={c.idCategoria}>
+              {c.nombreCategoria}
+            </option>
+          ))}
+        </select>
+        <select
+          value={idRegion}
+          onChange={(e) => setIdRegion(e.target.value)}
+          className={selectClass}
+        >
+          <option value="">Todas las regiones</option>
+          {regionesList.map((r) => (
+            <option key={r.idRegion} value={r.idRegion}>
+              {r.nombreRegion}
+            </option>
+          ))}
+        </select>
+        <select
+          value={filtroEstado}
+          onChange={(e) => setFiltroEstado(e.target.value)}
+          className={selectClass}
+        >
+          <option value="">Todos los estados</option>
+          <option value="null">Pendiente</option>
+          <option value="true">Aprobada</option>
+          <option value="false">Denegada</option>
+        </select>
+      </section>
+
+      {isPending ? (
+        <SkeletonTabla />
+      ) : filtradas.length === 0 ? (
+        <p className="rounded-xl border border-slate-600/40 bg-slate-800/40 px-4 py-8 text-center text-slate-400">
+          No hay solicitudes con los filtros seleccionados.
+        </p>
+      ) : (
+        <div className="flex flex-col gap-3">
+          {filtradas.map((s) => (
+            <CardRowSolicitudSancion
+              key={s.id_solicitud_sancion ?? `${s.idBanda}-${s.id_sancion}`}
+              solicitud={s}
+              onView={() => abrirVer(s)}
+              onResponder={
+                permitirResponder && s.estado === null
+                  ? () => abrirResponder(s)
+                  : undefined
+              }
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}

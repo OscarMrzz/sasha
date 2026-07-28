@@ -1,8 +1,8 @@
 "use client";
 
-import type { registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
-import { revalidarBandasDeEvento } from "@/lib/actions/revalidarResultadosEvento";
-import { cargarEventosAsignadosAlPerfil } from "@/lib/eventos/cargarEventosAsignadosAlPerfil";
+import type { registroEventoDatosAmpleosInterface } from "@/models";
+import { revalidarBandasDeEvento } from "@/actions/revalidarResultadosEvento";
+import { cargarEventosAsignadosAlPerfil } from "@/helpers/eventos/cargarEventosAsignadosAlPerfil";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useCallback } from "react";
 

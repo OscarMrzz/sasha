@@ -3,23 +3,23 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeftIcon, CheckIcon } from "@heroicons/react/16/solid";
-import type { ModalInformacionSelectedItem } from "@/component/informacion/informacionResultados/ModalInformacionResultados";
-import ModalInformacionResultados from "@/component/informacion/informacionResultados/ModalInformacionResultados";
-import SalaEsperaEvento from "@/component/eventos/SalaEsperaEvento";
-import ModalFormularioSolicitudRevicion from "@/component/informacion/informacionResultados/modalFormularioSolicitudRevicion";
-import ApprovateMessage from "@/component/Message/ApprovateMessage";
-import CardRowPosicion from "@/component/CardRow/CardRowPosicion";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
-import { RegistroEventoInterface, vistaResultadosPreliminaresInterface } from "@/interfaces/interfaces";
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
-import { coincideBusqueda } from "@/lib/busqueda/normalizarTextoBusqueda";
-import { esEventoDelDia } from "@/lib/fechas/eventosDelDia";
-import { formatearFechaEvento } from "@/lib/fechas/formatearFechaEvento";
+import type { ModalInformacionSelectedItem } from "@/components/informacion/informacionResultados/ModalInformacionResultados";
+import ModalInformacionResultados from "@/components/informacion/informacionResultados/ModalInformacionResultados";
+import SalaEsperaEvento from "@/components/eventos/SalaEsperaEvento";
+import ModalFormularioSolicitudRevicion from "@/components/informacion/informacionResultados/modalFormularioSolicitudRevicion";
+import ApprovateMessage from "@/components/Message/ApprovateMessage";
+import CardRowPosicion from "@/components/CardRow/CardRowPosicion";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
+import { RegistroEventoInterface, vistaResultadosPreliminaresInterface } from "@/models";
+import RegistroCumplimientoServices from "@/services/RegistroCumplimientosServices";
+import { coincideBusqueda } from "@/helpers/busqueda/normalizarTextoBusqueda";
+import { esEventoDelDia } from "@/helpers/fechas/eventosDelDia";
+import { formatearFechaEvento } from "@/helpers/fechas/formatearFechaEvento";
 import { useEventosAsignadosActualizados } from "@/hooks/eventos/useEventosAsignadosActualizados";
 import { useListaCategoriaFiltro } from "@/hooks/useListaCategoriasFiltro";
-import { useModalSolicitudRevicionesStore } from "@/Store/revicionesStore/modalSolicitudRevicionesStore";
-import { useModalMessageAprovateSolicitudRevicionStore } from "@/Store/revicionesStore/modalMessage/modalMessageAprovateSolicitudRevicionStore";
+import { useModalSolicitudRevicionesStore } from "@/store/revicionesStore/modalSolicitudRevicionesStore";
+import { useModalMessageAprovateSolicitudRevicionStore } from "@/store/revicionesStore/modalMessage/modalMessageAprovateSolicitudRevicionStore";
 import {
   deleteFiscalWizardCookie,
   FiscalWizardCookieState,

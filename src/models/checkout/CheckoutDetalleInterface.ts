@@ -1,0 +1,30 @@
+export interface CheckoutDetalleInterface {
+    id_checkout?: string | null;
+    created_at_checkout?: string | Date | null;
+    id_foranea_banda?: string | null;
+    hora_llegada_banda?: string | Date | null;
+    confirmacion_horallegada?: boolean | null;
+    time_confirmacion_hora_llegada?: string | null; 
+    cantidad_integrantes?: number | null; 
+    cantidad_palillonas?: number | null;
+    aportacion?: number | null;
+    hora_ingreso?: string | Date | null;
+    confirmacion_hora_ingreso?: boolean | null;
+    time_confirmacion_hora_ingreso?: string | Date | null;
+    observaciones?: string | null;
+    time_envio_confirmacion_llegada?: string | Date | null;
+    time_envio_confirmacion_ingreso?: string | Date | null;
+    id_foranea_diciplina?: string | null;
+    id_foranea_confirmador?: string | null;
+    nombreBanda?: string | null;
+    id_foranea_categoria?: string | null;
+    nombreCategoria?: string | null;
+    id_foranea_region?: string | null;
+    nombreRegion?: string | null;
+    nombre_encargado_diciplina?: string | null;
+    apellido_encargado_diciplina?: string | null;
+    nombre_confirmador?: string | null;
+    apellido_confirmador?: string | null;
+    id_foranea_evento: string;
+    LugarEvento: string;
+  }

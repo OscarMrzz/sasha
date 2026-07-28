@@ -1,4 +1,4 @@
-import {  bandaInterface} from '@/interfaces/interfaces';
+import {  bandaInterface} from '@/models';
 import { create } from 'zustand';
 
 interface buscadorInterface{

@@ -1,22 +1,22 @@
 "use client";
 
-import TablaCondensados from "@/component/Tablas/tabla-condensados/tabla-condensados";
+import TablaCondensados from "@/components/Tablas/tabla-condensados/tabla-condensados";
 import type {
   categoriaDatosAmpleosInterface,
   regionesDatosAmpleosInterface,
   rubricaDatosAmpleosInterface,
   vistaCondensado,
-} from "@/interfaces/interfaces";
-import { fetchVistaCondensado } from "@/lib/actions/condensadoPorRubrica";
+} from "@/models";
+import { fetchVistaCondensado } from "@/actions/condensadoPorRubrica";
 import {
   extraerCategoriasConDatos,
   extraerEventosCondensado,
   filtrarFilasPorBanda,
   pivotCondensado,
-} from "@/lib/condensado/pivotCondensado";
-import CategoriasServices from "@/lib/services/categoriaServices";
-import RegionesServices from "@/lib/services/regionesServices";
-import RubricasServices from "@/lib/services/rubricasServices";
+} from "@/helpers/condensado/pivotCondensado";
+import CategoriasServices from "@/services/categoriaServices";
+import RegionesServices from "@/services/regionesServices";
+import RubricasServices from "@/services/rubricasServices";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useRef, useState } from "react";
 

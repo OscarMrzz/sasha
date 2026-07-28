@@ -1,10 +1,10 @@
 "use client";
 
-import SeccionActualizarDatosMiBanda from "@/component/controladores/SeccionActualizarDatosMiBanda";
-import SeccionActualizarDatosPorEvento from "@/component/controladores/SeccionActualizarDatosPorEvento";
-import Switches from "@/component/UI/toggle switches/Switches";
-import { rolInterface } from "@/interfaces/interfaces";
-import RolesServices from "@/lib/services/rolServices";
+import SeccionActualizarDatosMiBanda from "@/components/controladores/SeccionActualizarDatosMiBanda";
+import SeccionActualizarDatosPorEvento from "@/components/controladores/SeccionActualizarDatosPorEvento";
+import Switches from "@/components/UI/toggle switches/Switches";
+import { rolInterface } from "@/models";
+import RolesServices from "@/services/rolServices";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import React, { useEffect, useRef, useState } from "react";
 

@@ -1,7 +1,7 @@
 "use client";
 
-import UsuariosCrud from "@/component/usuarios/UsuariosCrud";
-import { ROLES_PRIVILEGIADOS_USUARIOS } from "@/lib/usuarios/rolesUsuarios";
+import UsuariosCrud from "@/components/usuarios/UsuariosCrud";
+import { ROLES_PRIVILEGIADOS_USUARIOS } from "@/helpers/usuarios/rolesUsuarios";
 
 export default function ResponsableUsuariosPage() {
   return (

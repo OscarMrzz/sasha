@@ -1,6 +1,6 @@
 "use client";
 
-import RegionesCrud from "@/component/regiones/RegionesCrud";
+import RegionesCrud from "@/components/regiones/RegionesCrud";
 
 export default function ResponsableEventosRegionesPage() {
   return <RegionesCrud />;

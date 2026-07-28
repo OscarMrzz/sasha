@@ -4,15 +4,15 @@ import Link from "next/link";
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import PerfilesServices from "@/lib/services/perfilesServices";
+import PerfilesServices from "@/services/perfilesServices";
 import { dataBaseSupabase } from "@/lib/supabase";
-import { setPerfilActivo } from "@/feacture/Perfil/PerfilSlice";
-import { perfilDatosAmpleosInterface, perfilInterface } from "@/interfaces/interfaces";
-import { useInicioSesionStore } from "@/Store/PerfilStore/InicioSesionStore";
+import { setPerfilActivo } from "@/features/Perfil/PerfilSlice";
+import { perfilDatosAmpleosInterface, perfilInterface } from "@/models";
+import { useInicioSesionStore } from "@/store/PerfilStore/InicioSesionStore";
 import {
   MENSAJE_USUARIO_ELIMINADO,
   validarAccesoPerfil,
-} from "@/lib/usuarios/validarAccesoPerfil";
+} from "@/helpers/usuarios/validarAccesoPerfil";
 
 const SignInPage = () => {
   const [form, setForm] = useState({ email: "", password: "" });

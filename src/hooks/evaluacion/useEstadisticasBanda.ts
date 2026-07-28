@@ -5,10 +5,10 @@ import type {
   resultadosEventoInterface,
   vistaResultadosModel,
   vistaResultadosTenporadaInterface,
-} from "@/interfaces/interfaces";
-import PerfilesServices from "@/lib/services/perfilesServices";
-import RegistroCumplimientoServices from "@/lib/services/RegistroCumplimientosServices";
-import RubricasServices from "@/lib/services/rubricasServices";
+} from "@/models";
+import PerfilesServices from "@/services/perfilesServices";
+import RegistroCumplimientoServices from "@/services/RegistroCumplimientosServices";
+import RubricasServices from "@/services/rubricasServices";
 import {
   agruparPorRubrica,
   calcularEstrellasDesdePromedio,
@@ -18,7 +18,7 @@ import {
   contarPorRank,
   filtrarEvaluacionesPorAnio,
   type RubricaStats,
-} from "@/lib/utils/estadisticasHelpers";
+} from "@/helpers/utils/estadisticasHelpers";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export function useEstadisticasBanda() {

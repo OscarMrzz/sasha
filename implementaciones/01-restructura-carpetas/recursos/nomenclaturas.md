@@ -7,11 +7,12 @@
 ## Models
 
 - Carpeta por dominio: `src/models/bandas/`, `src/models/eventos/`, etc.
-- Archivo por interface/type, conservando el nombre exportado:
-  - `bandaInterface` → `bandaInterface.ts`
-  - `bandaDatosAmpleosInterface` → `bandaDatosAmpleosInterface.ts`
-- Barrel por dominio: `index.ts` reexporta el dominio.
-- Barrel global: `src/models/index.ts`.
+- Archivo por interface/type con la **definición real** (`export interface` / `export type`), conservando el nombre exportado:
+  - `bandaInterface` → `bandaInterface.ts` (cuerpo completo)
+  - `bandaDatosAmpleosInterface` → `bandaDatosAmpleosInterface.ts` (cuerpo + imports de dependencias)
+- **Prohibido**: monolito `allInterfaces.ts` y stubs `export type { X } from "../allInterfaces"`.
+- **Prohibido**: `index.ts` por dominio.
+- Único barrel: `src/models/index.ts` (reexporta desde los archivos reales para `from "@/models"`).
 
 ## Capas
 

@@ -1,6 +1,6 @@
 "use client";
 
-import RecuperarContrasenaAdmin from "@/component/usuarios/RecuperarContrasenaAdmin";
+import RecuperarContrasenaAdmin from "@/components/usuarios/RecuperarContrasenaAdmin";
 
 export default function RecuperarContrasenaPanelPage() {
   return <RecuperarContrasenaAdmin rutaCancelar="/PanelControlPage" />;

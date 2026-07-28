@@ -2,17 +2,17 @@
 
 import { useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckoutDetalleInterface } from "@/interfaces/interfaces";
-import { getAllCheckoutByEvento } from "@/lib/services/chekoutServices";
+import { CheckoutDetalleInterface } from "@/models";
+import { getAllCheckoutByEvento } from "@/services/chekoutServices";
 import { useEventosDisciplinaHoy } from "@/hooks/diciplina/useEventosDisciplinaHoy";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import SkeletonTabla from "@/component/skeleton/SkeletonTabla/Page";
-import OverleyModal from "@/component/modales/OverleyModal/Page";
-import ModalVerCheckout from "@/component/diciplina/ModalVerCheckout";
-import WizardCheckoutLlegada from "@/component/diciplina/WizardCheckoutLlegada";
-import ErrorMessage from "@/component/Message/ErrorMessage";
-import ApprovateMessage from "@/component/Message/ApprovateMessage";
-import { formatCheckoutFechaHora } from "@/component/diciplina/checkoutUtils";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import SkeletonTabla from "@/components/skeleton/SkeletonTabla/Page";
+import OverleyModal from "@/components/modales/OverleyModal/Page";
+import ModalVerCheckout from "@/components/diciplina/ModalVerCheckout";
+import WizardCheckoutLlegada from "@/components/diciplina/WizardCheckoutLlegada";
+import ErrorMessage from "@/components/Message/ErrorMessage";
+import ApprovateMessage from "@/components/Message/ApprovateMessage";
+import { formatCheckoutFechaHora } from "@/components/diciplina/checkoutUtils";
 
 export default function CheckoutLlegadaPage() {
   const queryClient = useQueryClient();

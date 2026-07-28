@@ -1,17 +1,17 @@
 "use client";
 
-import { fetchTablaPosicionesSecretaria } from "@/lib/actions/tablaPosicionesSecretaria";
-import type { TablaPosicionSecretariaPayload } from "@/lib/services/servidor/resultadosServices";
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
-import CardRowPosicionRegional from "@/component/CardRow/CardRowPosicionRegional";
+import { fetchTablaPosicionesSecretaria } from "@/actions/tablaPosicionesSecretaria";
+import type { TablaPosicionSecretariaPayload } from "@/services/servidor/resultadosServices";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
+import CardRowPosicionRegional from "@/components/CardRow/CardRowPosicionRegional";
 import type {
   categoriaDatosAmpleosInterface,
   perfilDatosAmpleosInterface,
   regionesDatosAmpleosInterface,
-} from "@/interfaces/interfaces";
-import CategoriasServices from "@/lib/services/categoriaServices";
-import PerfilesServices from "@/lib/services/perfilesServices";
-import RegionesServices from "@/lib/services/regionesServices";
+} from "@/models";
+import CategoriasServices from "@/services/categoriaServices";
+import PerfilesServices from "@/services/perfilesServices";
+import RegionesServices from "@/services/regionesServices";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useRef, useState } from "react";
 

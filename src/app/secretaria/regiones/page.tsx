@@ -1,6 +1,6 @@
 "use client";
 
-import SecretariaRegionesGestor from "@/component/secretaria/SecretariaRegionesGestor";
+import SecretariaRegionesGestor from "@/components/secretaria/SecretariaRegionesGestor";
 
 export default function Page() {
   return <SecretariaRegionesGestor />;

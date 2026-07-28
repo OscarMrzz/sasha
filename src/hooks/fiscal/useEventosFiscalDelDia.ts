@@ -1,8 +1,8 @@
 "use client";
 
-import type { registroEventoDatosAmpleosInterface } from "@/interfaces/interfaces";
-import { cargarEventosAsignadosAlPerfil } from "@/lib/eventos/cargarEventosAsignadosAlPerfil";
-import { filtrarEventosDelDia } from "@/lib/fechas/eventosDelDia";
+import type { registroEventoDatosAmpleosInterface } from "@/models";
+import { cargarEventosAsignadosAlPerfil } from "@/helpers/eventos/cargarEventosAsignadosAlPerfil";
+import { filtrarEventosDelDia } from "@/helpers/fechas/eventosDelDia";
 import { useQuery } from "@tanstack/react-query";
 
 export const EVENTOS_FISCAL_HOY_QUERY_KEY = [

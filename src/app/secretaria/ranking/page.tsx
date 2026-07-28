@@ -1,6 +1,6 @@
 "use client";
 
-import BuscadorRow from "@/component/buscadores/BuscadorRow";
+import BuscadorRow from "@/components/buscadores/BuscadorRow";
 import {
   ChartContainer,
   ChartTooltip,
@@ -12,11 +12,11 @@ import type {
   categoriaDatosAmpleosInterface,
   regionesDatosAmpleosInterface,
   vistaResultadosTenporadaInterface,
-} from "@/interfaces/interfaces";
-import { fetchRankingGlobal } from "@/lib/actions/rankingGlobal";
-import BandasServices from "@/lib/services/bandasServices";
-import CategoriasServices from "@/lib/services/categoriaServices";
-import RegionesServices from "@/lib/services/regionesServices";
+} from "@/models";
+import { fetchRankingGlobal } from "@/actions/rankingGlobal";
+import BandasServices from "@/services/bandasServices";
+import CategoriasServices from "@/services/categoriaServices";
+import RegionesServices from "@/services/regionesServices";
 import { useQuery } from "@tanstack/react-query";
 import React, { useMemo, useRef, useState } from "react";
 import {

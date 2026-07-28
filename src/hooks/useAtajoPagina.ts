@@ -1,12 +1,12 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import type { AccionPaginaId } from "@/lib/atajos/config";
+import type { AccionPaginaId } from "@/config/atajos/config";
 import {
   desregistrarAccionPagina,
   registrarAccionPagina,
-} from "@/lib/atajos/accionesRegistry";
-import "@/lib/atajos/installAtajosListener";
+} from "@/config/atajos/accionesRegistry";
+import "@/config/atajos/installAtajosListener";
 
 export default function useAtajoPagina(accion: AccionPaginaId, callback: () => void) {
   const callbackRef = useRef(callback);

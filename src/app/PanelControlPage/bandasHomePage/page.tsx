@@ -1,6 +1,6 @@
 "use client";
 
-import BandasCrud from "@/component/bandas/BandasCrud";
+import BandasCrud from "@/components/bandas/BandasCrud";
 
 export default function BandasHomePage() {
   return <BandasCrud />;

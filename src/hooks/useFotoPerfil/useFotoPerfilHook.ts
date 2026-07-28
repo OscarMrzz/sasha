@@ -1,5 +1,5 @@
-import { perfilDatosAmpleosInterface } from "@/interfaces/interfaces";
-import PerfilesServices from "@/lib/services/perfilesServices";
+import { perfilDatosAmpleosInterface } from "@/models";
+import PerfilesServices from "@/services/perfilesServices";
 import { useEffect, useRef, useState } from "react";
 
 export default function useFotoPerfilHook(perfil: perfilDatosAmpleosInterface) {
