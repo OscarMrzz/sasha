@@ -1,5 +1,6 @@
 import { perfilDatosAmpleosInterface, perfilInterface } from "@/models";
 import { validarAccesoPerfil } from "@/helpers/usuarios/validarAccesoPerfil";
+import { fromDb } from "@/services/mappers/caseMapper";
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -83,7 +84,9 @@ export const validarSesion = async (
     return { ok: false, razon: "usuario_no_encontrado" };
   }
 
-  const perfilTipado = perfil as perfilDatosAmpleosInterface;
+  const perfilTipado = fromDb<perfilDatosAmpleosInterface>(
+    perfil as Record<string, unknown>,
+  );
   const acceso = validarAccesoPerfil(perfilTipado);
 
   if (acceso === "usuario_eliminado") {
@@ -132,7 +135,7 @@ const getByIdUSer = async (idUser: string, request: NextRequest): Promise<perfil
     console.error("❌ getByIdUSer error:", error);
     return null;
   }
-  return (data as perfilInterface) ?? null;
+  return data ? fromDb<perfilInterface>(data as Record<string, unknown>) : null;
 };
 
 export const perfilTienePermiso = async (idUser: string, request: NextRequest): Promise<boolean> => {
@@ -154,7 +157,7 @@ const getRol = async (perfil: perfilInterface | null, request: NextRequest) => {
     console.error("❌ getRol error:", error);
     return null;
   }
-  return data;
+  return data ? fromDb<Record<string, unknown>>(data as Record<string, unknown>) : null;
 };
 
 const tienePermisolRol = async (perfil: perfilInterface | null, request: NextRequest): Promise<boolean> => {
