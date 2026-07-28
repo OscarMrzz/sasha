@@ -47,7 +47,7 @@ const viewFixes = {
 
 const STORAGE_BUCKETS = new Set([
   "imgLogoBandas",
-  "img-fotos-perfiles-aurora",
+  "img-fotos-perfiles-sasha",
   "imgFotosPerfiles",
 ]);
 

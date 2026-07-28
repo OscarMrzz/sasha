@@ -47,7 +47,7 @@ export const ResultadosEventoReportePdf = React.forwardRef<
         </div>
         <div className="page-footer">
           <div>
-            <div className="page-footer__left">AURORA</div>
+            <div className="page-footer__left">SASHA</div>
             <div className="page-footer__center"></div>
             <div className="page-footer__right"></div>
           </div>
@@ -80,7 +80,7 @@ export const ResultadosEventoReportePdf = React.forwardRef<
           </div>
         </div>
         <div className="page-footer">
-          <div className="page-footer__left">AURORA</div>
+          <div className="page-footer__left">SASHA</div>
           <div className="page-footer__center"></div>
           <div className="page-footer__right">pag-01</div>
         </div>
@@ -117,7 +117,7 @@ export const ResultadosEventoReportePdf = React.forwardRef<
               </div>
             </div>
             <div className="page-footer">
-              <div className="page-footer__left">AURORA</div>
+              <div className="page-footer__left">SASHA</div>
               <div className="page-footer__center"></div>
               <div className="page-footer__right">
                 pag-{index + 2 < 10 ? `0${index + 2}` : index + 2}
@@ -142,7 +142,7 @@ export const ResultadosEventoReportePdf = React.forwardRef<
               </div>
             </div>
             <div className="page-footer">
-              <div className="page-footer__left">AURORA</div>
+              <div className="page-footer__left">SASHA</div>
               <div className="page-footer__center"></div>
               <div className="page-footer__right">
                 pag-

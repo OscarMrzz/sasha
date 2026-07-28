@@ -278,7 +278,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
                 value={formData.nombreBanda}
                 onChange={handleInputChange}
                 className={inputBaseClass}
-                placeholder="Ej. Banda Aurora"
+                placeholder="Ej. Banda Sasha"
                 required
               />
             </div>
@@ -294,7 +294,7 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
                 value={formData.AliasBanda}
                 onChange={handleInputChange}
                 className={inputBaseClass}
-                placeholder="Ej. Aurora"
+                placeholder="Ej. Sasha"
               />
             </div>
 

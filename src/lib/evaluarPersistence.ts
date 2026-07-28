@@ -24,10 +24,10 @@ export type EvaluarDraftCookieState = {
   updatedAt: number;
 };
 
-const EVALUAR_SESSION_STORAGE_KEY = "aurora_evaluar_session";
-const EVALUAR_SESSION_COOKIE = "aurora_evaluar_session";
-const EVALUAR_DRAFT_COOKIE = "aurora_evaluar_draft";
-const EVALUAR_DRAFT_STORAGE_KEY = "aurora_evaluar_draft";
+const EVALUAR_SESSION_STORAGE_KEY = "sasha_evaluar_session";
+const EVALUAR_SESSION_COOKIE = "sasha_evaluar_session";
+const EVALUAR_DRAFT_COOKIE = "sasha_evaluar_draft";
+const EVALUAR_DRAFT_STORAGE_KEY = "sasha_evaluar_draft";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 const isBrowser = () => typeof document !== "undefined";
@@ -115,8 +115,8 @@ export const setEvaluarSession = (state: EvaluarSessionState) => {
 export const deleteEvaluarSession = () => {
   deleteStorage(EVALUAR_SESSION_STORAGE_KEY);
   deleteCookie(EVALUAR_SESSION_COOKIE);
-  deleteStorage("aurora_evaluar_wizard");
-  deleteCookie("aurora_evaluar_wizard");
+  deleteStorage("sasha_evaluar_wizard");
+  deleteCookie("sasha_evaluar_wizard");
 };
 
 export const readEvaluarDraftCookie = () => {

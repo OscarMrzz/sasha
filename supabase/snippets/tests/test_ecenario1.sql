@@ -114,13 +114,13 @@ BEGIN
     -- 1. Asignamos el valor a la variable
     SELECT "idFederacion" INTO id_federacion 
     FROM federaciones 
-    WHERE "nombreFederacion" = 'FECCAH-DEV';
+    WHERE "nombreFederacion" = 'SASHA-DEV';
 
     -- Si no existe la federación base, la creamos (para que el snippet sea auto-contenido)
     IF id_federacion IS NULL THEN
       id_federacion := gen_random_uuid();
       INSERT INTO public.federaciones ("idFederacion","created_at","nombreFederacion")
-      VALUES (id_federacion, now(), 'FECCAH-DEV');
+      VALUES (id_federacion, now(), 'SASHA-DEV');
     END IF;
 
     -- Resolver IDs de roles por nombre (si no existen, los creamos)
@@ -160,8 +160,8 @@ BEGIN
     /* Password: 12345678 */
     /* ====================================================================== */
 
-    -- developer@aurora.com
-    tmp_email := 'developer@aurora.com';
+    -- developer@sasha.com
+    tmp_email := 'developer@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -177,17 +177,17 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Developer", "role": "developer"}',
+      '{"name": "Sasha Developer", "role": "developer"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Developer', id_federacion, new_user_id, idRolDeveloper, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Developer', id_federacion, new_user_id, idRolDeveloper, true);
 
-    -- admin@aurora.com
-    tmp_email := 'admin@aurora.com';
+    -- admin@sasha.com
+    tmp_email := 'admin@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -203,17 +203,17 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Admin", "role": "admin"}',
+      '{"name": "Sasha Admin", "role": "admin"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Admin', id_federacion, new_user_id, idRolAdmin, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Admin', id_federacion, new_user_id, idRolAdmin, true);
 
-    -- admintemporal@aurora.com
-    tmp_email := 'admintemporal@aurora.com';
+    -- admintemporal@sasha.com
+    tmp_email := 'admintemporal@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -229,17 +229,17 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Admin Temporal", "role": "admin temporal"}',
+      '{"name": "Sasha Admin Temporal", "role": "admin temporal"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Admin Temporal', id_federacion, new_user_id, idRolAdminTemporal, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Admin Temporal', id_federacion, new_user_id, idRolAdminTemporal, true);
 
-    -- jurado@aurora.com
-    tmp_email := 'jurado@aurora.com';
+    -- jurado@sasha.com
+    tmp_email := 'jurado@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -255,7 +255,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Jurado", "role": "jurado"}',
+      '{"name": "Sasha Jurado", "role": "jurado"}',
       now(), now(),
       '', '', '', ''
     );
@@ -263,10 +263,10 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilJurado := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilJurado, now(), 'Aurora Jurado', id_federacion, new_user_id, idRolJurado, true);
+    VALUES (idPerfilJurado, now(), 'Sasha Jurado', id_federacion, new_user_id, idRolJurado, true);
 
-    -- fiscal@aurora.com
-    tmp_email := 'fiscal@aurora.com';
+    -- fiscal@sasha.com
+    tmp_email := 'fiscal@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -282,7 +282,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Fiscal", "role": "fiscal"}',
+      '{"name": "Sasha Fiscal", "role": "fiscal"}',
       now(), now(),
       '', '', '', ''
     );
@@ -290,10 +290,10 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilFiscal := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilFiscal, now(), 'Aurora Fiscal', id_federacion, new_user_id, idRolFiscal, true);
+    VALUES (idPerfilFiscal, now(), 'Sasha Fiscal', id_federacion, new_user_id, idRolFiscal, true);
 
-    -- dirigente@aurora.com
-    tmp_email := 'dirigente@aurora.com';
+    -- dirigente@sasha.com
+    tmp_email := 'dirigente@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -309,7 +309,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Dirigente", "role": "dirigente"}',
+      '{"name": "Sasha Dirigente", "role": "dirigente"}',
       now(), now(),
       '', '', '', ''
     );
@@ -317,10 +317,10 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilDirigente := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilDirigente, now(), 'Aurora Dirigente', id_federacion, new_user_id, idRolDirigente, true);
+    VALUES (idPerfilDirigente, now(), 'Sasha Dirigente', id_federacion, new_user_id, idRolDirigente, true);
 
-    -- liderbanda@aurora.com
-    tmp_email := 'liderbanda@aurora.com';
+    -- liderbanda@sasha.com
+    tmp_email := 'liderbanda@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -336,14 +336,14 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Lider Banda", "role": "lider de banda"}',
+      '{"name": "Sasha Lider Banda", "role": "lider de banda"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Lider Banda', id_federacion, new_user_id, idRolLiderbanda, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Lider Banda', id_federacion, new_user_id, idRolLiderbanda, true);
 
   
 
@@ -511,7 +511,7 @@ VALUES
 (gen_random_uuid(),now(),'Banda Independiente de Cofradilla',idCategoriaA,idRegionPrincipal,id_federacion),
 (gen_random_uuid(),now(),'Banda Independiente Cristo Rey',idCategoriaA,idRegionPrincipal,id_federacion);
 
-    -- dirigente@aurora.com → Banda Independiente Dos Caminos
+    -- dirigente@sasha.com → Banda Independiente Dos Caminos
     UPDATE public.perfiles
     SET "idForaneaBanda" = idBandaDosCaminos
     WHERE "idPerfil" = idPerfilDirigente;

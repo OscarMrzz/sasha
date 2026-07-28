@@ -158,13 +158,13 @@ BEGIN
     -- 1. Asignamos el valor a la variable
     SELECT "idFederacion" INTO id_federacion 
     FROM federaciones 
-    WHERE "nombreFederacion" = 'FECCAH-DEV';
+    WHERE "nombreFederacion" = 'SASHA-DEV';
 
     -- Si no existe la federación base, la creamos (para que el snippet sea auto-contenido)
     IF id_federacion IS NULL THEN
       id_federacion := gen_random_uuid();
       INSERT INTO public.federaciones ("idFederacion","created_at","nombreFederacion")
-      VALUES (id_federacion, now(), 'FECCAH-DEV');
+      VALUES (id_federacion, now(), 'SASHA-DEV');
     END IF;
 
     -- Resolver IDs de roles por nombre (si no existen, los creamos)
@@ -230,8 +230,8 @@ BEGIN
     /* Password: 12345678 */
     /* ====================================================================== */
 
-    -- developer@aurora.com
-    tmp_email := 'developer@aurora.com';
+    -- developer@sasha.com
+    tmp_email := 'developer@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -247,17 +247,17 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Developer", "role": "developer"}',
+      '{"name": "Sasha Developer", "role": "developer"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Developer', id_federacion, new_user_id, idRolDeveloper, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Developer', id_federacion, new_user_id, idRolDeveloper, true);
 
-    -- admin@aurora.com
-    tmp_email := 'admin@aurora.com';
+    -- admin@sasha.com
+    tmp_email := 'admin@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -273,17 +273,17 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Admin", "role": "admin"}',
+      '{"name": "Sasha Admin", "role": "admin"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Admin', id_federacion, new_user_id, idRolAdmin, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Admin', id_federacion, new_user_id, idRolAdmin, true);
 
-    -- admintemporal@aurora.com
-    tmp_email := 'admintemporal@aurora.com';
+    -- admintemporal@sasha.com
+    tmp_email := 'admintemporal@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -299,18 +299,18 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Admin Temporal", "role": "admin temporal"}',
+      '{"name": "Sasha Admin Temporal", "role": "admin temporal"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Admin Temporal', id_federacion, new_user_id, idRolAdminTemporal, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Admin Temporal', id_federacion, new_user_id, idRolAdminTemporal, true);
 
-    -- jurado1@aurora.com … jurado5@aurora.com (todos vinculados a todos los eventos abajo)
+    -- jurado1@sasha.com … jurado5@sasha.com (todos vinculados a todos los eventos abajo)
     FOR i_jurado IN 1..5 LOOP
-      tmp_email := format('jurado%s@aurora.com', i_jurado);
+      tmp_email := format('jurado%s@sasha.com', i_jurado);
       new_user_id := gen_random_uuid();
       new_identity_id := gen_random_uuid();
       tmp_id := gen_random_uuid();
@@ -327,19 +327,19 @@ BEGIN
         extensions.crypt(seed_password, extensions.gen_salt('bf')),
         now(), now(), now(),
         '{"provider": "email", "providers": ["email"]}',
-        format('{"name": "Aurora Jurado %s", "role": "jurado"}', i_jurado)::jsonb,
+        format('{"name": "Sasha Jurado %s", "role": "jurado"}', i_jurado)::jsonb,
         now(), now(),
         '', '', '', ''
       );
       INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
       VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
       INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-      VALUES (tmp_id, now(), format('Aurora Jurado %s', i_jurado), id_federacion, new_user_id, idRolJurado, true);
+      VALUES (tmp_id, now(), format('Sasha Jurado %s', i_jurado), id_federacion, new_user_id, idRolJurado, true);
       idPerfilJurados := array_append(idPerfilJurados, tmp_id);
     END LOOP;
 
-    -- fiscal@aurora.com
-    tmp_email := 'fiscal@aurora.com';
+    -- fiscal@sasha.com
+    tmp_email := 'fiscal@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -355,7 +355,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Fiscal", "role": "fiscal"}',
+      '{"name": "Sasha Fiscal", "role": "fiscal"}',
       now(), now(),
       '', '', '', ''
     );
@@ -363,10 +363,10 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilFiscal := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilFiscal, now(), 'Aurora Fiscal', id_federacion, new_user_id, idRolFiscal, true);
+    VALUES (idPerfilFiscal, now(), 'Sasha Fiscal', id_federacion, new_user_id, idRolFiscal, true);
 
-    -- liderbanda@aurora.com
-    tmp_email := 'liderbanda@aurora.com';
+    -- liderbanda@sasha.com
+    tmp_email := 'liderbanda@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -382,17 +382,17 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Lider Banda", "role": "lider de banda"}',
+      '{"name": "Sasha Lider Banda", "role": "lider de banda"}',
       now(), now(),
       '', '', '', ''
     );
     INSERT INTO auth.identities (provider_id, id, user_id, identity_data, provider, last_sign_in_at, created_at, updated_at)
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (gen_random_uuid(), now(), 'Aurora Lider Banda', id_federacion, new_user_id, idRolLiderbanda, true);
+    VALUES (gen_random_uuid(), now(), 'Sasha Lider Banda', id_federacion, new_user_id, idRolLiderbanda, true);
 
-    -- responsablebandas@aurora.com
-    tmp_email := 'responsablebandas@aurora.com';
+    -- responsablebandas@sasha.com
+    tmp_email := 'responsablebandas@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -408,7 +408,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Responsable Bandas", "role": "responsable de bandas"}',
+      '{"name": "Sasha Responsable Bandas", "role": "responsable de bandas"}',
       now(), now(),
       '', '', '', ''
     );
@@ -416,10 +416,10 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilResponsableBandas := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilResponsableBandas, now(), 'Aurora Responsable Bandas', id_federacion, new_user_id, idRolResponsableBandas, true);
+    VALUES (idPerfilResponsableBandas, now(), 'Sasha Responsable Bandas', id_federacion, new_user_id, idRolResponsableBandas, true);
 
-    -- responsableusuarios@aurora.com
-    tmp_email := 'responsableusuarios@aurora.com';
+    -- responsableusuarios@sasha.com
+    tmp_email := 'responsableusuarios@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -435,7 +435,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Responsable Usuarios", "role": "responsable de usuarios"}',
+      '{"name": "Sasha Responsable Usuarios", "role": "responsable de usuarios"}',
       now(), now(),
       '', '', '', ''
     );
@@ -443,10 +443,10 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilResponsableUsuarios := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilResponsableUsuarios, now(), 'Aurora Responsable Usuarios', id_federacion, new_user_id, idRolResponsableUsuarios, true);
+    VALUES (idPerfilResponsableUsuarios, now(), 'Sasha Responsable Usuarios', id_federacion, new_user_id, idRolResponsableUsuarios, true);
 
-    -- responsableeventos@aurora.com
-    tmp_email := 'responsableeventos@aurora.com';
+    -- responsableeventos@sasha.com
+    tmp_email := 'responsableeventos@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -462,7 +462,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Responsable Eventos", "role": "responsable de eventos"}',
+      '{"name": "Sasha Responsable Eventos", "role": "responsable de eventos"}',
       now(), now(),
       '', '', '', ''
     );
@@ -470,10 +470,10 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilResponsableEventos := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilResponsableEventos, now(), 'Aurora Responsable Eventos', id_federacion, new_user_id, idRolResponsableEventos, true);
+    VALUES (idPerfilResponsableEventos, now(), 'Sasha Responsable Eventos', id_federacion, new_user_id, idRolResponsableEventos, true);
 
-    -- responsablemesa@aurora.com
-    tmp_email := 'responsablemesa@aurora.com';
+    -- responsablemesa@sasha.com
+    tmp_email := 'responsablemesa@sasha.com';
     new_user_id := gen_random_uuid();
     new_identity_id := gen_random_uuid();
     INSERT INTO auth.users (
@@ -489,7 +489,7 @@ BEGIN
       extensions.crypt(seed_password, extensions.gen_salt('bf')),
       now(), now(), now(),
       '{"provider": "email", "providers": ["email"]}',
-      '{"name": "Aurora Responsable Mesa", "role": "responsable de mesa"}',
+      '{"name": "Sasha Responsable Mesa", "role": "responsable de mesa"}',
       now(), now(),
       '', '', '', ''
     );
@@ -497,7 +497,7 @@ BEGIN
     VALUES (tmp_email, new_identity_id, new_user_id, format('{"sub":"%s","email":"%s"}', new_user_id, tmp_email)::jsonb, 'email', now(), now(), now());
     idPerfilResponsableMesa := gen_random_uuid();
     INSERT INTO public.perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-    VALUES (idPerfilResponsableMesa, now(), 'Aurora Responsable Mesa', id_federacion, new_user_id, idRolResponsableMesa, true);
+    VALUES (idPerfilResponsableMesa, now(), 'Sasha Responsable Mesa', id_federacion, new_user_id, idRolResponsableMesa, true);
 
     /* ====================================================================== */
     /* PERSONAL POR ZONA - 4 JURADOS + 1 FISCAL + 1 RESPONSABLE DE MESA POR ZONA */
@@ -523,7 +523,7 @@ BEGIN
 
         /* Crear 4 jurados por zona */
         FOR zona_jurado_idx IN 1..4 LOOP
-          tmp_email := format('jurado%s%s@aurora.com', lower(CASE WHEN zona_nombre = 'Centro' THEN 'centro' ELSE zona_nombre END), zona_jurado_idx);
+          tmp_email := format('jurado%s%s@sasha.com', lower(CASE WHEN zona_nombre = 'Centro' THEN 'centro' ELSE zona_nombre END), zona_jurado_idx);
           new_user_id := gen_random_uuid();
           new_identity_id := gen_random_uuid();
           tmp_id := gen_random_uuid();
@@ -553,7 +553,7 @@ BEGIN
         END LOOP;
 
         /* Crear fiscal por zona */
-        tmp_email := format('fiscal%s@aurora.com', lower(CASE WHEN zona_nombre = 'Centro' THEN 'centro' ELSE zona_nombre END));
+        tmp_email := format('fiscal%s@sasha.com', lower(CASE WHEN zona_nombre = 'Centro' THEN 'centro' ELSE zona_nombre END));
         new_user_id := gen_random_uuid();
         new_identity_id := gen_random_uuid();
         zona_fiscal := gen_random_uuid();
@@ -580,7 +580,7 @@ BEGIN
         VALUES (zona_fiscal, now(), format('Fiscal %s', zona_nombre), id_federacion, new_user_id, idRolFiscal, true);
 
         /* Crear responsable de mesa por zona */
-        tmp_email := format('responsablemesa%s@aurora.com', lower(CASE WHEN zona_nombre = 'Centro' THEN 'centro' ELSE zona_nombre END));
+        tmp_email := format('responsablemesa%s@sasha.com', lower(CASE WHEN zona_nombre = 'Centro' THEN 'centro' ELSE zona_nombre END));
         new_user_id := gen_random_uuid();
         new_identity_id := gen_random_uuid();
         zona_mesa := gen_random_uuid();
@@ -772,7 +772,7 @@ END seed_rubricas_por_categoria;
 
 
 /* ====================================================================== */
-/* BANDAS FECCAH 2026 + UN DIRIGENTE POR BANDA                            */
+/* BANDAS SASHA 2026 + UN DIRIGENTE POR BANDA                            */
 /* ====================================================================== */
 <<seed_bandas_y_dirigentes>>
 DECLARE
@@ -783,41 +783,41 @@ BEGIN
   FOR banda_row IN
     SELECT *
     FROM (VALUES
-      ('Inst. Fran D.R', 'B', 'dirigentefrandr@aurora.com'),
-      ('Inst. Minerva', 'B', 'dirigenteminerva@aurora.com'),
-      ('Inst. Santa Cruz', 'B', 'dirigenteinstitutosantacruz@aurora.com'),
-      ('Inst. Manantial de valores', 'B', 'dirigentemanantialdevalores@aurora.com'),
-      ('ind. Cholomeña', 'B', 'dirigentecholomena@aurora.com'),
-      ('ind. 0501', 'B', 'dirigente0501@aurora.com'),
-      ('Inst. Ponce', 'B', 'dirigenteponce@aurora.com'),
-      ('Inst. En-Hacore', 'B', 'dirigenteenhacore@aurora.com'),
-      ('Inst. Saunt Anthony', 'B', 'dirigentesauntanthony@aurora.com'),
-      ('ind. Lluvia de Peces', 'B', 'dirigentelluviadepeces@aurora.com'),
-      ('Inst. bethel', 'B', 'dirigentebethel@aurora.com'),
-      ('ind. Furia Blanca', 'B', 'dirigentefuriablanca@aurora.com'),
-      ('Inst. Republica de Honduras', 'B', 'dirigenterepublicadehonduras@aurora.com'),
-      ('Ind. Santa Cruz', 'B', 'dirigenteindependientesantacruz@aurora.com'),
-      ('Inst. Sotero Barahona', 'B', 'dirigentesoterobarahona@aurora.com'),
-      ('Inst. Union y Esfurzo', 'B', 'dirigenteunionyesfurzo@aurora.com'),
-      ('ind. Crito Rey', 'B', 'dirigenteindependientecritorey@aurora.com'),
-      ('inst. Crito Rey', 'A', 'dirigenteinstitutocritorey@aurora.com'),
-      ('Muni. Negriteña', 'A', 'dirigentenegritena@aurora.com'),
-      ('ind. Cofradilla', 'A', 'dirigentecofradilla@aurora.com'),
-      ('inst. Subirana', 'A', 'dirigentesubirana@aurora.com'),
-      ('Ind.  Dos caminos', 'A', 'dirigentedoscaminos@aurora.com'),
-      ('Ind.  Mezapeña', 'A', 'dirigentemezapena@aurora.com'),
-      ('Ind.  Legion Porteña', 'A', 'dirigentelegionportena@aurora.com'),
-      ('Ind.  Delfina Mejia', 'A', 'dirigentedelfinamejia@aurora.com'),
-      ('Ind.  San Antonio', 'A', 'dirigentesanantonio@aurora.com'),
-      ('Ind.  Perla ', 'A', 'dirigenteperla@aurora.com'),
-      ('Ind. Tecno', 'PREMIER', 'dirigentetecno@aurora.com'),
-      ('Ind. ASB', 'PREMIER', 'dirigenteasb@aurora.com'),
-      ('Ind. BIT', 'PREMIER', 'dirigentebit@aurora.com'),
-      ('Inst. San ramon', 'PREMIER', 'dirigentesanramon@aurora.com'),
-      ('Inst. Patria', 'PREMIER', 'dirigentepatria@aurora.com'),
-      ('Inst. Pagan', 'PREMIER', 'dirigentepagan@aurora.com'),
-      ('Ind. IPC', 'PREMIER', 'dirigenteipc@aurora.com'),
-      ('Ind. MBP', 'PREMIER', 'dirigentembp@aurora.com')
+      ('Inst. Fran D.R', 'B', 'dirigentefrandr@sasha.com'),
+      ('Inst. Minerva', 'B', 'dirigenteminerva@sasha.com'),
+      ('Inst. Santa Cruz', 'B', 'dirigenteinstitutosantacruz@sasha.com'),
+      ('Inst. Manantial de valores', 'B', 'dirigentemanantialdevalores@sasha.com'),
+      ('ind. Cholomeña', 'B', 'dirigentecholomena@sasha.com'),
+      ('ind. 0501', 'B', 'dirigente0501@sasha.com'),
+      ('Inst. Ponce', 'B', 'dirigenteponce@sasha.com'),
+      ('Inst. En-Hacore', 'B', 'dirigenteenhacore@sasha.com'),
+      ('Inst. Saunt Anthony', 'B', 'dirigentesauntanthony@sasha.com'),
+      ('ind. Lluvia de Peces', 'B', 'dirigentelluviadepeces@sasha.com'),
+      ('Inst. bethel', 'B', 'dirigentebethel@sasha.com'),
+      ('ind. Furia Blanca', 'B', 'dirigentefuriablanca@sasha.com'),
+      ('Inst. Republica de Honduras', 'B', 'dirigenterepublicadehonduras@sasha.com'),
+      ('Ind. Santa Cruz', 'B', 'dirigenteindependientesantacruz@sasha.com'),
+      ('Inst. Sotero Barahona', 'B', 'dirigentesoterobarahona@sasha.com'),
+      ('Inst. Union y Esfurzo', 'B', 'dirigenteunionyesfurzo@sasha.com'),
+      ('ind. Crito Rey', 'B', 'dirigenteindependientecritorey@sasha.com'),
+      ('inst. Crito Rey', 'A', 'dirigenteinstitutocritorey@sasha.com'),
+      ('Muni. Negriteña', 'A', 'dirigentenegritena@sasha.com'),
+      ('ind. Cofradilla', 'A', 'dirigentecofradilla@sasha.com'),
+      ('inst. Subirana', 'A', 'dirigentesubirana@sasha.com'),
+      ('Ind.  Dos caminos', 'A', 'dirigentedoscaminos@sasha.com'),
+      ('Ind.  Mezapeña', 'A', 'dirigentemezapena@sasha.com'),
+      ('Ind.  Legion Porteña', 'A', 'dirigentelegionportena@sasha.com'),
+      ('Ind.  Delfina Mejia', 'A', 'dirigentedelfinamejia@sasha.com'),
+      ('Ind.  San Antonio', 'A', 'dirigentesanantonio@sasha.com'),
+      ('Ind.  Perla ', 'A', 'dirigenteperla@sasha.com'),
+      ('Ind. Tecno', 'PREMIER', 'dirigentetecno@sasha.com'),
+      ('Ind. ASB', 'PREMIER', 'dirigenteasb@sasha.com'),
+      ('Ind. BIT', 'PREMIER', 'dirigentebit@sasha.com'),
+      ('Inst. San ramon', 'PREMIER', 'dirigentesanramon@sasha.com'),
+      ('Inst. Patria', 'PREMIER', 'dirigentepatria@sasha.com'),
+      ('Inst. Pagan', 'PREMIER', 'dirigentepagan@sasha.com'),
+      ('Ind. IPC', 'PREMIER', 'dirigenteipc@sasha.com'),
+      ('Ind. MBP', 'PREMIER', 'dirigentembp@sasha.com')
     ) AS bandas_seed(nombre_banda, categoria_banda, email_dirigente)
   LOOP
     categoria_id := CASE banda_row.categoria_banda
@@ -901,9 +901,9 @@ BEGIN
 END seed_bandas_y_dirigentes;
 
 /* ====================================================================== */
-/* EVENTOS FECCAH 2026                                                    */
+/* EVENTOS SASHA 2026                                                    */
 /* ====================================================================== */
-<<seed_eventos_feccah_2026>>
+<<seed_eventos_sasha_2026>>
 DECLARE
   evento_row RECORD;
   evento_id UUID;
@@ -971,7 +971,7 @@ BEGIN
       idEventosEvaluacion := array_append(idEventosEvaluacion, evento_id);
     END IF;
   END LOOP;
-END seed_eventos_feccah_2026;
+END seed_eventos_sasha_2026;
 
 /* ====================================================================== */
 /* Premios por escuadra (demo: banda evaluada × eventos de evaluación)    */
@@ -1083,7 +1083,7 @@ END seed_eventos_feccah_2026;
 
     /* ====================================================================== */
     /* EVALUACIONES: 5 jurados = 5 rúbricas (cada jurado evalúa solo 1).       */
-    /* Banda Dos Caminos en los dos primeros eventos FECCAH 2026.             */
+    /* Banda Dos Caminos en los dos primeros eventos SASHA 2026.             */
     /* ====================================================================== */
     IF idBandaEvaluada IS NOT NULL THEN
       FOREACH v_evento IN ARRAY idEventosEvaluacion LOOP

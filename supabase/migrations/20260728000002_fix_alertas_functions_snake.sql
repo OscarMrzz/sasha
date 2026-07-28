@@ -4,43 +4,7 @@
 DROP POLICY IF EXISTS "crear" ON public.registro_cumplimiento_evaluaciones;
 DROP POLICY IF EXISTS "crear" ON public.registro_comentarios;
 
--- =============================================================================
--- revisar_permisos (cuerpo aún referenciaba columnas camelCase)
--- =============================================================================
-CREATE OR REPLACE FUNCTION public.revisar_permisos(target_table text, target_action text)
- RETURNS boolean
- LANGUAGE plpgsql
- SECURITY DEFINER
- SET search_path TO 'public'
- SET row_security TO 'off'
-AS $function$
-DECLARE
-  tiene_permisos boolean;
-  id_rol_user_auth uuid;
-BEGIN
-  SELECT pf.id_foranea_rol INTO id_rol_user_auth
-  FROM public.perfiles pf
-  WHERE pf.id_foranea_user = auth.uid()
-  ORDER BY
-    CASE WHEN pf.id_foranea_banda IS NOT NULL THEN 0 ELSE 1 END,
-    pf.created_at DESC NULLS LAST
-  LIMIT 1;
-
-  IF id_rol_user_auth IS NULL THEN
-    RETURN false;
-  END IF;
-
-  SELECT EXISTS (
-    SELECT 1
-    FROM public.permisos
-    WHERE permisos.id_foranea_rol = id_rol_user_auth
-      AND permisos.tabla = target_table
-      AND permisos.accion = target_action
-  ) INTO tiene_permisos;
-
-  RETURN tiene_permisos;
-END;
-$function$;
+-- revisar_permisos: ver migración 20260728000003_fix_revisar_permisos_snake_case.sql
 
 -- Evaluaciones duplicadas: funciones, permisos, policies RLS e indices UNIQUE.
 -- Funciones canonicas tambien en: supabase/snippets/funciones/funciones.sql

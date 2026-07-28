@@ -2,18 +2,18 @@
 -- Sintaxis correcta postgre_sql
 --
 -- Usuarios por defecto en este seed:
---   admin:      admin@feccah.com      / adminfeccha01
---   secretaria: secretaria@feccah.com / secretariafeccah
+--   admin:      admin@sasha.com      / adminsasha01
+--   secretaria: secretaria@sasha.com / secretariasasha
 
 -- variables
 do $$
 declare
     id_user uuid := gen_random_uuid();
-    user_email text := 'admin@feccah.net';
-    user_password text := 'adminfeccah';
+    user_email text := 'admin@sasha.net';
+    user_password text := 'adminsasha';
     id_user_secretaria uuid := gen_random_uuid();
-    user_email_secretaria text := 'secretaria@feccah.com';
-    user_password_secretaria text := 'secretariafeccah';
+    user_email_secretaria text := 'secretaria@sasha.com';
+    user_password_secretaria text := 'secretariasasha';
     id_rol_developer uuid := gen_random_uuid();
     id_rol_admin uuid := gen_random_uuid();
     id_rol_admin_temporal uuid := gen_random_uuid();
@@ -42,7 +42,7 @@ insert into public.federaciones (id_federacion,"created_at",nombre_federacion)
 values (
     id_federacion,
     now(),
-    'feccah-dev'
+    'SASHA-DEV'
 );
 
 -- dentro del begin, después de insertar la federación:
@@ -111,7 +111,7 @@ values
     now(),
     now(),
     '{"provider": "email", "providers": ["email"]}',
-    '{"name": "feccah Admin", "role": "admin"}',
+    '{"name": "Sasha Admin", "role": "admin"}',
     now(),
     now(),
     '',
@@ -145,7 +145,7 @@ values
 -- Crear perfil en public.perfiles (cuarto)
 insert into perfiles (id_perfil,"created_at","nombre",id_foranea_federacion,id_foranea_user,id_foranea_rol,"permisos") 
 values(
-    gen_random_uuid(), now(),'feccah Admin',id_federacion,id_user,id_rol_admin,true
+    gen_random_uuid(), now(),'Sasha Admin',id_federacion,id_user,id_rol_admin,true
 );
 
 -- user secretaria en auth.users
@@ -179,7 +179,7 @@ values(
     now(),
     now(),
     '{"provider": "email", "providers": ["email"]}',
-    '{"name": "feccah Secretaria", "role": "secretaria"}',
+    '{"name": "Sasha Secretaria", "role": "secretaria"}',
     now(),
     now(),
     '',
@@ -211,7 +211,7 @@ values(
 
 insert into perfiles (id_perfil,"created_at","nombre",id_foranea_federacion,id_foranea_user,id_foranea_rol,"permisos")
 values(
-    gen_random_uuid(), now(),'feccah Secretaria',id_federacion,id_user_secretaria,id_rol_secretaria,true
+    gen_random_uuid(), now(),'Sasha Secretaria',id_federacion,id_user_secretaria,id_rol_secretaria,true
 );
 
 
@@ -1483,7 +1483,7 @@ grant select on public.vista_detalle_checkout to anon, authenticated, service_ro
 
 insert into storage.buckets (id, name, public)
 values
-  ('img-fotos-perfiles-aurora', 'img-fotos-perfiles-aurora', false),
+  ('img-fotos-perfiles-sasha', 'img-fotos-perfiles-sasha', false),
   ('img_logo_bandas', 'img_logo_bandas', false)
 on conflict (id) do nothing;
 
@@ -1494,41 +1494,41 @@ drop policy if exists "eliminar 1gmiffv_0" on storage.objects;
 drop policy if exists "eliminar 1gmiffv_1" on storage.objects;
 drop policy if exists "leer 1gmiffv_0" on storage.objects;
 
--- img-fotos-perfiles-aurora
+-- img-fotos-perfiles-sasha
 drop policy if exists "storage_perfiles_agregar" on storage.objects;
 create policy "storage_perfiles_agregar"
   on storage.objects
   for insert
   to authenticated
-  with check (bucket_id = 'img-fotos-perfiles-aurora');
+  with check (bucket_id = 'img-fotos-perfiles-sasha');
 
 drop policy if exists "storage_perfiles_editar" on storage.objects;
 create policy "storage_perfiles_editar"
   on storage.objects
   for update
   to authenticated
-  using (bucket_id = 'img-fotos-perfiles-aurora');
+  using (bucket_id = 'img-fotos-perfiles-sasha');
 
 drop policy if exists "storage_perfiles_eliminar" on storage.objects;
 create policy "storage_perfiles_eliminar"
   on storage.objects
   for delete
   to authenticated
-  using (bucket_id = 'img-fotos-perfiles-aurora');
+  using (bucket_id = 'img-fotos-perfiles-sasha');
 
 drop policy if exists "storage_perfiles_leer_authenticated" on storage.objects;
 create policy "storage_perfiles_leer_authenticated"
   on storage.objects
   for select
   to authenticated
-  using (bucket_id = 'img-fotos-perfiles-aurora');
+  using (bucket_id = 'img-fotos-perfiles-sasha');
 
 drop policy if exists "storage_perfiles_leer_public" on storage.objects;
 create policy "storage_perfiles_leer_public"
   on storage.objects
   for select
   to public
-  using (bucket_id = 'img-fotos-perfiles-aurora');
+  using (bucket_id = 'img-fotos-perfiles-sasha');
 
 -- img_logo_bandas
 drop policy if exists "storage_logo_banda_agregar" on storage.objects;

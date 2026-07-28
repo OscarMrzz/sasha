@@ -62,7 +62,7 @@ BEGIN
     -- 1. Asignamos el valor a la variable
     SELECT "idFederacion" INTO id_federacion 
     FROM federaciones 
-    WHERE "nombreFederacion" = 'FECCAH-DEV';
+    WHERE "nombreFederacion" = 'SASHA-DEV';
 
   
 

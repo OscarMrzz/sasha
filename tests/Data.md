@@ -1,4 +1,4 @@
-# Aurora — Roles, ventanas y acciones
+# Sasha — Roles, ventanas y acciones
 
 > Fuentes: `supabase/seed.sql` (permisos BD), `src/proxy.ts` (protección de rutas), `src/lib/navegacion/navigationConfig.ts` (menú lateral).
 >
@@ -20,7 +20,7 @@
 | # | Rol | Usuario seed | Ruta de entrada |
 |---|-----|--------------|-----------------|
 | 1 | `developer` | — | `/sup` |
-| 2 | `admin` | admin@feccah.com | `/PanelControlPage` |
+| 2 | `admin` | admin@sasha.com | `/PanelControlPage` |
 | 3 | `admin temporal` | — | `/PanelControlPage` |
 | 4 | `jurado` | — | `/EvaluarPage` |
 | 5 | `fiscal` | — | `/fiscal` |
@@ -31,7 +31,7 @@
 | 10 | `responsable de usuarios` | — | `/responsable-usuarios` |
 | 11 | `responsable de eventos` | — | `/responsable-eventos` |
 | 12 | `responsable de mesa` | — | `/responsable-mesa` |
-| 13 | `secretaria` | secretaria@feccah.com | `/secretaria` |
+| 13 | `secretaria` | secretaria@sasha.com | `/secretaria` |
 | 14 | `comite de disciplina` | — | `/diciplina` |
 
 **Notas:**

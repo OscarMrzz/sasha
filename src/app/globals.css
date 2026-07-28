@@ -47,12 +47,9 @@ body:has(dialog:modal) {
   background: #ff8400;
 }
 
-/* Clase para fondo de login */
+/* Fondo plano login / páginas de error */
 .login {
-  background-image: url("/imgs/fondoLogin2.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  background-color: rgb(2 6 23);
 }
 
 /* PDF */

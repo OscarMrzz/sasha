@@ -21,7 +21,7 @@ const elId = "id_perfil";
 
 /** Bucket de fotos de perfil (debe coincidir con Storage en Supabase). */
 export function getPerfilFotosBucketId(): string {
-    return process.env.NEXT_PUBLIC_SUPABASE_BUCKET_PERFILES || "img-fotos-perfiles-aurora";
+    return process.env.NEXT_PUBLIC_SUPABASE_BUCKET_PERFILES || "img-fotos-perfiles-sasha";
 }
 
 /**

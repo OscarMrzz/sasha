@@ -81,7 +81,7 @@ using ((bucket_id = 'imgLogoBandas'::text));
   as permissive
   for insert
   to authenticated
-with check ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+with check ((bucket_id = 'img-fotos-perfiles-sasha'::text));
 
 
 
@@ -90,7 +90,7 @@ with check ((bucket_id = 'img-fotos-perfiles-aurora'::text));
   as permissive
   for update
   to authenticated
-using ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+using ((bucket_id = 'img-fotos-perfiles-sasha'::text));
 
 
 
@@ -99,7 +99,7 @@ using ((bucket_id = 'img-fotos-perfiles-aurora'::text));
   as permissive
   for delete
   to authenticated
-using ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+using ((bucket_id = 'img-fotos-perfiles-sasha'::text));
 
 
 
@@ -108,7 +108,7 @@ using ((bucket_id = 'img-fotos-perfiles-aurora'::text));
   as permissive
   for select
   to authenticated
-using ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+using ((bucket_id = 'img-fotos-perfiles-sasha'::text));
 
 
 
@@ -117,7 +117,7 @@ using ((bucket_id = 'img-fotos-perfiles-aurora'::text));
   as permissive
   for select
   to public
-using ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+using ((bucket_id = 'img-fotos-perfiles-sasha'::text));
 
 
 

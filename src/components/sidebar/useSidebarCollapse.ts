@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-const STORAGE_KEY = "aurora-sidebar-collapsed";
+const STORAGE_KEY = "sasha-sidebar-collapsed";
 
 export function useSidebarCollapse() {
   const [collapsed, setCollapsed] = useState(false);

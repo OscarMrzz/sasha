@@ -284,7 +284,7 @@ const FormularioEditarBandaComponent = ({
                 value={formData.nombreBanda}
                 onChange={handleInputChange}
                 className={inputBaseClass}
-                placeholder="Ej. Banda Aurora"
+                placeholder="Ej. Banda Sasha"
                 required
               />
             </div>
@@ -300,7 +300,7 @@ const FormularioEditarBandaComponent = ({
                 value={formData.AliasBanda}
                 onChange={handleInputChange}
                 className={inputBaseClass}
-                placeholder="Ej. Aurora"
+                placeholder="Ej. Sasha"
               />
             </div>
 

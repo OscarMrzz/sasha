@@ -4,7 +4,7 @@ const EncabezadoGeneralCompenet = () => {
   return (
     <div>
         Festiles de Concursos Culturales y Artisticos
-        FECCAH
+        SASHA
       
     </div>
   )

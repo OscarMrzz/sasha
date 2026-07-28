@@ -6,22 +6,22 @@ import { dataBaseSupabase } from "@/lib/supabase";
 const SESSION_COOKIES = [
     "rolPerfil",
     "perfilActivo",
-    "aurora_evaluar_session",
-    "aurora_evaluar_draft",
-    "aurora_evaluar_wizard",
-    "aurora_fiscal_wizard",
-    "aurora_copas_wizard",
+    "sasha_evaluar_session",
+    "sasha_evaluar_draft",
+    "sasha_evaluar_wizard",
+    "sasha_fiscal_wizard",
+    "sasha_copas_wizard",
 ] as const;
 
 const SESSION_STORAGE_KEYS = [
     "EventoSelecionado",
     "CategoriaSelecionada",
     "perfilActivo",
-    "aurora_evaluar_session",
-    "aurora_evaluar_draft",
-    "aurora_evaluar_wizard",
-    "aurora_fiscal_wizard",
-    "aurora_copas_wizard",
+    "sasha_evaluar_session",
+    "sasha_evaluar_draft",
+    "sasha_evaluar_wizard",
+    "sasha_fiscal_wizard",
+    "sasha_copas_wizard",
 ] as const;
 
 const deleteCookie = (name: string) => {
@@ -46,7 +46,7 @@ const limpiarLocalStorageSesion = () => {
         const keysToRemove: string[] = [];
         for (let i = 0; i < window.localStorage.length; i++) {
             const key = window.localStorage.key(i);
-            if (key?.startsWith("aurora_") || key?.startsWith("sb-")) {
+            if (key?.startsWith("sasha_") || key?.startsWith("sb-")) {
                 keysToRemove.push(key);
             }
         }

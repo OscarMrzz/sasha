@@ -2,11 +2,11 @@
 
 Este repo usa el proyecto Docker **`backend-sasha`** (ver `config.toml`).
 
-Es independiente del stack de Aurora (`project_id = "app"`, puertos `6432x`), así que ambos pueden correr a la vez.
+Es independiente de otro stack local (`project_id = "app"`, puertos `6432x`), así que ambos pueden correr a la vez.
 
 ## Puertos
 
-| Servicio | Sasha (`backend-sasha`) | Aurora (`app`) |
+| Servicio | Sasha (`backend-sasha`) | Otro proyecto (`app`) |
 |---|---|---|
 | API | 65321 | 64321 |
 | DB | 65322 | 64322 |
@@ -36,4 +36,4 @@ API: http://127.0.0.1:65321
 npx supabase stop
 ```
 
-No uses `supabase stop` desde Aurora si quieres dejar Sasha arriba: cada proyecto se controla desde su propio directorio.
+No uses `supabase stop` desde el otro proyecto si quieres dejar Sasha arriba: cada uno se controla desde su propio directorio.

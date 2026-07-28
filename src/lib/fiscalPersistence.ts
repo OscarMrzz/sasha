@@ -9,8 +9,8 @@ export type FiscalWizardCookieState = {
   updatedAt: number;
 };
 
-const FISCAL_WIZARD_COOKIE = "aurora_fiscal_wizard";
-const FISCAL_WIZARD_STORAGE_KEY = "aurora_fiscal_wizard";
+const FISCAL_WIZARD_COOKIE = "sasha_fiscal_wizard";
+const FISCAL_WIZARD_STORAGE_KEY = "sasha_fiscal_wizard";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 const CAMPOS_VALIDOS: FiscalWizardCampo[] = ["evento", "categoria", "resultados", ""];

@@ -9,8 +9,8 @@ export type CopasWizardCookieState = {
   updatedAt: number;
 };
 
-const STORAGE_KEY = "aurora_copas_wizard";
-const COOKIE_NAME = "aurora_copas_wizard";
+const STORAGE_KEY = "sasha_copas_wizard";
+const COOKIE_NAME = "sasha_copas_wizard";
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 
 const CAMPOS_VALIDOS: CopasWizardCampo[] = [

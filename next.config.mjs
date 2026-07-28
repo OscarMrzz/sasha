@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-// Ruta canónica de Windows: evita el bug de Turbopack al mezclar trabajos/aurora vs Trabajos/Aurora.
+// Ruta canónica de Windows: evita el bug de Turbopack al mezclar rutas con distinta capitalización.
 const projectRoot = fs.realpathSync.native(
   path.dirname(fileURLToPath(import.meta.url)),
 );

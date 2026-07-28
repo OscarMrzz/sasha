@@ -2,7 +2,7 @@
 # https://supabase.com/docs/guides/local-development/cli/config
 # A string used to distinguish different Supabase projects on the same host. Defaults to the
 # working directory name when running `supabase init`.
-# Distinto de Aurora (`app` / puertos 6432x) para poder correr ambos en Docker a la vez.
+# Distinto de otro stack local (`app` / puertos 6432x) para poder correr ambos en Docker a la vez.
 project_id = "backend-sasha"
 
 [api]

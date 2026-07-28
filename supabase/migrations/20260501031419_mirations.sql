@@ -69,7 +69,7 @@ BEGIN
       AS permissive
       FOR INSERT
       TO authenticated
-    WITH CHECK ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+    WITH CHECK ((bucket_id = 'img-fotos-perfiles-sasha'::text));
   END IF;
 END;
 $$;
@@ -90,7 +90,7 @@ BEGIN
       AS permissive
       FOR UPDATE
       TO authenticated
-    USING ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+    USING ((bucket_id = 'img-fotos-perfiles-sasha'::text));
   END IF;
 END;
 $$;
@@ -111,7 +111,7 @@ BEGIN
       AS permissive
       FOR DELETE
       TO authenticated
-    USING ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+    USING ((bucket_id = 'img-fotos-perfiles-sasha'::text));
   END IF;
 END;
 $$;
@@ -132,7 +132,7 @@ BEGIN
       AS permissive
       FOR SELECT
       TO authenticated
-    USING ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+    USING ((bucket_id = 'img-fotos-perfiles-sasha'::text));
   END IF;
 END;
 $$;
@@ -153,7 +153,7 @@ BEGIN
       AS permissive
       FOR SELECT
       TO public
-    USING ((bucket_id = 'img-fotos-perfiles-aurora'::text));
+    USING ((bucket_id = 'img-fotos-perfiles-sasha'::text));
   END IF;
 END;
 $$;

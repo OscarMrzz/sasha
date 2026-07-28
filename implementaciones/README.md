@@ -57,3 +57,4 @@ NN-slug-corto/
 |---|---|---|
 | 01 | [01-restructura-carpetas](./01-restructura-carpetas/) | Reorganización de carpetas en capas + unificación de components + models |
 | 02 | [02-snake-case-zod](./02-snake-case-zod/) | DB snake_case + Next camelCase + mappers + Zod en forms/services |
+| 03 | [03-sasha-rebrand-seed](./03-sasha-rebrand-seed/) | Rebrand plataforma a Sasha + seed 3 categorías / 9 bandas / 4 eventos |

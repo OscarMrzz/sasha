@@ -198,8 +198,10 @@ export default function RootLayout({
     return (
       <html lang="es" className={cn("font-sans", geist.variable)}>
         <head>
-          <title>Aurora</title>
-          <link rel="icon" href="/favicon.ico" sizes="any" />
+          <title>Sasha</title>
+          <link rel="icon" href="/favicon.ico?v=blank" sizes="any" />
+          <link rel="shortcut icon" href="/favicon.ico?v=blank" />
+          <link rel="apple-touch-icon" href="/favicon.ico?v=blank" />
         </head>
         <body
           className={`bg-gray-800 lg:pt-0 w-full text-gray-50 flex min-h-screen font-poppins ${poppins.className}`}
@@ -218,8 +220,10 @@ export default function RootLayout({
   return (
     <html lang="es" className={cn("font-sans", geist.variable)}>
       <head>
-        <title>Aurora</title>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <title>Sasha</title>
+        <link rel="icon" href="/favicon.ico?v=blank" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.ico?v=blank" />
+        <link rel="apple-touch-icon" href="/favicon.ico?v=blank" />
       </head>
       <body
         className={`bg-slate-800 w-full text-gray-50 flex flex-col h-full font-poppins ${poppins.className}`}
