@@ -50,7 +50,7 @@ async function revalidarIdsBandas(idsBanda: string[]): Promise<number> {
  */
 export async function revalidarBandasDeEvento(idEvento: string): Promise<number> {
   if (!idEvento?.trim()) {
-    throw new Error("idEvento es obligatorio.");
+    throw new Error("id_evento es obligatorio.");
   }
 
   const db = getSupabaseAdmin();
@@ -60,9 +60,9 @@ export async function revalidarBandasDeEvento(idEvento: string): Promise<number>
       .select("id_foranea_banda, estado_asistencia")
       .eq("id_foranea_evento", idEvento),
     db
-      .from("registroCumplimientoEvaluaciones")
-      .select("idForaneaBanda")
-      .eq("idForaneaEvento", idEvento),
+      .from("registro_cumplimiento_evaluaciones")
+      .select("id_foranea_banda")
+      .eq("id_foranea_evento", idEvento),
   ]);
 
   if (confirmacionRes.error) throw confirmacionRes.error;
@@ -80,7 +80,8 @@ export async function revalidarBandasDeEvento(idEvento: string): Promise<number>
             row.id_foranea_banda?.trim(),
           ),
         ...(evaluacionesRes.data ?? []).map(
-          (row: { idForaneaBanda: string | null }) => row.idForaneaBanda?.trim(),
+          (row: { id_foranea_banda: string | null }) =>
+            row.id_foranea_banda?.trim(),
         ),
       ].filter(Boolean) as string[],
     ),
@@ -101,7 +102,7 @@ export async function revalidarResultadosPorIdBanda(
   idBanda: string,
 ): Promise<number> {
   const id = idBanda?.trim();
-  if (!id) throw new Error("idBanda es obligatorio.");
+  if (!id) throw new Error("id_banda es obligatorio.");
   return revalidarIdsBandas([id]);
 }
 
@@ -109,28 +110,36 @@ export async function revalidarResultadosPorRegion(
   idRegion: string,
 ): Promise<number> {
   const id = idRegion?.trim();
-  if (!id) throw new Error("idRegion es obligatorio.");
+  if (!id) throw new Error("id_region es obligatorio.");
 
   const { data, error } = await getSupabaseAdmin()
     .from("bandas")
-    .select("idBanda")
-    .eq("idForaneaRegion", id);
+    .select("id_banda")
+    .eq("id_foranea_region", id);
 
   if (error) throw error;
-  return revalidarIdsBandas((data ?? []).map((row) => String(row.idBanda ?? "")));
+  return revalidarIdsBandas(
+    (data ?? []).map((row) =>
+      String((row as { id_banda?: string }).id_banda ?? ""),
+    ),
+  );
 }
 
 export async function revalidarResultadosPorCategoria(
   idCategoria: string,
 ): Promise<number> {
   const id = idCategoria?.trim();
-  if (!id) throw new Error("idCategoria es obligatorio.");
+  if (!id) throw new Error("id_categoria es obligatorio.");
 
   const { data, error } = await getSupabaseAdmin()
     .from("bandas")
-    .select("idBanda")
-    .eq("idForaneaCategoria", id);
+    .select("id_banda")
+    .eq("id_foranea_categoria", id);
 
   if (error) throw error;
-  return revalidarIdsBandas((data ?? []).map((row) => String(row.idBanda ?? "")));
+  return revalidarIdsBandas(
+    (data ?? []).map((row) =>
+      String((row as { id_banda?: string }).id_banda ?? ""),
+    ),
+  );
 }

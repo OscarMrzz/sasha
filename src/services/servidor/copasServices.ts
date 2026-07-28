@@ -6,6 +6,7 @@ import {
   vistaCopasTemporadaInterface,
 } from "@/models";
 import { unstable_cache } from "next/cache";
+import { fromDbMany } from "@/services/mappers/caseMapper";
 
 export async function getVistaCopasEventos(): Promise<vistaCopasEventosInterface[]> {
   const fetcher = unstable_cache(
@@ -29,7 +30,7 @@ export async function getVistaCopasGlobal(): Promise<vistaCopasGlobalInterface[]
         .from("vista_copas_global")
         .select("*");
       if (error) throw error;
-      return data as vistaCopasGlobalInterface[];
+      return fromDbMany<vistaCopasGlobalInterface>(data ?? []);
     },
     ["vista-copas-global"],
     { tags: ["resultados-global"], revalidate: false },
@@ -45,9 +46,9 @@ export async function getVistaCopasGlobalByIdBanda(
       const { data, error } = await getSupabaseAdmin()
         .from("vista_copas_global")
         .select("*")
-        .eq("idBanda", id);
+        .eq("id_banda", id);
       if (error) throw error;
-      return (data ?? []) as vistaCopasGlobalInterface[];
+      return fromDbMany<vistaCopasGlobalInterface>(data ?? []);
     },
     [`vista-copas-global-banda-${idBanda}`],
     {
@@ -67,7 +68,7 @@ export async function getVistaCopasTemporada(): Promise<
         .from("vista_copas_temporada")
         .select("*");
       if (error) throw error;
-      return (data ?? []) as vistaCopasTemporadaInterface[];
+      return fromDbMany<vistaCopasTemporadaInterface>(data ?? []);
     },
     ["vista-copas-temporada"],
     { tags: ["copas-temporada", "resultados-global"], revalidate: false },

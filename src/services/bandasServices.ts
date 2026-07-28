@@ -1,5 +1,8 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { bandaDatosAmpleosInterface,bandaInterface, perfilDatosAmpleosInterface } from "@/models";
+import { bandaInsertSchema, bandaUpdateSchema } from "@/models/bandas/bandaSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import {
     ACCION_BANDA,
     BandaServicioError,
@@ -10,7 +13,7 @@ import {
 type Interface = bandaInterface;
 
 const tabla = "bandas";
-const elId = "idBanda";
+const elId = "id_banda";
 
 export default class BandasServices {
 
@@ -48,7 +51,7 @@ export default class BandasServices {
                     federaciones(*),
                     categorias(*),
                     regiones(*)
-                `).eq("idForaneaFederacion", this.perfil.idForaneaFederacion).order('nombreBanda', { ascending: true });
+                `).eq("id_foranea_federacion", this.perfil.idForaneaFederacion).order('nombre_banda', { ascending: true });
 
             if (error) {
                 console.error("❌ Error obteniendo bandas con datos completos:", error);
@@ -56,7 +59,7 @@ export default class BandasServices {
             }
 
         
-            return data as bandaDatosAmpleosInterface[];
+            return fromDbMany<bandaDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;
@@ -69,9 +72,9 @@ export default class BandasServices {
               if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
-            const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil.idForaneaFederacion).order('nombreBanda', { ascending: true });
+            const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("id_foranea_federacion", this.perfil.idForaneaFederacion).order('nombre_banda', { ascending: true });
         if (error) throw error;
-        return data;
+        return fromDbMany<bandaInterface>(data ?? []);
 
         }
         catch(error){
@@ -90,11 +93,11 @@ export default class BandasServices {
    const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elId, id).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq(elId, id).eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<bandaInterface>(data);
 
         }
         catch(error){
@@ -118,15 +121,16 @@ export default class BandasServices {
         try{
 
         this.validarFederacionActiva(dataCreate, ACCION_BANDA.CREACION);
-            
+
+        const parsed = parseCamel(bandaInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(parsed as Record<string, unknown>))
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<bandaInterface>(data);
 
 
         }
@@ -142,11 +146,12 @@ export default class BandasServices {
         try {
             this.validarFederacionActiva(dataUpdate, ACCION_BANDA.EDICION);
 
+            const parsed = parseCamel(bandaUpdateSchema, dataUpdate);
             const { data, error } = await dataBaseSupabase
                 .from(tabla)
-                .update(dataUpdate)
+                .update(toDb(parsed as Record<string, unknown>))
                 .eq(elId, id)
-                .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+                .eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
                 .select("*")
                 .single();
 
@@ -154,7 +159,7 @@ export default class BandasServices {
                 const codigo = clasificarErrorBanda(error, ACCION_BANDA.EDICION);
                 throw new BandaServicioError(ACCION_BANDA.EDICION, codigo);
             }
-            return data;
+            return fromDb<bandaInterface>(data);
         } catch (error) {
             if (error instanceof BandaServicioError) throw error;
             const codigo = clasificarErrorBanda(error, ACCION_BANDA.EDICION);
@@ -169,7 +174,7 @@ export default class BandasServices {
             .from(tabla)
             .delete()
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil?.idForaneaFederacion);
 
         if (error) throw error;
         return true;

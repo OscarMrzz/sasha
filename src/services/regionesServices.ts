@@ -1,11 +1,14 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { regionesDatosAmpleosInterface, regionesInterface, perfilDatosAmpleosInterface } from "@/models";
+import { regionesInsertSchema, regionesUpdateSchema } from "@/models/regiones/regionesSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import PerfilesServices from "./perfilesServices";
 
 type Interface = regionesInterface;
 
 const tabla = "regiones";
-const elID = "idRegion"
+const elID = "id_region"
 
 export default class RegionService {
      perfil: perfilDatosAmpleosInterface | null = null;
@@ -39,7 +42,7 @@ export default class RegionService {
                 .select(`
                     *,
                     federaciones(*)
-                `).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+                `).eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
 
             if (error) {
                 console.error("❌ Error obteniendo regiones con federaciones:", error);
@@ -47,7 +50,7 @@ export default class RegionService {
             }
 
          
-            return data as regionesDatosAmpleosInterface[];
+            return fromDbMany<regionesDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;
@@ -55,9 +58,9 @@ export default class RegionService {
     }
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
-        return data;
+        return fromDbMany<regionesInterface>(data ?? []);
     }
 
     async getOne(id: string) {
@@ -71,11 +74,11 @@ export default class RegionService {
              const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elID , id).eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq(elID , id).eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<regionesInterface>(data);
     }
         catch (error) {
             console.error("❌ Error general en getOne:", error);
@@ -97,29 +100,31 @@ export default class RegionService {
     async create(dataCreate: Interface) {
         this.validarFederacionActiva(dataCreate);
 
+        const parsed = parseCamel(regionesInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(parsed as Record<string, unknown>))
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<regionesInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
         this.validarFederacionActiva(dataUpdate);
 
+        const parsed = parseCamel(regionesUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(elID , id)
-            .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<regionesInterface>(data);
     }
 
     async delete(id: string) {
@@ -128,8 +133,8 @@ export default class RegionService {
         const { error } = await dataBaseSupabase
             .from(tabla)
             .delete()
-            .eq("idRegion", id)
-            .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion);
+            .eq("id_region", id)
+            .eq("id_foranea_federacion", this.perfil?.idForaneaFederacion);
 
         if (error) throw error;
         return true;

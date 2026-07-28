@@ -71,7 +71,7 @@ export const validarSesion = async (
   const { data: perfil, error: errPerfil } = await supabase
     .from("perfiles")
     .select("*, roles(*)")
-    .eq("idForaneaUser", idUser)
+    .eq("id_foranea_user", idUser)
     .maybeSingle();
 
   if (errPerfil) {
@@ -126,7 +126,7 @@ const getByIdUSer = async (idUser: string, request: NextRequest): Promise<perfil
   const { data, error } = await supabase
     .from("perfiles")
     .select("*")
-    .eq("idForaneaUser", idUser)
+    .eq("id_foranea_user", idUser)
     .maybeSingle();
   if (error) {
     console.error("❌ getByIdUSer error:", error);
@@ -147,8 +147,8 @@ const getRol = async (perfil: perfilInterface | null, request: NextRequest) => {
   const { data, error } = await supabase
     .from("roles")
     .select("*")
-    .eq("idRol", perfil.idForaneaRol)
-    .eq("idForaneaFederacion", perfil.idForaneaFederacion)
+    .eq("id_rol", perfil.idForaneaRol)
+    .eq("id_foranea_federacion", perfil.idForaneaFederacion)
     .maybeSingle();
   if (error) {
     console.error("❌ getRol error:", error);

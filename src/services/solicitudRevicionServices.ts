@@ -1,11 +1,14 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import {   perfilDatosAmpleosInterface, solicitudRevicionInterface, solicitudRevicionDatosAmpleosInterface, vistaSolicitudRevicionInterface } from "@/models";
+import { solicitudRevicionInsertSchema, solicitudRevicionUpdateSchema } from "@/models/solicitudes/solicitudRevicionSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import PerfilesServices from "./perfilesServices";
 
 type Interface = solicitudRevicionInterface;
 
-const tabla = "solicitudRevicion";
-const elId = "idSolicitud";
+const tabla = "solicitud_revision";
+const elId = "id_solicitud";
 
 export default class SolicitudRevicionServices {
 
@@ -38,14 +41,14 @@ export default class SolicitudRevicionServices {
                     federaciones(*),
                    perfiles(*),
                    registroCumplimientos(*)
-                `).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+                `).eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
 
             if (error) {
                 console.error("❌ Error obteniendo regiones con federaciones:", error);
                 throw error;
             }
 
-            return data as solicitudRevicionDatosAmpleosInterface[];
+            return fromDbMany<solicitudRevicionDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;
@@ -54,14 +57,14 @@ export default class SolicitudRevicionServices {
 
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
-        return data;
+        return fromDbMany<solicitudRevicionInterface>(data ?? []);
     }
     async getVista() {
-        const { data, error } = await dataBaseSupabase.from("vista_solicitud_revicion").select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+        const { data, error } = await dataBaseSupabase.from("vista_solicitud_revicion").select("*").eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
-        return data as vistaSolicitudRevicionInterface[];
+        return fromDbMany<vistaSolicitudRevicionInterface>(data ?? []);
     }
 
     async getVistaPendientesDelDiaPorEventos(
@@ -77,48 +80,50 @@ export default class SolicitudRevicionServices {
         const { data, error } = await dataBaseSupabase
             .from("vista_solicitud_revicion")
             .select("*")
-            .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
-            .in("idForaneaEvento", idsEventos)
+            .eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
+            .in("id_foranea_evento", idsEventos)
             .eq("estado", "pendiente")
             .gte("created_at", inicioDia)
             .lt("created_at", finDia);
 
         if (error) throw error;
-        return data as vistaSolicitudRevicionInterface[];
+        return fromDbMany<vistaSolicitudRevicionInterface>(data ?? []);
     }
 
     async getOne(id: string) {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elId, id).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+            .eq(elId, id).eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<solicitudRevicionInterface>(data);
     }
 
     async create(dataCreate: Interface) {
+        const parsed = parseCamel(solicitudRevicionInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(parsed as Record<string, unknown>))
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<solicitudRevicionInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
+        const parsed = parseCamel(solicitudRevicionUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(elId, id)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<solicitudRevicionInterface>(data);
     }
 
     async delete(id: string) {
@@ -143,14 +148,14 @@ async getPorRegistroCumplido(idRegistroCumplido: string): Promise<solicitudRevic
                     perfiles(*)
 
                 `)
-                .eq("idForaneaRegistroCumplimiento", idRegistroCumplido)
-                .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion);
+                .eq("id_foranea_registro_cumplimiento", idRegistroCumplido)
+                .eq("id_foranea_federacion", this.perfil?.idForaneaFederacion);
             if (error) {
                 console.error("❌ Error obteniendo rubricas por registro cumplido:", error);
                 throw error;
             }
 
-            return data as solicitudRevicionDatosAmpleosInterface[];
+            return fromDbMany<solicitudRevicionDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getPorRegistroCumplido:", error);
             throw error;

@@ -1,13 +1,15 @@
  import { dataBaseSupabase } from "@/lib/supabase";
  import {  perfilDatosAmpleosInterface, registroComentariosDatosAmpleosInterface, registroComentariosInterface } from "@/models";
- 
+ import { registroComentariosInsertSchema, registroComentariosUpdateSchema } from "@/models/comentarios/registroComentariosSchema";
+ import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+ import { parseCamel } from "@/services/mappers/parseCamel";
 
- 
+
  
  type Interface = registroComentariosInterface;
  
- const tabla = "registroComentarios";
- const elId = "idRegistroComentario";
+ const tabla = "registro_comentarios";
+ const elId = "id_registro_comentario";
  
  
  
@@ -47,7 +49,7 @@
              .from(tabla)
              .select(`
                  *
-              ,registroEventos(*),
+              ,registro_eventos(*),
                  bandas(*),
                  
               
@@ -57,7 +59,7 @@
                  federaciones(*),
                  rubricas(*)
              `)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
  
          if (error) {
              console.error("❌ Error obteniendo regiones con federaciones:", error);
@@ -65,24 +67,24 @@
          }
  
        
-         return data as registroComentariosDatosAmpleosInterface[];
-     } catch (error) {
-         console.error("❌ Error general en getDatosAmpleos:", error);
-         throw error;
-     }
- }
- 
-     async get() {
-         
-         if (!this.perfil?.idForaneaFederacion) {
-             throw new Error("No hay federación en el perfil del usuario.");
-         }
-         const { data, error } = await dataBaseSupabase
-         .from(tabla).select("*")
-         .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
-         if (error) throw error;
-         return data;
-     }
+        return fromDbMany<registroComentariosDatosAmpleosInterface>(data ?? []);
+    } catch (error) {
+        console.error("❌ Error general en getDatosAmpleos:", error);
+        throw error;
+    }
+}
+
+    async get() {
+        
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const { data, error } = await dataBaseSupabase
+        .from(tabla).select("*")
+        .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
+        if (error) throw error;
+        return fromDbMany<registroComentariosInterface>(data ?? []);
+    }
  
      async getOne(id: string) {
          
@@ -93,7 +95,7 @@
              .from(tabla)
                .select(`
                  *
-              ,registroEventos(*),
+              ,registro_eventos(*),
                  bandas(*),
                  
                
@@ -103,15 +105,15 @@
                  federaciones(*),
                  rubricas(*)
              `)
-             .eq(elId, id)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .single();
- 
-         if (error) throw error;
-         return data;
-     }
- 
-     async getPorEvento(idEvento: string) {
+            .eq(elId, id)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+            .single();
+
+        if (error) throw error;
+        return fromDb<registroComentariosDatosAmpleosInterface>(data);
+    }
+
+    async getPorEvento(idEvento: string) {
          
          if (!this.perfil?.idForaneaFederacion) {
              throw new Error("No hay federación en el perfil del usuario.");
@@ -120,7 +122,7 @@
              .from(tabla)
                .select(`
                  *
-              ,registroEventos(*),
+              ,registro_eventos(*),
                  bandas(*),
                  
                 
@@ -130,14 +132,14 @@
                  federaciones(*),
                  rubricas(*)
              `)
-             .eq("idForaneaEvento", idEvento)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            
- 
-         if (error) throw error;
-         return data;
-     }
-     async getPorBanda(idBanda: string) {
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+           
+
+        if (error) throw error;
+        return fromDbMany<registroComentariosDatosAmpleosInterface>(data ?? []);
+    }
+    async getPorBanda(idBanda: string) {
          
          if (!this.perfil?.idForaneaFederacion) {
              throw new Error("No hay federación en el perfil del usuario.");
@@ -146,7 +148,7 @@
              .from(tabla)
              .select(`
                  *
-              ,registroEventos(*),
+              ,registro_eventos(*),
                  bandas(*),
                  
         
@@ -156,14 +158,14 @@
                  federaciones(*),
                  rubricas(*)
              `)
-             .eq("idForaneaBanda", idBanda)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-          
- 
-         if (error) throw error;
-         return data;
-     }
-     async getPorBandaYEvento(idBanda: string, idEvento: string) {
+            .eq("id_foranea_banda", idBanda)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+         
+
+        if (error) throw error;
+        return fromDbMany<registroComentariosDatosAmpleosInterface>(data ?? []);
+    }
+    async getPorBandaYEvento(idBanda: string, idEvento: string) {
          
          if (!this.perfil?.idForaneaFederacion) {
              throw new Error("No hay federación en el perfil del usuario.");
@@ -172,7 +174,7 @@
              .from(tabla)
                .select(`
                  *
-              ,registroEventos(*),
+              ,registro_eventos(*),
                  bandas(*),
                  
              
@@ -182,14 +184,14 @@
                  federaciones(*),
                  rubricas(*)
              `)
-             .eq("idForaneaBanda", idBanda)
-             .eq("idForaneaEvento", idEvento)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+             .eq("id_foranea_banda", idBanda)
+             .eq("id_foranea_evento", idEvento)
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
        
  
-        if (error) throw error;
-        return data as registroComentariosDatosAmpleosInterface[];
-    }
+       if (error) throw error;
+       return fromDbMany<registroComentariosDatosAmpleosInterface>(data ?? []);
+   }
 
     /** Indica si la rúbrica ya fue aplicada a la banda en el evento (cualquier jurado). */
     async rubricaYaEvaluadaEnEvento(
@@ -212,10 +214,10 @@
         const { count, error } = await dataBaseSupabase
             .from(tabla)
             .select(elId, { count: "exact", head: true })
-            .eq("idForaneaBanda", idBanda)
-            .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaRubrica", idRubrica)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_banda", idBanda)
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_rubrica", idRubrica)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return (count ?? 0) > 0;
@@ -230,7 +232,7 @@
              .from(tabla)
                .select(`
                  *
-              ,registroEventos(*),
+              ,registro_eventos(*),
                  bandas(*),
                  
              
@@ -240,15 +242,15 @@
                  federaciones(*),
                  rubricas(*)
              `)
-             .eq("idForaneaRubrica", idRubrica)
-           
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .single();
- 
-         if (error) throw error;
-         return data;
-     }
-     async getPorRubricaYEvento(idRubrica: string, idEvento: string) {
+            .eq("id_foranea_rubrica", idRubrica)
+          
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+            .single();
+
+        if (error) throw error;
+        return fromDb<registroComentariosDatosAmpleosInterface>(data);
+    }
+    async getPorRubricaYEvento(idRubrica: string, idEvento: string) {
          
          if (!this.perfil?.idForaneaFederacion) {
              throw new Error("No hay federación en el perfil del usuario.");
@@ -257,7 +259,7 @@
              .from(tabla)
                 .select(`
                  *
-              ,registroEventos(*),
+              ,registro_eventos(*),
                  bandas(*),
                  
              
@@ -267,49 +269,51 @@
                  federaciones(*),
                  rubricas(*)
              `)
-             .eq("idForaneaRubrica", idRubrica)
-             .eq("idForaneaEvento", idEvento)
+             .eq("id_foranea_rubrica", idRubrica)
+             .eq("id_foranea_evento", idEvento)
            
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            
- 
-         if (error) throw error;
-         return data;
-     }
- 
- 
-     async create(dataCreate: Interface) {
-         
-         if (!this.perfil || !this.perfil.idForaneaFederacion) {
-             throw new Error("No hay federación en el perfil del usuario.");
-         }
-         const { data, error } = await dataBaseSupabase
-             .from(tabla)
-             .insert(dataCreate)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .select("*")
-             .single()
- 
-         if (error) throw error;
-         return data;
-     }
- 
-     async update(id: string, dataUpdate: Interface) {
-         
-         if (!this.perfil?.idForaneaFederacion) {
-             throw new Error("No hay federación en el perfil del usuario.");
-         }
-         const { data, error } = await dataBaseSupabase
-             .from(tabla)
-             .update(dataUpdate)
-             .eq(elId, id)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .select("*")
-             .single();
- 
-         if (error) throw error;
-         return data;
-     }
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+           
+
+        if (error) throw error;
+        return fromDbMany<registroComentariosDatosAmpleosInterface>(data ?? []);
+    }
+
+
+    async create(dataCreate: Interface) {
+        
+        if (!this.perfil || !this.perfil.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const parsed = parseCamel(registroComentariosInsertSchema, dataCreate);
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .insert(toDb(parsed as Record<string, unknown>))
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+            .select("*")
+            .single()
+
+        if (error) throw error;
+        return fromDb<registroComentariosInterface>(data);
+    }
+
+    async update(id: string, dataUpdate: Interface) {
+        
+        if (!this.perfil?.idForaneaFederacion) {
+            throw new Error("No hay federación en el perfil del usuario.");
+        }
+        const parsed = parseCamel(registroComentariosUpdateSchema, dataUpdate);
+        const { data, error } = await dataBaseSupabase
+            .from(tabla)
+            .update(toDb(parsed as Record<string, unknown>))
+            .eq(elId, id)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+            .select("*")
+            .single();
+
+        if (error) throw error;
+        return fromDb<registroComentariosInterface>(data);
+    }
  
      async delete(id: string) {
          
@@ -320,7 +324,7 @@
              .from(tabla)
              .delete()
              .eq(elId, id)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
  
          if (error) throw error;
          return true;

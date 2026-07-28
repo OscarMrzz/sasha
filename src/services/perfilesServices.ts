@@ -1,5 +1,8 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { perfilInterface, perfilDatosAmpleosInterface } from "@/models";
+import { perfilInsertSchema, perfilUpdateSchema } from "@/models/perfiles/perfilSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import { mensajeErrorServicio } from "@/helpers/errores/mensajesServicio";
 import {
     esGestorUsuariosFederacion,
@@ -14,7 +17,7 @@ import {
 type Interface = perfilInterface;
 
 const tabla = "perfiles";
-const elId = "idPerfil";
+const elId = "id_perfil";
 
 /** Bucket de fotos de perfil (debe coincidir con Storage en Supabase). */
 export function getPerfilFotosBucketId(): string {
@@ -44,7 +47,7 @@ export default class PerfilesServices {
        
     }
 
-    async getDatosAmpleos(idFederacion:string,rolusuario:string): Promise<perfilDatosAmpleosInterface[]> {
+    async getDatosAmpleos(id_federacion:string,rolusuario:string): Promise<perfilDatosAmpleosInterface[]> {
            
           
         try {
@@ -66,7 +69,7 @@ export default class PerfilesServices {
             }
 
    
-            return data as perfilDatosAmpleosInterface[];
+            return fromDbMany<perfilDatosAmpleosInterface>(data ?? []);
 
 
 
@@ -82,7 +85,7 @@ export default class PerfilesServices {
                     roles(*)
           
                 `)
-                .eq("idForaneaFederacion", idFederacion)
+                .eq("id_foranea_federacion", id_federacion)
                 .eq("estado", "activo")
                 .order("nombre", { ascending: true });
 
@@ -92,7 +95,7 @@ export default class PerfilesServices {
             }
 
    
-            return data as perfilDatosAmpleosInterface[];
+            return fromDbMany<perfilDatosAmpleosInterface>(data ?? []);
             }
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
@@ -101,18 +104,18 @@ export default class PerfilesServices {
     }
 
     async getDatosAmpleosExcluyendoRoles(
-        idFederacion: string,
+        id_federacion: string,
         rolusuario: string,
         rolesExcluidos: readonly string[]
     ): Promise<perfilDatosAmpleosInterface[]> {
-        const perfiles = await this.getDatosAmpleos(idFederacion, rolusuario);
+        const perfiles = await this.getDatosAmpleos(id_federacion, rolusuario);
         return filtrarPerfilesPermitidos(perfiles, rolesExcluidos);
     }
 
     async get() {
         const { data, error } = await dataBaseSupabase.from(tabla).select("*");
         if (error) throw error;
-        return data;
+        return fromDbMany<perfilInterface>(data ?? []);
     }
     async getOneDatosAmpleos(id: string): Promise<perfilDatosAmpleosInterface> {
         const { data, error } = await dataBaseSupabase
@@ -125,9 +128,9 @@ export default class PerfilesServices {
             .eq(elId, id)
             .single();
         if (error) throw error;
-        return data as perfilDatosAmpleosInterface;
+        return fromDb<perfilDatosAmpleosInterface>(data);
     }
-    async getEquipoEvaluador(idFederacion: string): Promise<perfilDatosAmpleosInterface[]> {
+    async getEquipoEvaluador(id_federacion: string): Promise<perfilDatosAmpleosInterface[]> {
         const rolesPermitidos = [
             "fiscal",
             "jurado",
@@ -139,11 +142,11 @@ export default class PerfilesServices {
             // inner join para que el filtro por rol sea estricto
             .select("*, roles!inner(*)")
             .eq("estado", "activo")
-            .eq("idForaneaFederacion", idFederacion)
-            .in("roles.nombreRol", [...rolesPermitidos])
+            .eq("id_foranea_federacion", id_federacion)
+            .in("roles.nombre_rol", [...rolesPermitidos])
             .order("nombre", { ascending: true });
         if (error) throw error;
-        return data;
+        return fromDbMany<perfilDatosAmpleosInterface>(data ?? []);
     }
 
     async getOne(id: string) {
@@ -154,7 +157,7 @@ export default class PerfilesServices {
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<perfilInterface>(data);
     }
 
     /**
@@ -169,13 +172,13 @@ export default class PerfilesServices {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*, federaciones(*), roles(*)")
-            .eq("idForaneaUser", userId)
+            .eq("id_foranea_user", userId)
             .maybeSingle();
         if (error) {
             console.error("❌ getPerfilPorUserId error:", error);
             return null;
         }
-        return (data as perfilDatosAmpleosInterface) ?? null;
+        return data ? fromDb<perfilDatosAmpleosInterface>(data) : null;
     }
 
     async getUsuarioLogiado(): Promise<perfilDatosAmpleosInterface > {
@@ -207,32 +210,33 @@ export default class PerfilesServices {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*, federaciones(*), bandas(*), roles(*)")
-            .eq("idForaneaUser", userIdFromSession)
+            .eq("id_foranea_user", userIdFromSession)
             .maybeSingle();
         if (error) throw error;
         if (!data) throw new Error("Perfil no encontrado para el usuario logueado");
-        return data as perfilDatosAmpleosInterface ;
+        return fromDb<perfilDatosAmpleosInterface>(data);
     }
 
     async create(dataCreate: Interface) {
+        const parsed = parseCamel(perfilInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(parsed as Record<string, unknown>))
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<perfilInterface>(data);
     }
 
-    async createUsuario(dataCreate: Interface, nombreRol?: string | null) {
+    async createUsuario(dataCreate: Interface, nombre_rol?: string | null) {
         const validacion = validarDatosPerfilCrearUsuario({
             nombre: dataCreate.nombre,
             idForaneaRol: dataCreate.idForaneaRol ?? "",
             idForaneaFederacion: dataCreate.idForaneaFederacion ?? "",
             idForaneaUser: dataCreate.idForaneaUser ?? "",
             idForaneaBanda: dataCreate.idForaneaBanda,
-            nombreRol,
+            nombreRol: nombre_rol,
         } satisfies DatosPerfilCrearUsuario);
 
         if (!validacion.valido) {
@@ -240,9 +244,10 @@ export default class PerfilesServices {
         }
 
         try {
+            const parsed = parseCamel(perfilInsertSchema, dataCreate);
             const { data, error } = await dataBaseSupabase
                 .from(tabla)
-                .insert(dataCreate)
+                .insert(toDb(parsed as Record<string, unknown>))
                 .select("*")
                 .single();
 
@@ -250,7 +255,7 @@ export default class PerfilesServices {
                 throw new Error(mensajeErrorServicio(error, "No se pudo guardar el perfil del usuario"));
             }
 
-            return data;
+            return fromDb<perfilInterface>(data);
         } catch (error) {
             if (error instanceof Error && !error.message.includes("No se pudo guardar")) {
                 throw new Error(mensajeErrorServicio(error, "Error al crear el perfil del usuario"));
@@ -260,19 +265,20 @@ export default class PerfilesServices {
     }
 
     async update(id: string, dataUpdate: Interface) {
+        const parsed = parseCamel(perfilUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(elId, id)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<perfilInterface>(data);
     }
 
     private async validarGestionResponsableUsuarios(
-        idPerfil: string,
+        id_perfil: string,
         rolesExcluidos: readonly string[],
         dataUpdate?: Interface
     ) {
@@ -281,7 +287,7 @@ export default class PerfilesServices {
         const perfilActivo = await this.getUsuarioLogiado();
         if (!esGestorUsuariosFederacion(perfilActivo.roles?.nombreRol)) return;
 
-        const perfilObjetivo = await this.getOneDatosAmpleos(idPerfil);
+        const perfilObjetivo = await this.getOneDatosAmpleos(id_perfil);
         if (perfilObjetivo.idForaneaFederacion !== perfilActivo.idForaneaFederacion) {
             throw new Error("No puedes gestionar usuarios de otra federación.");
         }
@@ -300,12 +306,12 @@ export default class PerfilesServices {
         const { data: rolDestino, error } = await dataBaseSupabase
             .from("roles")
             .select("*")
-            .eq("idRol", dataUpdate.idForaneaRol)
-            .eq("idForaneaFederacion", perfilActivo.idForaneaFederacion)
+            .eq("id_rol", dataUpdate.idForaneaRol)
+            .eq("id_foranea_federacion", perfilActivo.idForaneaFederacion)
             .maybeSingle();
 
         if (error) throw error;
-        if (!rolDestino || rolDestino.estadoRol === false || esRolRestringido(rolDestino.nombreRol, rolesExcluidos)) {
+        if (!rolDestino || rolDestino.estado_rol === false || esRolRestringido(rolDestino.nombre_rol, rolesExcluidos)) {
             throw new Error("No puedes asignar ese rol.");
         }
     }
@@ -317,33 +323,33 @@ export default class PerfilesServices {
     async EliminarPerfilDeFederacion(id: string, dataUpdate: Interface) {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(dataUpdate as unknown as Record<string, unknown>))
             .eq(elId, id)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<perfilInterface>(data);
     }
 
-    async delete(idForaneaUser: string) {
+    async delete(id_foranea_user: string) {
         const { error } = await dataBaseSupabase
             .from(tabla)
             .update({ estado: "inactivo", permisos: false })
-            .eq("idForaneaUser", idForaneaUser)
+            .eq("id_foranea_user", id_foranea_user)
          
 
         if (error) throw error;
         return true;
     }
 
-    async deleteRestringido(idPerfil: string, rolesExcluidos: readonly string[]) {
-        await this.validarGestionResponsableUsuarios(idPerfil, rolesExcluidos);
+    async deleteRestringido(id_perfil: string, rolesExcluidos: readonly string[]) {
+        await this.validarGestionResponsableUsuarios(id_perfil, rolesExcluidos);
 
         const { error } = await dataBaseSupabase
             .from(tabla)
             .update({ estado: "inactivo", permisos: false })
-            .eq(elId, idPerfil);
+            .eq(elId, id_perfil);
 
         if (error) throw error;
         return true;
@@ -391,7 +397,7 @@ export default class PerfilesServices {
 
         const path = normalizePerfilFotoStoragePathForSigning(trimmed);
         if (!path) {
-            console.warn("❌ urlFotoPerfil no se pudo normalizar para firmar:", trimmed);
+            console.warn("❌ url_foto_perfil no se pudo normalizar para firmar:", trimmed);
             return "";
         }
 
@@ -452,12 +458,12 @@ export default class PerfilesServices {
     async cambiarURLFotoPerfil(idForaneaUser: string, urlFotoPerfil: string) {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update({ urlFotoPerfil })
-            .eq("idForaneaUser", idForaneaUser)
+            .update(toDb({ urlFotoPerfil }))
+            .eq("id_foranea_user", idForaneaUser)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<perfilInterface>(data);
     }
 }

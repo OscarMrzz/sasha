@@ -13,6 +13,7 @@ import RegionService from "@/services/regionesServices";
 import RegistroEventossServices from "@/services/registroEventosServices";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { registroEventoUpdateSchema } from "@/models/eventos/registroEventoSchema";
 
 const inputBaseClass =
   "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 shadow-inner transition focus:border-primario/80 focus:bg-white/[0.07] focus:ring-2 focus:ring-primario/35";
@@ -86,8 +87,16 @@ export default function FormularioEditarEventoComponet({
         tipo_lugar: EventoAEditar.tipo_lugar,
       };
 
+      const parsed = registroEventoUpdateSchema.safeParse(nuevoEvento);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
       await registoEvntoServices.update(EventoAEditar.idEvento,
-        nuevoEvento as RegistroEventoInterface
+        parsed.data as RegistroEventoInterface
       );
 
       // Limpiar formulario

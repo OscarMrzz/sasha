@@ -82,9 +82,9 @@ export default class RubricasPaquetesServices {
 
     const rubrica = paquete.rubrica as Record<string, unknown>;
     if (
-      typeof rubrica.nombreRubrica !== "string" ||
-      typeof rubrica.versionRubrica !== "string" ||
-      typeof rubrica.idForaneaCategoria !== "string"
+      typeof rubrica.nombre_rubrica !== "string" ||
+      typeof rubrica.version_rubrica !== "string" ||
+      typeof rubrica.id_foranea_categoria !== "string"
     ) {
       throw new Error("La rúbrica del paquete tiene campos incompletos");
     }

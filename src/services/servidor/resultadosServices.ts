@@ -13,6 +13,7 @@ import type {
 } from "@/models";
 import { serializarCausaErrorMiBanda } from "@/helpers/mi-banda/servidorMiBandaHealth";
 import { getSupabaseAdmin } from "@/services/servidor/supabaseAdmin";
+import { fromDb, fromDbMany } from "@/services/mappers/caseMapper";
 import { unstable_cache } from "next/cache";
 
 /** Errores de Supabase a veces no imprimen bien en consola; siempre exponemos mensaje legible. */
@@ -72,28 +73,54 @@ function anioDesdeFecha(fecha: string | null | undefined): number {
   return Number.isFinite(y) ? y : 0;
 }
 
-type FilaGeneralRaw = Record<string, unknown>;
-type FilaGeneralAgg = vistaResultadosModel & { idBanda?: string };
-
-/** Unifica columnas del esquema antiguo (idForanea*) y el nuevo (idBanda, idEvento, total). */
-function normalizarFilaGeneral(row: FilaGeneralRaw): FilaGeneralAgg {
-  const fechaEvento = String(row.fechaEvento ?? "");
+/**
+ * `vista_resultados_temporada` devuelve id_banda/nombre_banda/id_categoria/
+ * nombre_categoria en snake_case, pero `vistaResultadosTenporadaInterface`
+ * conserva esos campos en camelCase (el resto ya son snake_case en la
+ * interfaz, p. ej. total_antes_sanciones).
+ */
+function mapVistaResultadosTemporadaRow(
+  row: Record<string, unknown>,
+): vistaResultadosTenporadaInterface {
+  const { id_banda, nombre_banda, id_categoria, nombre_categoria, ...rest } = row;
   return {
-    ...(row as unknown as FilaGeneralAgg),
-    idForaneaEvento: String(row.idForaneaEvento ?? row.idEvento ?? ""),
-    idForaneaBanda: String(row.idForaneaBanda ?? row.idBanda ?? ""),
-    idBanda: String(row.idBanda ?? row.idForaneaBanda ?? ""),
+    ...rest,
+    idBanda: id_banda as string,
+    nombreBanda: nombre_banda as string,
+    idCategoria: id_categoria as string,
+    nombreCategoria: nombre_categoria as string,
+  } as vistaResultadosTenporadaInterface;
+}
+
+function mapVistaResultadosTemporadaRows(
+  rows: Record<string, unknown>[] | null,
+): vistaResultadosTenporadaInterface[] {
+  return (rows ?? []).map(mapVistaResultadosTemporadaRow);
+}
+
+type FilaGeneralRaw = Record<string, unknown>;
+type FilaGeneralAgg = vistaResultadosModel & { id_banda?: string };
+
+/** Unifica columnas del esquema antiguo (idForanea*) y el nuevo (id_banda, id_evento, total); la vista es snake_case. */
+function normalizarFilaGeneral(row: FilaGeneralRaw): FilaGeneralAgg {
+  const camel = fromDb<Record<string, unknown>>(row);
+  const fechaEvento = String(camel.fechaEvento ?? "");
+  return {
+    ...(camel as unknown as FilaGeneralAgg),
+    idForaneaEvento: String(camel.idForaneaEvento ?? camel.idEvento ?? ""),
+    idForaneaBanda: String(camel.idForaneaBanda ?? camel.idBanda ?? ""),
+    id_banda: String(camel.idBanda ?? camel.idForaneaBanda ?? ""),
     fechaEvento,
-    anioEvento: Number(row.anioEvento ?? anioDesdeFecha(fechaEvento)),
-    puntosObtenidos: Number(row.puntosObtenidos ?? row.total ?? 0),
-    idForaneaRegion: String(row.idForaneaRegion ?? row.idRegion ?? ""),
-    idForaneaCategoria: String(row.idForaneaCategoria ?? row.idCategoria ?? ""),
-    nombreRegion: String(row.nombreRegion ?? ""),
-    nombreCategoria: String(row.nombreCategoria ?? ""),
-    nombreBanda: String(row.nombreBanda ?? ""),
-    LugarEvento: String(row.LugarEvento ?? ""),
-    idForaneaFederacion: String(row.idForaneaFederacion ?? ""),
-  };
+    anioEvento: Number(camel.anioEvento ?? anioDesdeFecha(fechaEvento)),
+    puntosObtenidos: Number(camel.puntosObtenidos ?? camel.total ?? 0),
+    idForaneaRegion: String(camel.idForaneaRegion ?? camel.idRegion ?? ""),
+    idForaneaCategoria: String(camel.idForaneaCategoria ?? camel.idCategoria ?? ""),
+    nombreRegion: String(camel.nombreRegion ?? ""),
+    nombreCategoria: String(camel.nombreCategoria ?? ""),
+    nombreBanda: String(camel.nombreBanda ?? ""),
+    LugarEvento: String(camel.LugarEvento ?? ""),
+    idForaneaFederacion: String(camel.idForaneaFederacion ?? ""),
+  } as FilaGeneralAgg;
 }
 
 function mapFilasGenerales(data: unknown[] | null): FilaGeneralAgg[] {
@@ -103,7 +130,7 @@ function mapFilasGenerales(data: unknown[] | null): FilaGeneralAgg[] {
 }
 
 function bandaIdDesdeGeneral(row: FilaGeneralAgg): string {
-  return String(row.idForaneaBanda ?? row.idBanda ?? "");
+  return String(row.idForaneaBanda ?? row.id_banda ?? "");
 }
 
 type BucketEventoBanda = {
@@ -219,11 +246,11 @@ function rankingsEventosParaMiBanda(
  */
 async function eventosRankingsFallbackDesdeGenerales(
   db: ReturnType<typeof getSupabaseAdmin>,
-  idBanda: string,
+  id_banda: string,
   anio: number
 ): Promise<resultadosEventoInterface[]> {
-  const miBandaNorm = normUuid(idBanda);
-  const genRes = await filasVistaResultadosGeneralesPorBanda(db, idBanda);
+  const miBandaNorm = normUuid(id_banda);
+  const genRes = await filasVistaResultadosGeneralesPorBanda(db, id_banda);
   if (genRes.error) {
     console.error(
       "[eventosRankingsFallbackDesdeGenerales] vista_resultados_generales:",
@@ -249,13 +276,13 @@ async function eventosRankingsFallbackDesdeGenerales(
     let r = await db
       .from("vista_resultados_generales")
       .select("*")
-      .in("idForaneaEvento", chunk);
+      .in("id_foranea_evento", chunk);
 
     if (r.error && esProbableErrorNombreColumna(r.error)) {
       r = await db
         .from("vista_resultados_generales")
         .select("*")
-        .in("idEvento", chunk);
+        .in("id_evento", chunk);
     }
 
     if (r.error) {
@@ -289,24 +316,24 @@ async function eventosRankingsFallbackDesdeGenerales(
  */
 async function filasVistaResultadosEventosPorBandaAnio(
   db: ReturnType<typeof getSupabaseAdmin>,
-  idBanda: string,
+  id_banda: string,
   anio: number
 ) {
   const conForanea = await db
     .from("vista_resultados_eventos")
     .select("*")
-    .eq("idForaneaBanda", idBanda)
-    .eq("anioEvento", anio);
+    .eq("id_foranea_banda", id_banda)
+    .eq("anio_evento", anio);
 
   if (!conForanea.error) return conForanea;
 
   if (esRelacionAusentePostgrest(conForanea.error)) {
-    const data = await eventosRankingsFallbackDesdeGenerales(db, idBanda, anio);
+    const data = await eventosRankingsFallbackDesdeGenerales(db, id_banda, anio);
     return { data, error: null };
   }
 
   if (esProbableErrorNombreColumna(conForanea.error)) {
-    const data = await eventosRankingsFallbackDesdeGenerales(db, idBanda, anio);
+    const data = await eventosRankingsFallbackDesdeGenerales(db, id_banda, anio);
     return { data, error: null };
   }
 
@@ -315,12 +342,12 @@ async function filasVistaResultadosEventosPorBandaAnio(
 
 async function filasVistaResultadosGeneralesPorBanda(
   db: ReturnType<typeof getSupabaseAdmin>,
-  idBanda: string
+  id_banda: string
 ) {
   const conForanea = await db
     .from("vista_resultados_generales")
     .select("*")
-    .eq("idForaneaBanda", idBanda);
+    .eq("id_foranea_banda", id_banda);
   if (!conForanea.error) {
     return { data: mapFilasGenerales(conForanea.data), error: null };
   }
@@ -328,7 +355,7 @@ async function filasVistaResultadosGeneralesPorBanda(
   const conId = await db
     .from("vista_resultados_generales")
     .select("*")
-    .eq("idBanda", idBanda);
+    .eq("id_banda", id_banda);
   if (conId.error) return conForanea;
   return { data: mapFilasGenerales(conId.data), error: null };
 }
@@ -339,7 +366,7 @@ export type TablaPosicionFila = vistaResultadosTenporadaInterface & {
 
 export type EstadisticasBandaPrecarga = {
   resultadoMiBanda: vistaResultadosTenporadaInterface | null;
-  nombreBanda: string;
+  nombre_banda: string;
   eventosRankings: resultadosEventoInterface[];
   evaluacionesGenerales: vistaResultadosModel[];
   penalizacionesCount: number;
@@ -360,12 +387,12 @@ export async function getResultadosByIdBanda(
       const { data, error } = await getSupabaseAdmin()
         .from("vista_resultados_temporada")
         .select("*")
-        .eq("idBanda", id)
+        .eq("id_banda", id)
         .limit(1)
         .maybeSingle();
 
       if (error) throw errorConsultaEstadisticas("getResultadosByIdBanda · vista_resultados_temporada", error);
-      return data as vistaResultadosTenporadaInterface | null;
+      return data ? mapVistaResultadosTemporadaRow(data) : null;
     },
     [`resultados-${idbanda}`],
     {
@@ -381,7 +408,7 @@ export async function getResultadosByIdBanda(
  * Datos agregados para la pantalla de estadísticas (caché por banda).
  */
 export async function getEstadisticasByIdBanda(
-  idBanda: string
+  id_banda: string
 ): Promise<EstadisticasBandaPrecarga | null> {
   const fetcher = unstable_cache(
     async (id: string) => {
@@ -390,14 +417,14 @@ export async function getEstadisticasByIdBanda(
 
         const { data: band, error: bandErr } = await getSupabaseAdmin()
           .from("bandas")
-          .select("idBanda, nombreBanda, idForaneaFederacion, idForaneaCategoria")
-          .eq("idBanda", id)
+          .select("id_banda, nombre_banda, id_foranea_federacion, id_foranea_categoria")
+          .eq("id_banda", id)
           .maybeSingle();
 
         lanzarSiErrorEstadisticas("bandas", bandErr);
-        if (!band?.idForaneaFederacion || !band.idForaneaCategoria) return null;
+        if (!band?.id_foranea_federacion || !band.id_foranea_categoria) return null;
 
-        const idCat = band.idForaneaCategoria;
+        const idCat = band.id_foranea_categoria;
 
         const db = getSupabaseAdmin();
         const [
@@ -410,20 +437,20 @@ export async function getEstadisticasByIdBanda(
           db
             .from("vista_resultados_temporada")
             .select("*")
-            .eq("idBanda", id)
-            .eq("idCategoria", idCat)
+            .eq("id_banda", id)
+            .eq("id_categoria", idCat)
             .limit(1)
             .maybeSingle(),
           filasVistaResultadosEventosPorBandaAnio(db, id, anio),
           filasVistaResultadosGeneralesPorBanda(db, id),
           db
-            .from("registroPenalizaciones")
+            .from("registro_penalizaciones")
             .select("*", { count: "exact", head: true })
-            .eq("idForaneaBanda", id),
+            .eq("id_foranea_banda", id),
           db
             .from("rubricas")
             .select("*")
-            .eq("idForaneaCategoria", idCat),
+            .eq("id_foranea_categoria", idCat),
         ]);
 
         lanzarSiErrorEstadisticas(
@@ -439,18 +466,18 @@ export async function getEstadisticasByIdBanda(
           evalsRes.error
         );
         lanzarSiErrorEstadisticas(
-          "registroPenalizaciones",
+          "registro_penalizaciones",
           penalRes.error
         );
         lanzarSiErrorEstadisticas("rubricas", rubricasRes.error);
 
-        const resultadoMiBanda =
-          (temporadaRes.data as vistaResultadosTenporadaInterface | null) ??
-          null;
+        const resultadoMiBanda = temporadaRes.data
+          ? mapVistaResultadosTemporadaRow(temporadaRes.data)
+          : null;
 
         return {
           resultadoMiBanda,
-          nombreBanda: band.nombreBanda,
+          nombre_banda: band.nombre_banda,
           eventosRankings: (eventosRes.data ?? []) as resultadosEventoInterface[],
           evaluacionesGenerales: (evalsRes.data ?? []) as vistaResultadosModel[],
           penalizacionesCount: penalRes.count ?? 0,
@@ -458,30 +485,30 @@ export async function getEstadisticasByIdBanda(
         } satisfies EstadisticasBandaPrecarga;
       } catch (e) {
         if (e instanceof Error && e.message.trim() !== "") {
-          console.error("[getEstadisticasByIdBanda]", "idBanda=", id, e.message);
+          console.error("[getEstadisticasByIdBanda]", "id_banda=", id, e.message);
           throw e;
         }
-        console.error("[getEstadisticasByIdBanda]", "idBanda=", id, e);
+        console.error("[getEstadisticasByIdBanda]", "id_banda=", id, e);
         throw errorConsultaEstadisticas(
           `getEstadisticasByIdBanda[banda=${id}]`,
           e
         );
       }
     },
-    [`estadisticas-${idBanda}`],
+    [`estadisticas-${id_banda}`],
     {
-      tags: ["estadisticas-global", `estadisticas-${idBanda}`],
+      tags: ["estadisticas-global", `estadisticas-${id_banda}`],
       revalidate: false,
     }
   );
 
-  return fetcher(idBanda);
+  return fetcher(id_banda);
 }
 
 /**
  * Tabla regional: misma lógica que la pantalla cliente, con admin y caché.
  */
-export async function getTablaPosicionesByIdBanda(idBanda: string) {
+export async function getTablaPosicionesByIdBanda(id_banda: string) {
   const fetcher = unstable_cache(
     async (id: string) => {
       const anio = new Date().getFullYear();
@@ -489,16 +516,16 @@ export async function getTablaPosicionesByIdBanda(idBanda: string) {
       const { data: band, error: bandErr } = await getSupabaseAdmin()
         .from("bandas")
         .select(
-          "idBanda, idForaneaFederacion, idForaneaCategoria, idForaneaRegion"
+          "id_banda, id_foranea_federacion, id_foranea_categoria, id_foranea_region"
         )
-        .eq("idBanda", id)
+        .eq("id_banda", id)
         .maybeSingle();
 
       if (bandErr) throw bandErr;
 
-      const idFed = band?.idForaneaFederacion;
-      const idCat = band?.idForaneaCategoria;
-      const idReg = band?.idForaneaRegion;
+      const idFed = band?.id_foranea_federacion;
+      const idCat = band?.id_foranea_categoria;
+      const idReg = band?.id_foranea_region;
 
       if (!band || !idFed || !idCat || !idReg) {
         return {
@@ -512,34 +539,33 @@ export async function getTablaPosicionesByIdBanda(idBanda: string) {
       const [regionRes, bandasZonaRes, temporadaRes] = await Promise.all([
         db
           .from("regiones")
-          .select("nombreRegion")
-          .eq("idRegion", idReg)
+          .select("nombre_region")
+          .eq("id_region", idReg)
           
           .maybeSingle(),
         db
           .from("bandas")
-          .select("idBanda")
+          .select("id_banda")
           
-          .eq("idForaneaCategoria", idCat)
-          .eq("idForaneaRegion", idReg),
+          .eq("id_foranea_categoria", idCat)
+          .eq("id_foranea_region", idReg),
         db
           .from("vista_resultados_temporada")
           .select("*")
-          .eq("idCategoria", idCat),
+          .eq("id_categoria", idCat),
       ]);
 
       if (regionRes.error) throw regionRes.error;
       if (bandasZonaRes.error) throw bandasZonaRes.error;
       if (temporadaRes.error) throw temporadaRes.error;
 
-      const nombreRegion = regionRes.data?.nombreRegion ?? "";
+      const nombreRegion = regionRes.data?.nombre_region ?? "";
       const idsPermitidos = new Set(
-        (bandasZonaRes.data ?? []).map((b: { idBanda: string }) => b.idBanda)
+        (bandasZonaRes.data ?? []).map((b: { id_banda: string }) => b.id_banda)
       );
 
-      const mismaCatYAnio = (temporadaRes.data ?? []).filter(
-        (r: vistaResultadosTenporadaInterface) =>
-          r.idCategoria === idCat 
+      const mismaCatYAnio = mapVistaResultadosTemporadaRows(temporadaRes.data).filter(
+        (r) => r.idCategoria === idCat
       );
 
       const enMiRegion = mismaCatYAnio.filter((r) =>
@@ -558,14 +584,14 @@ export async function getTablaPosicionesByIdBanda(idBanda: string) {
 
       return { nombreRegion, filas, idMiBanda: id };
     },
-    [`tabla-posiciones-${idBanda}`],
+    [`tabla-posiciones-${id_banda}`],
     {
-      tags: ["tabla-posiciones-global", `tabla-posiciones-${idBanda}`],
+      tags: ["tabla-posiciones-global", `tabla-posiciones-${id_banda}`],
       revalidate: false,
     }
   );
 
-  return fetcher(idBanda);
+  return fetcher(id_banda);
 }
 export type TablaPosicionSecretariaPayload = {
   nombreRegion: string;
@@ -577,13 +603,13 @@ export type TablaPosicionSecretariaPayload = {
  * Usada desde secretaría cuando el usuario elige región y categoría.
  */
 export async function getTablaPosicionesPorFederacionRegionCategoria(
-  idForaneaFederacion: string,
-  idForaneaRegion: string,
-  idForaneaCategoria: string
+  id_foranea_federacion: string,
+  id_foranea_region: string,
+  id_foranea_categoria: string
 ): Promise<TablaPosicionSecretariaPayload> {
-  const idFed = idForaneaFederacion.trim();
-  const idReg = idForaneaRegion.trim();
-  const idCat = idForaneaCategoria.trim();
+  const idFed = id_foranea_federacion.trim();
+  const idReg = id_foranea_region.trim();
+  const idCat = id_foranea_categoria.trim();
 
   const fetcher = unstable_cache(
     async () => {
@@ -598,34 +624,33 @@ export async function getTablaPosicionesPorFederacionRegionCategoria(
       const [regionRes, bandasZonaRes, temporadaRes] = await Promise.all([
         db
           .from("regiones")
-          .select("nombreRegion")
-          .eq("idRegion", idReg)
+          .select("nombre_region")
+          .eq("id_region", idReg)
           
           .maybeSingle(),
         db
           .from("bandas")
-          .select("idBanda")
+          .select("id_banda")
           
-          .eq("idForaneaCategoria", idCat)
-          .eq("idForaneaRegion", idReg),
+          .eq("id_foranea_categoria", idCat)
+          .eq("id_foranea_region", idReg),
         db
           .from("vista_resultados_temporada")
           .select("*")
-          .eq("idCategoria", idCat),
+          .eq("id_categoria", idCat),
       ]);
 
       if (regionRes.error) throw regionRes.error;
       if (bandasZonaRes.error) throw bandasZonaRes.error;
       if (temporadaRes.error) throw temporadaRes.error;
 
-      const nombreRegion = regionRes.data?.nombreRegion ?? "";
+      const nombreRegion = regionRes.data?.nombre_region ?? "";
       const idsPermitidos = new Set(
-        (bandasZonaRes.data ?? []).map((b: { idBanda: string }) => b.idBanda)
+        (bandasZonaRes.data ?? []).map((b: { id_banda: string }) => b.id_banda)
       );
 
-      const mismaCatYAnio = (temporadaRes.data ?? []).filter(
-        (r: vistaResultadosTenporadaInterface) =>
-          r.idCategoria === idCat 
+      const mismaCatYAnio = mapVistaResultadosTemporadaRows(temporadaRes.data).filter(
+        (r) => r.idCategoria === idCat
       );
 
       const enMiRegion = mismaCatYAnio.filter((r) =>
@@ -661,18 +686,18 @@ export async function getTablaPosicionesPorFederacionRegionCategoria(
  * Banda, categoría y federación para la pantalla de resultados por evento.
  */
 export async function getPrecargaResultadosPorEvento(
-  idBanda: string
+  id_banda: string
 ): Promise<ResultadosPorEventoPrecarga | null> {
   const fetcher = unstable_cache(
     async (id: string) => {
       const { data: band, error: bandErr } = await getSupabaseAdmin()
         .from("bandas")
         .select(`*, categorias(*), federaciones(*)`)
-        .eq("idBanda", id)
+        .eq("id_banda", id)
         .maybeSingle();
 
       if (bandErr) throw bandErr;
-      if (!band?.idForaneaFederacion) return null;
+      if (!band?.id_foranea_federacion) return null;
 
       const raw = band as bandaInterface & {
         categorias?: categoriaInterface | categoriaInterface[] | null;
@@ -704,33 +729,33 @@ export async function getPrecargaResultadosPorEvento(
         federacion,
       } satisfies ResultadosPorEventoPrecarga;
     },
-    [`resultados-evento-precarga-meta-${idBanda}`],
+    [`resultados-evento-precarga-meta-${id_banda}`],
     {
       tags: [
         "eventos-banda-global",
-        `eventos-banda-${idBanda}`,
-        `resultados-${idBanda}`,
+        `eventos-banda-${id_banda}`,
+        `resultados-${id_banda}`,
       ],
       revalidate: false,
     }
   );
 
-  return fetcher(idBanda);
+  return fetcher(id_banda);
 }
 
 export async function getComentariosBandaEventoServidor(
-  idBanda: string,
-  idEvento: string,
-  idFederacion: string
+  id_banda: string,
+  id_evento: string,
+  id_federacion: string
 ): Promise<registroComentariosDatosAmpleosInterface[]> {
   const fetcher = unstable_cache(
     async () => {
       const { data, error } = await getSupabaseAdmin()
-        .from("registroComentarios")
+        .from("registro_comentarios")
         .select(
           `
           *,
-          registroEventos(*),
+          registro_eventos(*),
           bandas(*),
           categorias(*),
           regiones(*),
@@ -739,20 +764,20 @@ export async function getComentariosBandaEventoServidor(
           rubricas(*)
         `
         )
-        .eq("idForaneaBanda", idBanda)
-        .eq("idForaneaEvento", idEvento)
-        .eq("idForaneaFederacion", idFederacion);
+        .eq("id_foranea_banda", id_banda)
+        .eq("id_foranea_evento", id_evento)
+        .eq("id_foranea_federacion", id_federacion);
       if (error) {
         throw errorConsultaEstadisticas(
-          "getComentariosBandaEventoServidor · registroComentarios",
+          "getComentariosBandaEventoServidor · registro_comentarios",
           error
         );
       }
-      return (data ?? []) as registroComentariosDatosAmpleosInterface[];
+      return fromDbMany<registroComentariosDatosAmpleosInterface>(data ?? []);
     },
-    [`comentarios-banda-evento`, idBanda, idEvento, idFederacion],
+    [`comentarios-banda-evento`, id_banda, id_evento, id_federacion],
     {
-      tags: ["resultados-global", `resultados-${idBanda}`],
+      tags: ["resultados-global", `resultados-${id_banda}`],
       revalidate: false,
     }
   );
@@ -772,10 +797,10 @@ export const getAllBandasIds = unstable_cache(
     try {
       const { data, error } = await getSupabaseAdmin()
         .from("bandas")
-        .select("idBanda");
+        .select("id_banda");
 
       if (error) return [];
-      return (data ?? []) as { idBanda: string }[];
+      return fromDbMany<{ idBanda: string }>(data ?? []);
     } catch {
       return [];
     }
@@ -792,33 +817,33 @@ export async function getVistaRendimientoPorRubricaTemporadaActual(): Promise<vi
         .from("vista_rendimiento_por_rubrica_global_actual")
         .select("*");
       if (error) throw error;
-      return data as vistaRendimientoPorRubricaGlobalInterface[];
+      return fromDbMany<vistaRendimientoPorRubricaGlobalInterface>(data ?? []);
     },
     ["vista-rendimiento-por-rubrica-temporada-actual"],
     { tags: ["vista-rendimiento-por-rubrica-temporada-actual"], revalidate: false }
   );
   return fetcher();
 }
-export async function getVistaRendimientoPorRubricaTemporadaActualByIdBanda(idBanda: string): Promise<vistaRendimientoPorRubricaGlobalInterface[]> {
+export async function getVistaRendimientoPorRubricaTemporadaActualByIdBanda(id_banda: string): Promise<vistaRendimientoPorRubricaGlobalInterface[]> {
   const fetcher = unstable_cache(
     async (id: string) => {
       const { data, error } = await getSupabaseAdmin()
         .from("vista_rendimiento_por_rubrica_global_actual")
         .select("*")
-        .eq("idBanda", id);
+        .eq("id_banda", id);
       if (error) throw error;
-      return (data ?? []) as vistaRendimientoPorRubricaGlobalInterface[];
+      return fromDbMany<vistaRendimientoPorRubricaGlobalInterface>(data ?? []);
     },
-    [`vista-rendimiento-por-rubrica-temporada-actual-${idBanda}`],
+    [`vista-rendimiento-por-rubrica-temporada-actual-${id_banda}`],
     {
       tags: [
         "vista-rendimiento-por-rubrica-temporada-actual",
-        `resultados-${idBanda}`,
+        `resultados-${id_banda}`,
       ],
       revalidate: false,
     }
   );
-  return fetcher(idBanda);
+  return fetcher(id_banda);
 }
 
 export async function getVistaCondensado(): Promise<vistaCondensado[]> {
@@ -826,7 +851,7 @@ export async function getVistaCondensado(): Promise<vistaCondensado[]> {
     .from("vista_condensado")
     .select("*");
   if (error) throw errorConsultaEstadisticas("vista_condensado", error);
-  return (data ?? []) as vistaCondensado[];
+  return fromDbMany<vistaCondensado>(data ?? []);
 }
 
 export async function getRankingGlobalTemporadaActual(): Promise<vistaResultadosTenporadaInterface[]> {
@@ -836,7 +861,7 @@ export async function getRankingGlobalTemporadaActual(): Promise<vistaResultados
         .from("vista_resultados_temporada")
         .select("*");
       if (error) throw error;
-      return data as vistaResultadosTenporadaInterface[];
+      return mapVistaResultadosTemporadaRows(data);
     },
     ["vista-ranking-global-temporada-actual"],
     { tags: ["vista-ranking-global-temporada-actual"], revalidate: false }
@@ -844,19 +869,19 @@ export async function getRankingGlobalTemporadaActual(): Promise<vistaResultados
   return fetcher();                                                                                                                                 
 }
 export async function getRankingGlobalTemporadaActualByIdBanda(
-  idBanda: string
+  id_banda: string
 ): Promise<vistaResultadosTenporadaInterface | null> {
   const fetcher = unstable_cache(
     async () => {
       const { data, error } = await getSupabaseAdmin()
         .from("vista_resultados_temporada")
         .select("*")
-        .eq("idBanda", idBanda)
+        .eq("id_banda", id_banda)
         .maybeSingle();
       if (error) throw error;
-      return data as vistaResultadosTenporadaInterface | null;
+      return data ? mapVistaResultadosTemporadaRow(data) : null;
     },
-    ["vista-ranking-global-temporada-actual", idBanda],
+    ["vista-ranking-global-temporada-actual", id_banda],
     { tags: ["vista-ranking-global-temporada-actual"], revalidate: false }
   );
   return fetcher();
@@ -869,26 +894,42 @@ export async function getRankingGlobalTemporadaActualByIdBanda(
  * Todas las filas de evaluación por banda desde la vista detallada `vista_resultados_eventos`.
  * Caché compartida entre usuarios; invalidación con tags `resultados-global` / `resultados-{idBanda}`.
  */
+/**
+ * `vista_resultados_eventos` devuelve sus columnas en snake_case, pero
+ * `vistaResultadosPorEventoInterface` conserva `tipo_evento` / `tipo_lugar`
+ * tal cual (snake_case) y el resto en camelCase.
+ */
+function mapVistaResultadosPorEventoRow(
+  row: Record<string, unknown>,
+): vistaResultadosPorEventoInterface {
+  const { tipo_evento, tipo_lugar, ...rest } = row;
+  return {
+    ...fromDb<Record<string, unknown>>(rest),
+    tipo_evento: tipo_evento as string | null,
+    tipo_lugar: tipo_lugar as string | null,
+  } as vistaResultadosPorEventoInterface;
+}
+
 export async function getVistaResultadosPorBanda(
-  idBanda: string
+  id_banda: string
 ): Promise<vistaResultadosPorEventoInterface[]> {
   const fetcher = unstable_cache(
     async () => {
       const { data, error } = await getSupabaseAdmin()
         .from("vista_resultados_eventos")
         .select("*")
-        .eq("idBanda", idBanda);
+        .eq("id_banda", id_banda);
       if (error) {
         throw errorConsultaEstadisticas(
           "getVistaResultadosPorBanda · vista_resultados_eventos",
           error
         );
       }
-      return (data ?? []) as vistaResultadosPorEventoInterface[];
+      return (data ?? []).map(mapVistaResultadosPorEventoRow);
     },
-    ["vista-resultados-por-banda", idBanda],
+    ["vista-resultados-por-banda", id_banda],
     {
-      tags: ["resultados-global", `resultados-${idBanda}`],
+      tags: ["resultados-global", `resultados-${id_banda}`],
       revalidate: false,
     }
   );

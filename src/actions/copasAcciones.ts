@@ -18,9 +18,9 @@ export type CopaAsignacionInput = {
 
 async function assertEventoEditable(idEvento: string): Promise<void> {
   const { data, error } = await getSupabaseAdmin()
-    .from("registroEventos")
+    .from("registro_eventos")
     .select("estado_evento")
-    .eq("idEvento", idEvento)
+    .eq("id_evento", idEvento)
     .single();
 
   if (error) throw error;
@@ -57,13 +57,13 @@ export async function guardarCopasEventoCategoria(
   const bandaIds = asignaciones.map((a) => a.id_foranea_banda);
   const { data: bandas, error: errBandas } = await getSupabaseAdmin()
     .from("bandas")
-    .select("idBanda, idForaneaCategoria")
-    .in("idBanda", bandaIds);
+    .select("id_banda, id_foranea_categoria")
+    .in("id_banda", bandaIds);
 
   if (errBandas) throw errBandas;
 
   const todasMismaCategoria = (bandas ?? []).every(
-    (b) => b.idForaneaCategoria === idCategoria,
+    (b) => (b as { id_foranea_categoria?: string }).id_foranea_categoria === idCategoria,
   );
   if (!todasMismaCategoria || (bandas ?? []).length !== bandaIds.length) {
     throw new Error("Todas las bandas deben pertenecer a la categoría seleccionada.");

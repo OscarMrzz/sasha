@@ -3,13 +3,30 @@ import {
   vistaUsuariosPorBandaEnEventoInterface,
 } from "@/models";
 import { dataBaseSupabase } from "@/lib/supabase";
+import { fromDb } from "@/services/mappers/caseMapper";
+
+/**
+ * `vista_usuarios_por_banda_en_evento` conserva ids en snake_case (incluso el
+ * typo histórico `id_fonranea_perfil`) por compatibilidad, pero `nombre` /
+ * `primerApellido` de perfiles se exponen así en la interfaz; la vista
+ * devuelve `primer_apellido` en snake_case.
+ */
+function mapVistaUsuariosPorBandaEnEventoRow(
+  row: Record<string, unknown>,
+): vistaUsuariosPorBandaEnEventoInterface {
+  const { primer_apellido, ...rest } = row;
+  return {
+    ...rest,
+    primerApellido: (primer_apellido as string) ?? "",
+  } as vistaUsuariosPorBandaEnEventoInterface;
+}
 
 export async function getUsuariosPorEventoCategoria(
     idEvento: string,
     idCategoria: string,
   ): Promise<vistaUsuariosPorBandaEnEventoInterface[]> {
     if (!idEvento?.trim()) {
-      throw new Error("idEvento es obligatorio.");
+      throw new Error("id_evento es obligatorio.");
     }
     const { data, error } = await dataBaseSupabase
       .from("vista_usuarios_por_banda_en_evento")
@@ -18,7 +35,7 @@ export async function getUsuariosPorEventoCategoria(
       .eq("id_foranea_categoria", idCategoria);
 
     if (error) throw error;
-    return (data ?? []) as vistaUsuariosPorBandaEnEventoInterface[];
+    return (data ?? []).map(mapVistaUsuariosPorBandaEnEventoRow);
   }
 
 
@@ -50,7 +67,7 @@ export async function estaActivadoAccesoPorEventoCategoria(idEvento: string, idC
         const { data, error } = await dataBaseSupabase
         .from("perfiles")
         .select("permisos")
-        .eq("idPerfil", usuario.id_fonranea_perfil)
+        .eq("id_perfil", usuario.id_fonranea_perfil)
         .single();
         if (error) throw error;
         if (data.permisos === true) return true;
@@ -76,14 +93,14 @@ export async function getCategoriasPorEvento(
   idEvento: string,
 ): Promise<categoriaInterface[]> {
   if (!idEvento?.trim()) {
-    throw new Error("idEvento es obligatorio.");
+    throw new Error("id_evento es obligatorio.");
   }
 
   const { data, error } = await dataBaseSupabase
     .from("confirmacion_asistencia")
     .select(`
       bandas(
-        idForaneaCategoria,
+        id_foranea_categoria,
         categorias(*)
       )
     `)
@@ -95,9 +112,10 @@ export async function getCategoriasPorEvento(
   const categoriasPorId = new Map<string, categoriaInterface>();
   for (const row of data ?? []) {
     const banda = row.bandas as {
-      categorias?: categoriaInterface | null;
+      categorias?: Record<string, unknown> | null;
     } | null;
-    const categoria = banda?.categorias;
+    const categoriaRaw = banda?.categorias;
+    const categoria = categoriaRaw ? fromDb<categoriaInterface>(categoriaRaw) : null;
     if (categoria?.idCategoria) {
       categoriasPorId.set(categoria.idCategoria, categoria);
     }

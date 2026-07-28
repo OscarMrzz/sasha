@@ -2,6 +2,7 @@
 import { createClientServidor } from "@/services/servidor/supabaseServidor";
 import { getSupabaseAdmin } from "@/services/servidor/supabaseAdmin";
 import type { perfilInterface } from "@/models";
+import { fromDb, toDb } from "@/services/mappers/caseMapper";
 import {
     esErrorConexionBaseDatos,
     esErrorSinInternet,
@@ -75,8 +76,8 @@ async function validarPermisoInsertarPerfil(
 
     const { data, error } = await supabaseAdmin
         .from("permisos")
-        .select("idPermiso")
-        .eq("idForaneaRol", idForaneaRolActor)
+        .select("id_permiso")
+        .eq("id_foranea_rol", idForaneaRolActor)
         .eq("tabla", "perfiles")
         .eq("accion", "INSERT")
         .maybeSingle();
@@ -117,13 +118,13 @@ function validarDatosPerfilAntesDeAuth(datosPerfil: DatosPerfilNuevoUsuario) {
 async function validarRolDestino(
     supabaseAdmin: ReturnType<typeof getSupabaseAdmin>,
     perfilActor: {
-        idForaneaFederacion: string | null;
-        roles?: { nombreRol?: string | null } | null;
+        id_foranea_federacion: string | null;
+        roles?: { nombre_rol?: string | null } | null;
     },
     options: CreateUserOptions
 ) {
-    const rolActor = normalizarNombreRol(perfilActor.roles?.nombreRol);
-    const rolesExcluidos = rolesExcluidosPorDefecto(perfilActor.roles?.nombreRol, options.rolesExcluidos);
+    const rolActor = normalizarNombreRol(perfilActor.roles?.nombre_rol);
+    const rolesExcluidos = rolesExcluidosPorDefecto(perfilActor.roles?.nombre_rol, options.rolesExcluidos);
 
     if (!options.idForaneaRol || !options.idForaneaFederacion) {
         return respuestaError(
@@ -131,15 +132,15 @@ async function validarRolDestino(
         );
     }
 
-    if (rolActor !== "developer" && options.idForaneaFederacion !== perfilActor.idForaneaFederacion) {
+    if (rolActor !== "developer" && options.idForaneaFederacion !== perfilActor.id_foranea_federacion) {
         return respuestaError("No puedes crear usuarios en otra federación.");
     }
 
     const { data: rolDestino, error: rolError } = await supabaseAdmin
         .from("roles")
         .select("*")
-        .eq("idRol", options.idForaneaRol)
-        .eq("idForaneaFederacion", options.idForaneaFederacion)
+        .eq("id_rol", options.idForaneaRol)
+        .eq("id_foranea_federacion", options.idForaneaFederacion)
         .maybeSingle();
 
     if (rolError) {
@@ -149,11 +150,11 @@ async function validarRolDestino(
         return respuestaError(mensajeErrorServicio(rolError, "Error al consultar el rol seleccionado"));
     }
 
-    if (!rolDestino || rolDestino.estadoRol === false) {
+    if (!rolDestino || rolDestino.estado_rol === false) {
         return respuestaError("El rol seleccionado no está disponible o está inactivo.");
     }
 
-    if (esRolRestringido(rolDestino.nombreRol, rolesExcluidos)) {
+    if (esRolRestringido(rolDestino.nombre_rol, rolesExcluidos)) {
         return respuestaError("No puedes crear usuarios con ese rol.");
     }
 
@@ -162,7 +163,7 @@ async function validarRolDestino(
 
 async function insertarPerfilConAdmin(
     supabaseAdmin: ReturnType<typeof getSupabaseAdmin>,
-    idForaneaUser: string,
+    id_foranea_user: string,
     datosPerfil: DatosPerfilNuevoUsuario
 ) {
     const filaPerfil = {
@@ -178,7 +179,7 @@ async function insertarPerfilConAdmin(
         numeroTelefono: "",
         direccion: "",
         idForaneaRol: datosPerfil.idForaneaRol,
-        idForaneaUser,
+        idForaneaUser: id_foranea_user,
         idForaneaBanda: datosPerfil.idForaneaBanda || null,
         permisos: datosPerfil.permisos,
         urlFotoPerfil: "",
@@ -187,7 +188,7 @@ async function insertarPerfilConAdmin(
 
     const { data, error } = await supabaseAdmin
         .from("perfiles")
-        .insert(filaPerfil)
+        .insert(toDb(filaPerfil as Record<string, unknown>))
         .select("*")
         .single();
 
@@ -195,7 +196,7 @@ async function insertarPerfilConAdmin(
         throw new Error(mensajeErrorServicio(error, "No se pudo guardar el perfil del usuario"));
     }
 
-    return data as perfilInterface;
+    return fromDb<perfilInterface>(data);
 }
 
 export async function createUser(
@@ -237,7 +238,7 @@ export async function createUser(
         const { data: perfilActor, error: perfilError } = await supabaseServidor
             .from("perfiles")
             .select("*, roles(*)")
-            .eq("idForaneaUser", user.id)
+            .eq("id_foranea_user", user.id)
             .eq("estado", "activo")
             .maybeSingle();
 
@@ -252,14 +253,14 @@ export async function createUser(
             return respuestaError("No se encontró un perfil activo asociado a tu cuenta.");
         }
 
-        const rolActor = normalizarNombreRol(perfilActor.roles?.nombreRol);
+        const rolActor = normalizarNombreRol(perfilActor.roles?.nombre_rol);
         const puedeCrear = ROLES_CON_PERMISO_CREAR_USUARIOS.some(
             (rol) => normalizarNombreRol(rol) === rolActor
         );
 
         if (!puedeCrear) {
             return respuestaError(
-                `Tu rol (${perfilActor.roles?.nombreRol ?? "desconocido"}) no tiene permiso para crear usuarios.`
+                `Tu rol (${perfilActor.roles?.nombre_rol ?? "desconocido"}) no tiene permiso para crear usuarios.`
             );
         }
 
@@ -269,7 +270,7 @@ export async function createUser(
             );
         }
 
-        if (!perfilActor.roles?.estadoRol) {
+        if (!perfilActor.roles?.estado_rol) {
             return respuestaError("Tu rol está inactivo. No puedes crear usuarios hasta que se reactive.");
         }
 
@@ -277,8 +278,8 @@ export async function createUser(
 
         const errorPermisoPerfil = await validarPermisoInsertarPerfil(
             supabaseAdmin,
-            perfilActor.idForaneaRol,
-            perfilActor.roles?.nombreRol
+            perfilActor.id_foranea_rol,
+            perfilActor.roles?.nombre_rol
         );
         if (errorPermisoPerfil) return errorPermisoPerfil;
 

@@ -4,11 +4,17 @@ import {
   registroEquipoEvaluadorInterface,
   perfilDatosAmpleosInterface,
 } from "@/models";
+import {
+  registroEquipoEvaluadorInsertSchema,
+  registroEquipoEvaluadorUpdateSchema,
+} from "@/models/equipoEvaluador/registroEquipoEvaluadorSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 
 type Interface = registroEquipoEvaluadorInterface;
 
-const tabla = "registroEquipoEvaluador";
-const elId = "idRegistroEvaluador";
+const tabla = "registro_equipo_evaluador";
+const elId = "id_registro_evaluador";
 const RUBRICA_DUPLICADA_MSG = "Esta rúbrica ya está asignada a otro jurado en este evento.";
 
 export default class RegistroEquipoEvaluadorServices {
@@ -52,7 +58,7 @@ export default class RegistroEquipoEvaluadorServices {
     let query = dataBaseSupabase
       .from(tabla)
       .select(elId)
-      .eq("idForaneaEvento", idEvento)
+      .eq("id_foranea_evento", idEvento)
       .eq("id_foranea_rubrica", idRubrica);
 
     if (idRegistroExcluir) {
@@ -73,19 +79,19 @@ export default class RegistroEquipoEvaluadorServices {
         .select(
           ` 
                     *,
-                    registroEventos(*),
+                    registro_eventos(*),
                     perfiles(*, roles(*))
               
                 `,
         )
-        .eq("idForaneaEvento", idEvento);
+        .eq("id_foranea_evento", idEvento);
 
       if (error) {
         console.error("❌ Error obteniendo regiones con equipoEvaluador:", error);
         throw error;
       }
 
-      return data as registroEquipoEvaluadorDatosAmpleosInterface[];
+      return fromDbMany<registroEquipoEvaluadorDatosAmpleosInterface>(data ?? []);
     } catch (error) {
       console.error("❌ Error general en getDatosAmpleos:", error);
       throw error;
@@ -95,7 +101,7 @@ export default class RegistroEquipoEvaluadorServices {
   async get() {
     const { data, error } = await dataBaseSupabase.from(tabla).select("*");
     if (error) throw error;
-    return data;
+    return fromDbMany<registroEquipoEvaluadorInterface>(data ?? []);
   }
 
   async getporPerfil(idUsuario: string) {
@@ -104,22 +110,22 @@ export default class RegistroEquipoEvaluadorServices {
       .select(
         `
                *,
-                     registroEventos(*),
+                     registro_eventos(*),
                      perfiles(*, roles(*))
             
             `,
       )
-      .eq("idForaneaPerfil", idUsuario);
+      .eq("id_foranea_perfil", idUsuario);
     if (error) throw error;
 
-    return data as registroEquipoEvaluadorDatosAmpleosInterface[];
+    return fromDbMany<registroEquipoEvaluadorDatosAmpleosInterface>(data ?? []);
   }
 
   async getOne(id: string) {
     const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq(elId, id).single();
 
     if (error) throw error;
-    return data;
+    return fromDb<registroEquipoEvaluadorInterface>(data);
   }
 
   async create(dataCreate: Interface) {
@@ -131,14 +137,15 @@ export default class RegistroEquipoEvaluadorServices {
     }
 
     try {
+      const parsed = parseCamel(registroEquipoEvaluadorInsertSchema, dataCreate);
       const { data, error } = await dataBaseSupabase
         .from(tabla)
-        .insert(dataCreate)
+        .insert(toDb(parsed as Record<string, unknown>))
         .select("*")
         .single();
 
       if (error) this.throwIfRubricaDuplicada(error);
-      return data;
+      return fromDb<registroEquipoEvaluadorInterface>(data);
     } catch (error) {
       this.throwIfRubricaDuplicada(error);
     }
@@ -154,15 +161,16 @@ export default class RegistroEquipoEvaluadorServices {
     }
 
     try {
+      const parsed = parseCamel(registroEquipoEvaluadorUpdateSchema, dataUpdate);
       const { data, error } = await dataBaseSupabase
         .from(tabla)
-        .update(dataUpdate)
+        .update(toDb(parsed as Record<string, unknown>))
         .eq(elId, id)
         .select("*")
         .single();
 
       if (error) this.throwIfRubricaDuplicada(error);
-      return data;
+      return fromDb<registroEquipoEvaluadorInterface>(data);
     } catch (error) {
       this.throwIfRubricaDuplicada(error);
     }
@@ -176,7 +184,7 @@ export default class RegistroEquipoEvaluadorServices {
   }
 
   async deletePorEvento(idEvento: string) {
-    const { error } = await dataBaseSupabase.from(tabla).delete().eq("idForaneaEvento", idEvento);
+    const { error } = await dataBaseSupabase.from(tabla).delete().eq("id_foranea_evento", idEvento);
 
     if (error) throw error;
     return true;
@@ -195,7 +203,7 @@ export default class RegistroEquipoEvaluadorServices {
         .single();
 
       if (error) this.throwIfRubricaDuplicada(error);
-      return data as registroEquipoEvaluadorInterface;
+      return fromDb<registroEquipoEvaluadorInterface>(data);
     } catch (error) {
       this.throwIfRubricaDuplicada(error);
     }

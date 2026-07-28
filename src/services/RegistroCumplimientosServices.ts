@@ -9,14 +9,40 @@ import {
     vistaResultadosModel, 
     vistaResultadosPreliminaresInterface,
     vistaResultadosTenporadaInterface } from "@/models";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
 
 
 
 
 type Interface = registroCumplimientoEvaluacionInterface;
 
-const tabla = "registroCumplimientoEvaluaciones";
-const elId = "idRegistroCumplimientoEvaluacion";
+const tabla = "registro_cumplimiento_evaluaciones";
+const elId = "id_registro_cumplimiento_evaluacion";
+
+/**
+ * `vista_resultados_temporada` devuelve id_banda/nombre_banda/id_categoria/
+ * nombre_categoria en snake_case, pero `vistaResultadosTenporadaInterface`
+ * conserva esos campos en camelCase (el resto de columnas ya son snake_case
+ * en la interfaz, p. ej. total_antes_sanciones).
+ */
+function mapVistaResultadosTemporadaRow(
+    row: Record<string, unknown>,
+): vistaResultadosTenporadaInterface {
+    const { id_banda, nombre_banda, id_categoria, nombre_categoria, ...rest } = row;
+    return {
+        ...rest,
+        idBanda: id_banda as string,
+        nombreBanda: nombre_banda as string,
+        idCategoria: id_categoria as string,
+        nombreCategoria: nombre_categoria as string,
+    } as vistaResultadosTenporadaInterface;
+}
+
+function mapVistaResultadosTemporadaRows(
+    rows: Record<string, unknown>[] | null,
+): vistaResultadosTenporadaInterface[] {
+    return (rows ?? []).map(mapVistaResultadosTemporadaRow);
+}
 
 /** Indica si un error de insert es por registro duplicado (UNIQUE o RLS anti-duplicado). */
 export function esErrorInsertDuplicadoEvaluacion(error: unknown): boolean {
@@ -71,9 +97,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
             .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -81,7 +107,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) {
             console.error("❌ Error obteniendo regiones con federaciones:", error);
@@ -89,7 +115,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
 
       
-        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+        return fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? []);
     } catch (error) {
         console.error("❌ Error general en getDatosAmpleos:", error);
         throw error;
@@ -103,9 +129,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
         const { data, error } = await dataBaseSupabase
         .from(tabla).select("*")
-        .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+        .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
-        return data;
+        return fromDbMany<registroCumplimientoEvaluacionInterface>(data ?? []);
     }
 
     async getOne(id: string) {
@@ -117,9 +143,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
               .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -128,11 +154,11 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 rubricas(*)
             `)
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<registroCumplimientoEvaluacionDatosAmpleosInterface>(data);
     }
 
     async getPorEvento(idEvento: string) {
@@ -144,9 +170,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
               .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -154,11 +180,11 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
-       return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+       return fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? []);
     }
     async getPorBanda(idBanda: string) {
          
@@ -169,9 +195,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
             .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -179,11 +205,11 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaBanda", idBanda)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_banda", idBanda)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
-        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+        return fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? []);
     }
     async getPorBandaYEvento(idBanda: string, idEvento: string) {
          
@@ -194,9 +220,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
               .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -204,12 +230,12 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaBanda", idBanda)
-            .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_banda", idBanda)
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
-        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+        return fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? []);
     }
 
     async getIdsCriteriosGuardadosEnRubrica(
@@ -226,15 +252,15 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .select("idForaneaCriterio")
-            .eq("idForaneaBanda", idBanda)
-            .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaRubrica", idRubrica)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .select("id_foranea_criterio")
+            .eq("id_foranea_banda", idBanda)
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_rubrica", idRubrica)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
 
-        const ids = (data ?? [])
+        const ids = fromDbMany<{ idForaneaCriterio?: string | null }>(data ?? [])
             .map((row) => row.idForaneaCriterio)
             .filter((id): id is string => Boolean(id?.trim()));
 
@@ -250,9 +276,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
               .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -260,12 +286,12 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaCategoria", idCategoria)
-            .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_categoria", idCategoria)
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
-        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+        return fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? []);
     }
     async getPorRubrica(idRubrica: string) {
          
@@ -276,9 +302,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
                 .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -286,12 +312,12 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaRubrica", idRubrica)
+            .eq("id_foranea_rubrica", idRubrica)
           
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
-        return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+        return fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? []);
     }
     async getPorRubricaYEvento(idRubrica: string, idEvento: string) {
          
@@ -302,9 +328,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
                 .select(`
                 *
-             ,registroEventos(*),
+             ,registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -312,13 +338,13 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaRubrica", idRubrica)
-            .eq("idForaneaEvento", idEvento)
+            .eq("id_foranea_rubrica", idRubrica)
+            .eq("id_foranea_evento", idEvento)
           
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
-       return data as registroCumplimientoEvaluacionDatosAmpleosInterface[];
+       return fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? []);
     }
 
 
@@ -334,9 +360,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
             .select(`
                 *,
-                registroEventos(*),
+                registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -344,8 +370,8 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
 
@@ -355,8 +381,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 
         // Agrupar por banda y sumar los puntos
         const resultadosPorBanda = new Map<string, resultadosGeneralesInterface>();
-        
-        data.forEach((evaluacion: registroCumplimientoEvaluacionDatosAmpleosInterface) => {
+
+        const evaluaciones = fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data);
+        evaluaciones.forEach((evaluacion) => {
             const idBanda = evaluacion.idForaneaBanda;
             
             if (!resultadosPorBanda.has(idBanda)) {
@@ -392,9 +419,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
             .select(`
                 *,
-                registroEventos(*),
+                registro_eventos(*),
                 bandas(*),
-                criteriosEvalucion(*),
+                criterios_evaluacion(*),
                 cumplimientos(*),
                 categorias(*),
                 regiones(*),
@@ -402,9 +429,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 federaciones(*),
                 rubricas(*)
             `)
-            .eq("idForaneaEvento", idEvento)
-            .eq("idForaneaCategoria", idCategoria)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_evento", idEvento)
+            .eq("id_foranea_categoria", idCategoria)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
 
@@ -414,8 +441,9 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 
         // Agrupar por banda y sumar los puntos
         const resultadosPorBanda = new Map<string, resultadosGeneralesInterface>();
-        
-        data.forEach((evaluacion: registroCumplimientoEvaluacionDatosAmpleosInterface) => {
+
+        const evaluaciones = fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data);
+        evaluaciones.forEach((evaluacion) => {
             const idBanda = evaluacion.idForaneaBanda;
             
             if (!resultadosPorBanda.has(idBanda)) {
@@ -450,13 +478,13 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .insert(toDb(dataCreate as unknown as Record<string, unknown>))
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single()
 
         if (error) throw error;
-        return data;
+        return fromDb<registroCumplimientoEvaluacionInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
@@ -466,14 +494,14 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(dataUpdate as unknown as Record<string, unknown>))
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<registroCumplimientoEvaluacionInterface>(data);
     }
 
     async delete(id: string) {
@@ -485,7 +513,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .from(tabla)
             .delete()
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return true;
@@ -505,14 +533,15 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .select("puntosObtenidos")
-            .eq("idForaneaBanda", idBanda)
+            .select("puntos_obtenidos")
+            .eq("id_foranea_banda", idBanda)
             .gte("created_at", fechaInicio)
             .lt("created_at", fechaFin)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
 
-        const totalPuntos = data?.reduce((total, registro) => total + (registro.puntosObtenidos || 0), 0) || 0;
+        const totalPuntos = fromDbMany<{ puntosObtenidos?: number | null }>(data ?? [])
+            .reduce((total, registro) => total + (registro.puntosObtenidos || 0), 0);
         return totalPuntos;
 
     }
@@ -529,11 +558,11 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             let query = dataBaseSupabase
                 .from("vista_resultados_temporada")
                 .select("*")
-                .eq("idBanda", idBanda);
+                .eq("id_banda", idBanda);
 
             const cat = idCategoria?.trim();
             if (cat) {
-                query = query.eq("idCategoria", cat);
+                query = query.eq("id_categoria", cat);
             }
 
             const { data, error } = await query.maybeSingle();
@@ -547,7 +576,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
                 return null;
             }
 
-            return data as vistaResultadosTenporadaInterface;
+            return mapVistaResultadosTemporadaRow(data);
         } catch (error) {
             throw error;
         }
@@ -568,11 +597,11 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         // Solicitamos también el idForaneaEvento para poder agrupar por evento
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .select("puntosObtenidos, idForaneaEvento")
-            .eq("idForaneaBanda", idBanda)
+            .select("puntos_obtenidos, id_foranea_evento")
+            .eq("id_foranea_banda", idBanda)
             .gte("created_at", fechaInicio)
             .lt("created_at", fechaFin)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         if (!data || data.length === 0) {
@@ -581,7 +610,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
 
         // Agrupar por evento y sumar puntos por cada evento
         const puntosPorEvento = new Map<string, number>();
-        data.forEach((registro: { idForaneaEvento?: string | null; puntosObtenidos?: number | null }) => {
+        fromDbMany<{ idForaneaEvento?: string | null; puntosObtenidos?: number | null }>(data).forEach((registro) => {
             const idEvento = registro.idForaneaEvento ?? 'sin_evento';
             const puntos = Number(registro.puntosObtenidos ?? 0) || 0;
             const actual = puntosPorEvento.get(idEvento) || 0;
@@ -610,12 +639,18 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         // Obtener todas las bandas en la federación
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .select("idForaneaBanda")
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .neq("idForaneaBanda", idBanda); // Excluir la banda actual
+            .select("id_foranea_banda")
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+            .neq("id_foranea_banda", idBanda); // Excluir la banda actual
         if (error) throw error;
 
-        const bandasUnicas = Array.from(new Set(data?.map(item => item.idForaneaBanda)));
+        const bandasUnicas = Array.from(
+            new Set(
+                fromDbMany<{ idForaneaBanda?: string | null }>(data ?? [])
+                    .map((item) => item.idForaneaBanda)
+                    .filter((id): id is string => Boolean(id)),
+            ),
+        );
         let posicion = 1; // Comenzar en posición 1 (mejor posición)
 
         // Comparar puntos con cada banda
@@ -648,8 +683,8 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         const { data, error } = await dataBaseSupabase
             .from("vista_resultados_generales") 
             .select("*")
-            .eq("idForaneaBanda", idbanda)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_banda", idbanda)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
            
         if (error) throw error;
         return data as vistaResultadosModel[];
@@ -664,8 +699,8 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         const { data, error } = await dataBaseSupabase
             .from("vista_resultados_generales")
             .select("*")
-            .eq("idForaneaBanda", idBanda)
-            .eq("idForaneaEvento", idEvento)
+            .eq("id_foranea_banda", idBanda)
+            .eq("id_foranea_evento", idEvento)
            
 
         if (error) throw error;
@@ -686,7 +721,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
          
 
         if (error) throw error;
-        return data as vistaResultadosTenporadaInterface[];
+        return mapVistaResultadosTemporadaRows(data);
     }
 
     async getVistaResultadosTemporadaByIdBanda(idbanda: string): Promise<vistaResultadosTenporadaInterface> {
@@ -697,7 +732,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         const { data, error } = await dataBaseSupabase
             .from("vista_resultados_temporada") 
             .select("*")
-            .eq("idBanda", idbanda)
+            .eq("id_banda", idbanda)
          
             .maybeSingle();
 
@@ -705,7 +740,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         if (!data) {
             throw new Error("No hay fila en vista_resultados_temporada para esta banda.");
         }
-        return data as vistaResultadosTenporadaInterface;
+        return mapVistaResultadosTemporadaRow(data);
     }
 
     async getVistaResultadosTemporadaActual(): Promise<vistaResultadosTenporadaInterface[]> {
@@ -719,7 +754,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
             .select("*")
       
         if (error) throw error;
-        return data as vistaResultadosTenporadaInterface[];
+        return mapVistaResultadosTemporadaRows(data);
     }
 
     /** Resultados agregados por evento para una banda (año de temporada actual). Usado en estadísticas. */
@@ -733,7 +768,7 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         const { data, error } = await dataBaseSupabase
             .from("vista_resultados_eventos")
             .select("*")
-            .eq("idForaneaBanda", idBanda)
+            .eq("id_foranea_banda", idBanda)
          
           
 
@@ -748,10 +783,10 @@ async getDatosAmpleos(): Promise<registroCumplimientoEvaluacionDatosAmpleosInter
         }
 
         const { count, error } = await dataBaseSupabase
-            .from("registroPenalizaciones")
+            .from("registro_penalizaciones")
             .select("*", { count: "exact", head: true })
-            .eq("idForaneaBanda", idBanda)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_banda", idBanda)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return count ?? 0;

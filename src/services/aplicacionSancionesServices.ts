@@ -3,6 +3,41 @@ import {
   registroSancionInterface,
   vistaAplicacionSancionInterface,
 } from "@/models";
+import { toDb } from "@/services/mappers/caseMapper";
+
+/**
+ * `vista_aplicacion_sanciones` devuelve id_banda/nombre_banda/id_categoria/
+ * nombre_categoria/id_region/nombre_region en snake_case, pero la interfaz
+ * conserva esos campos en camelCase por compatibilidad con la UI existente.
+ */
+function mapVistaAplicacionSancionRow(
+  row: Record<string, unknown>,
+): vistaAplicacionSancionInterface {
+  const {
+    id_banda,
+    nombre_banda,
+    id_categoria,
+    nombre_categoria,
+    id_region,
+    nombre_region,
+    ...rest
+  } = row;
+  return {
+    ...rest,
+    idBanda: (id_banda as string | null) ?? null,
+    nombreBanda: (nombre_banda as string | null) ?? null,
+    idCategoria: (id_categoria as string | null) ?? null,
+    nombreCategoria: (nombre_categoria as string | null) ?? null,
+    idRegion: (id_region as string | null) ?? null,
+    nombreRegion: (nombre_region as string | null) ?? null,
+  } as vistaAplicacionSancionInterface;
+}
+
+function mapVistaAplicacionSancionRows(
+  rows: Record<string, unknown>[] | null,
+): vistaAplicacionSancionInterface[] {
+  return (rows ?? []).map(mapVistaAplicacionSancionRow);
+}
 
 type RegistroInsert = Omit<
   registroSancionInterface,
@@ -20,7 +55,7 @@ export async function getAllAplicacionSanciones(): Promise<
   const { data, error } = await dataBaseSupabase.from(vistaAplicacion).select("*");
 
   if (error) throw error;
-  return data as vistaAplicacionSancionInterface[];
+  return mapVistaAplicacionSancionRows(data);
 }
 
 export async function getAplicacionSancionesPorAnio(
@@ -35,7 +70,7 @@ export async function getAplicacionSancionesPorAnio(
     .lte("fecha_aplico_sancion", hasta);
 
   if (error) throw error;
-  return data as vistaAplicacionSancionInterface[];
+  return mapVistaAplicacionSancionRows(data);
 }
 
 export async function getAllAplicacionSancionByIdBanda(
@@ -44,10 +79,10 @@ export async function getAllAplicacionSancionByIdBanda(
   const { data, error } = await dataBaseSupabase
     .from(vistaAplicacion)
     .select("*")
-    .eq("idBanda", idBanda);
+    .eq("id_banda", idBanda);
 
   if (error) throw error;
-  return data as vistaAplicacionSancionInterface[];
+  return mapVistaAplicacionSancionRows(data);
 }
 
 export async function getAllAplicacionSancionByIdSancion(
@@ -59,7 +94,7 @@ export async function getAllAplicacionSancionByIdSancion(
     .eq("id_sancion", idSancion);
 
   if (error) throw error;
-  return data as vistaAplicacionSancionInterface[];
+  return mapVistaAplicacionSancionRows(data);
 }
 
 export async function getAllAplicacionSancionByIdCategoria(
@@ -68,10 +103,10 @@ export async function getAllAplicacionSancionByIdCategoria(
   const { data, error } = await dataBaseSupabase
     .from(vistaAplicacion)
     .select("*")
-    .eq("idCategoria", idCategoria);
+    .eq("id_categoria", idCategoria);
 
   if (error) throw error;
-  return data as vistaAplicacionSancionInterface[];
+  return mapVistaAplicacionSancionRows(data);
 }
 
 export async function getAllAplicacionSancionByIdRegion(
@@ -80,10 +115,10 @@ export async function getAllAplicacionSancionByIdRegion(
   const { data, error } = await dataBaseSupabase
     .from(vistaAplicacion)
     .select("*")
-    .eq("idRegion", idRegion);
+    .eq("id_region", idRegion);
 
   if (error) throw error;
-  return data as vistaAplicacionSancionInterface[];
+  return mapVistaAplicacionSancionRows(data);
 }
 
 export async function getAplicacionSancionById(
@@ -96,7 +131,7 @@ export async function getAplicacionSancionById(
     .single();
 
   if (error) throw error;
-  return data as vistaAplicacionSancionInterface;
+  return mapVistaAplicacionSancionRow(data);
 }
 
 export async function createAplicacionSancion(
@@ -104,7 +139,7 @@ export async function createAplicacionSancion(
 ): Promise<registroSancionInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tablaRegistro)
-    .insert(payload)
+    .insert(toDb(payload as unknown as Record<string, unknown>))
     .select("*")
     .single();
 
@@ -118,7 +153,7 @@ export async function updateAplicacionSancion(
 ): Promise<registroSancionInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tablaRegistro)
-    .update(payload)
+    .update(toDb(payload as unknown as Record<string, unknown>))
     .eq(elId, id)
     .select("*")
     .single();

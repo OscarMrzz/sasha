@@ -1,11 +1,14 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { rubricaDatosAmpleosInterface, rubricaInterface, perfilDatosAmpleosInterface } from "@/models";
+import { rubricaInsertSchema, rubricaUpdateSchema } from "@/models/rubricas/rubricaSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import PerfilesServices from "./perfilesServices";
 
 type Interface = rubricaInterface;
 
 const tabla = "rubricas";
-const elId = "idRubrica";
+const elId = "id_rubrica";
 
 export function mensajeRubricaDuplicada(
     nombreRubrica: string,
@@ -51,14 +54,14 @@ export default class RubricasServices {
                     *,
                     federaciones(*),
                     categorias(*)
-                `).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+                `).eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
 
             if (error) {
                 console.error("❌ Error obteniendo regiones con federaciones:", error);
                 throw error;
             }
 
-            return data as rubricaDatosAmpleosInterface[];
+            return fromDbMany<rubricaDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;
@@ -72,14 +75,14 @@ export default class RubricasServices {
                     *,
                     federaciones(*),
                     categorias(*)
-                `) .eq("idForaneaCategoria", idCategoria).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+                `) .eq("id_foranea_categoria", idCategoria).eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
 
             if (error) {
                 console.error("❌ Error obteniendo regiones con federaciones:", error);
                 throw error;
             }
 
-            return data as rubricaDatosAmpleosInterface[];
+            return fromDbMany<rubricaDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;
@@ -87,20 +90,20 @@ export default class RubricasServices {
     }
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
-        return data;
+        return fromDbMany<rubricaInterface>(data ?? []);
     }
 
     async getOne(id: string) {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elId, id).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+            .eq(elId, id).eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<rubricaInterface>(data);
     }
 
     async existeRubricaDuplicada(
@@ -167,14 +170,15 @@ export default class RubricasServices {
             dataCreate.versionRubrica
         );
 
+        const parsed = parseCamel(rubricaInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(parsed as Record<string, unknown>))
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<rubricaInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
@@ -186,15 +190,16 @@ export default class RubricasServices {
             { excluirIdRubrica: id }
         );
 
+        const parsed = parseCamel(rubricaUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(elId, id)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<rubricaInterface>(data);
     }
 
     async delete(id: string) {

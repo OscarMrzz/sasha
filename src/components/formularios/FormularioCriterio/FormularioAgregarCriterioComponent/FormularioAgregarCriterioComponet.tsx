@@ -8,6 +8,7 @@ import PerfilesServices from "@/services/perfilesServices";
 import CriteriosServices from "@/services/criteriosServices";
 import { useDispatch } from "react-redux";
 import { activarRefrescarDataCriterios } from "@/features/RefrescadorData/refrescadorDataSlice";
+import { criterioEvaluacionInsertSchema } from "@/models/criterios/criterioEvaluacionSchema";
 
 const inputBaseClass =
   "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 shadow-inner transition focus:border-primario/80 focus:bg-white/[0.07] focus:ring-2 focus:ring-primario/35";
@@ -80,7 +81,15 @@ export default  function FormularioAgregarCriterioComponet  ({rubrica, refresaca
         idForaneaRubrica: rubrica.idRubrica,
       };
 
-      await criteriosServices.create(nuevaCategoria as criterioEvaluacionInterface);
+      const parsed = criterioEvaluacionInsertSchema.safeParse(nuevaCategoria);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      await criteriosServices.create(parsed.data as criterioEvaluacionInterface);
 
 
       // Limpiar formulario

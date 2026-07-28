@@ -21,6 +21,7 @@ import {
   manejoErrorEdicionBanda,
   manejoErrorLogoBanda,
 } from "@/helpers/errores/bandas/manejoErrorBanda";
+import { bandaUpdateSchema } from "@/models/bandas/bandaSchema";
 
 type Props = {
   refresacar: () => void;
@@ -168,7 +169,16 @@ const FormularioEditarBandaComponent = ({
           formData.fechaInscripcionAFederacion === "" ? null : formData.fechaInscripcionAFederacion,
         ubicacionSedeBanda: formData.ubicacionSedeBanda,
       };
-      await bandaServices.current.update(bandaAEditar.idBanda, nuevaBanda as bandaInterface);
+
+      const parsed = bandaUpdateSchema.safeParse(nuevaBanda);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      await bandaServices.current.update(bandaAEditar.idBanda, parsed.data as bandaInterface);
       refresacar();
       onClose();
 

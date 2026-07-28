@@ -5,6 +5,7 @@ import RegionesServices from "@/services/regionesServices";
 import { perfilDatosAmpleosInterface, regionesInterface } from "@/models";
 import PerfilesServices from "@/services/perfilesServices";
 import { useRegionAgregadaStore } from "@/store/RegionesStore/regionAgregadaStore";
+import { regionesInsertSchema } from "@/models/regiones/regionesSchema";
 
 type Props = {
   refresacar: () => void | Promise<void>;
@@ -67,7 +68,15 @@ export default function FormularioAgregarRegionComponent({
         idForaneaFederacion: perfil.idForaneaFederacion || ""
       };
 
-      const creada = await regionesServices.create(nuevaRegion as regionesInterface);
+      const parsed = regionesInsertSchema.safeParse(nuevaRegion);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        openErrorModal ? openErrorModal(msg || "Datos inválidos") : alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      const creada = await regionesServices.create(parsed.data as regionesInterface);
       if (creada?.idRegion != null && creada.idRegion !== "") {
         setUltimaRegion({ codigo: String(creada.idRegion) });
       }

@@ -1,11 +1,14 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { federacionInterface, perfilDatosAmpleosInterface} from "@/models";
+import { federacionInsertSchema, federacionUpdateSchema } from "@/models/federaciones/federacionSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import PerfilesServices from "./perfilesServices";
 
 type Interface = federacionInterface;
 
 const tabla = "federaciones";
-const Elid = "idFederacion";
+const Elid = "id_federacion";
 
 export default class FederacionesService {
      perfil: perfilDatosAmpleosInterface | null = null;
@@ -31,7 +34,7 @@ export default class FederacionesService {
     async get() {
         const { data, error } = await dataBaseSupabase.from(tabla).select("*")
         if (error) throw error;
-        return data;
+        return fromDbMany<federacionInterface>(data ?? []);
     }
 
     async getOne(id: string) {
@@ -43,30 +46,32 @@ export default class FederacionesService {
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<federacionInterface>(data);
     }
 
     async create(dataCreate: Interface) {
+        const parsed = parseCamel(federacionInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(parsed as Record<string, unknown>))
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<federacionInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
+        const parsed = parseCamel(federacionUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(Elid, id)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<federacionInterface>(data);
     }
 
     async delete(id: string) {

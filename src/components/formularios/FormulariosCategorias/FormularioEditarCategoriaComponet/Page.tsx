@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import {categoriaInterface,  perfilDatosAmpleosInterface,} from "@/models";
 import PerfilesServices from "@/services/perfilesServices";
 import CategoriasServices from "@/services/categoriaServices";
+import { categoriaUpdateSchema } from "@/models/categorias/categoriaSchema";
 
 const inputBaseClass =
   "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 shadow-inner transition focus:border-primario/80 focus:bg-white/[0.07] focus:ring-2 focus:ring-primario/35";
@@ -104,7 +105,15 @@ const cargaFormulario = (categoria: categoriaInterface) => {
         idForaneaFederacion: perfil.idForaneaFederacion || ""
       };
 
-      await categoriasServices.update(CategoriaAEditar.idCategoria, nuevaCategoria as categoriaInterface);
+      const parsed = categoriaUpdateSchema.safeParse(nuevaCategoria);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        openErrorModal ? openErrorModal(msg || "Datos inválidos") : alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      await categoriasServices.update(CategoriaAEditar.idCategoria, parsed.data as categoriaInterface);
       openModalExito?.("Categoría actualizada");
 
 

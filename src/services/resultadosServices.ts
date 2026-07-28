@@ -8,6 +8,7 @@ import type {
   vistaResultadosPreliminaresInterface,
 } from "@/models";
 import { dataBaseSupabase } from "@/lib/supabase";
+import { fromDbMany } from "@/services/mappers/caseMapper";
 
 /** PostgREST a veces entrega errores mal serializables (se ven como `{}` en consola). */
 function mensajeSupabase(err: unknown): string {
@@ -125,12 +126,12 @@ export class ResultadosService {
      *  pero sin `.eq(idForaneaFederacion, perfil)` — coincide con la vista antes usada aquí */
     try {
       const { data, error } = await dataBaseSupabase
-        .from("registroCumplimientoEvaluaciones")
+        .from("registro_cumplimiento_evaluaciones")
         .select(`
           *,
-          registroEventos(*),
+          registro_eventos(*),
           bandas(*),
-          criteriosEvalucion(*),
+          criterios_evaluacion(*),
           cumplimientos(*),
           categorias(*),
           regiones(*),
@@ -138,12 +139,12 @@ export class ResultadosService {
           federaciones(*),
           rubricas(*)
         `)
-        .eq("idForaneaBanda", idBanda)
-        .eq("idForaneaEvento", idEvento);
+        .eq("id_foranea_banda", idBanda)
+        .eq("id_foranea_evento", idEvento);
 
       if (error) throw error;
       return registrosEvaluacionAVista(
-        (data ?? []) as registroCumplimientoEvaluacionDatosAmpleosInterface[]
+        fromDbMany<registroCumplimientoEvaluacionDatosAmpleosInterface>(data ?? [])
       );
     } catch (e) {
       const msg = mensajeSupabase(e);
@@ -161,11 +162,11 @@ export class ResultadosService {
     const { data, error } = await dataBaseSupabase
       .from("rubricas")
       .select("*")
-      .eq("idForaneaCategoria", idCategoria)
-      .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+      .eq("id_foranea_categoria", idCategoria)
+      .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
     if (error) throw error;
-    return (data ?? []) as rubricaInterface[];
+    return fromDbMany<rubricaInterface>(data ?? []);
   }
 
   async getComentariosPorBandaYEvento(
@@ -176,10 +177,10 @@ export class ResultadosService {
       throw new Error("No hay federación en el perfil del usuario.");
     }
     const { data, error } = await dataBaseSupabase
-      .from("registroComentarios")
+      .from("registro_comentarios")
       .select(`
         *,
-        registroEventos(*),
+        registro_eventos(*),
         bandas(*),
         categorias(*),
         regiones(*),
@@ -187,12 +188,12 @@ export class ResultadosService {
         federaciones(*),
         rubricas(*)
       `)
-      .eq("idForaneaBanda", idBanda)
-      .eq("idForaneaEvento", idEvento)
-      .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+      .eq("id_foranea_banda", idBanda)
+      .eq("id_foranea_evento", idEvento)
+      .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
     if (error) throw error;
-    return (data ?? []) as registroComentariosDatosAmpleosInterface[];
+    return fromDbMany<registroComentariosDatosAmpleosInterface>(data ?? []);
   }
 
   async getResultadosCompletos(
@@ -258,13 +259,13 @@ export async function fetchResultadosPreliminaresEvento(
   const { data, error } = await dataBaseSupabase
     .from("vista_resultados_preliminares")
     .select("*")
-    .eq("idEvento", idEvento)
-    .eq("idForaneaCategoria", idCategoria)
-    .eq("idForaneaFederacion", idFederacion)
+    .eq("id_evento", idEvento)
+    .eq("id_foranea_categoria", idCategoria)
+    .eq("id_foranea_federacion", idFederacion)
     .order("rankin", { ascending: true });
 
   if (error) throw new Error(mensajeSupabase(error));
-  return (data ?? []) as vistaResultadosPreliminaresInterface[];
+  return fromDbMany<vistaResultadosPreliminaresInterface>(data ?? []);
 }
 
 
@@ -277,5 +278,5 @@ export async function getVistaCondensado(
  
 
   if (error) throw new Error(mensajeSupabase(error));
-  return (data ?? []) as vistaCondensado[];
+  return fromDbMany<vistaCondensado>(data ?? []);
 }

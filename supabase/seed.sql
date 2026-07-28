@@ -1,87 +1,87 @@
 -- Seed data para la base de datos de Supabase
--- Sintaxis correcta PostgreSQL
+-- Sintaxis correcta postgre_sql
 --
 -- Usuarios por defecto en este seed:
 --   admin:      admin@feccah.com      / adminfeccha01
 --   secretaria: secretaria@feccah.com / secretariafeccah
 
--- VARIABLES
-DO $$
-DECLARE
-    id_user UUID := gen_random_uuid();
-    user_email TEXT := 'admin@feccah.net';
-    user_password TEXT := 'adminfeccah';
-    id_user_secretaria UUID := gen_random_uuid();
-    user_email_secretaria TEXT := 'secretaria@feccah.com';
-    user_password_secretaria TEXT := 'secretariafeccah';
-    idRolDeveloper UUID := gen_random_uuid();
-    idRolAdmin UUID := gen_random_uuid();
-    idRolAdminTemporal UUID := gen_random_uuid();
-    idRolJurado UUID := gen_random_uuid();
-    idRolFiscal UUID := gen_random_uuid();
-    idRolDirigente UUID := gen_random_uuid();
-    idRolLiderbanda UUID := gen_random_uuid();
-    idRolResponsableBandas UUID := gen_random_uuid();
-    idRolResponsableRubricas UUID := gen_random_uuid();
-    idRolResponsableUsuarios UUID := gen_random_uuid();
-    idRolResponsableEventos UUID := gen_random_uuid();
-    idRolResponsableMesa UUID := gen_random_uuid();
-    idRolSecretaria UUID := gen_random_uuid();
-    idRolComiteDisciplina UUID := gen_random_uuid();
-    id_federacion UUID := gen_random_uuid();
+-- variables
+do $$
+declare
+    id_user uuid := gen_random_uuid();
+    user_email text := 'admin@feccah.net';
+    user_password text := 'adminfeccah';
+    id_user_secretaria uuid := gen_random_uuid();
+    user_email_secretaria text := 'secretaria@feccah.com';
+    user_password_secretaria text := 'secretariafeccah';
+    id_rol_developer uuid := gen_random_uuid();
+    id_rol_admin uuid := gen_random_uuid();
+    id_rol_admin_temporal uuid := gen_random_uuid();
+    id_rol_jurado uuid := gen_random_uuid();
+    id_rol_fiscal uuid := gen_random_uuid();
+    id_rol_dirigente uuid := gen_random_uuid();
+    id_rol_liderbanda uuid := gen_random_uuid();
+    id_rol_responsable_bandas uuid := gen_random_uuid();
+    id_rol_responsable_rubricas uuid := gen_random_uuid();
+    id_rol_responsable_usuarios uuid := gen_random_uuid();
+    id_rol_responsable_eventos uuid := gen_random_uuid();
+    id_rol_responsable_mesa uuid := gen_random_uuid();
+    id_rol_secretaria uuid := gen_random_uuid();
+    id_rol_comite_disciplina uuid := gen_random_uuid();
+    id_federacion uuid := gen_random_uuid();
 
    
 
 
 
     
-BEGIN
+begin
 
--- FEDERACION (primero)
-INSERT INTO public.federaciones ("idFederacion","created_at","nombreFederacion") 
-VALUES (
+-- federacion (primero)
+insert into public.federaciones (id_federacion,"created_at",nombre_federacion) 
+values (
     id_federacion,
     now(),
-    'FECCAH-DEV'
+    'feccah-dev'
 );
 
--- DENTRO DEL BEGIN, después de insertar la federación:
+-- dentro del begin, después de insertar la federación:
 
 
 /* 
 
-    idRol: string; // uuid
+    id_rol: string; // uuid
     created_at: string; // timestamp with time zone
-    idForaneaFederacion: string; // uuid
-    nombreRol: string; // text
-    estadoRol: boolean;
+    id_foranea_federacion: string; // uuid
+    nombre_rol: string; // text
+    estado_rol: boolean;
 
  */
 
-INSERT INTO public.roles ("idRol",created_at,"idForaneaFederacion","nombreRol","estadoRol")
-VALUES 
-(idRolDeveloper,now(),id_federacion,'developer',true),
-(idRolAdmin,now(),id_federacion,'admin',true),
-(idRolAdminTemporal,now(),id_federacion,'admin temporal',true),
-(idRolJurado,now(),id_federacion,'jurado',true),
-(idRolFiscal,now(),id_federacion,'fiscal',true),
-(idRolDirigente,now(),id_federacion,'dirigente',true),
-(idRolLiderbanda,now(),id_federacion,'lider de banda',true),
-(idRolResponsableBandas,now(),id_federacion,'responsable de bandas',true),
-(idRolResponsableRubricas,now(),id_federacion,'responsable de rubricas',true),
-(idRolResponsableUsuarios,now(),id_federacion,'responsable de usuarios',true),
-(idRolResponsableEventos,now(),id_federacion,'responsable de eventos',true),
-(idRolResponsableMesa,now(),id_federacion,'responsable de mesa',true),
-(idRolSecretaria,now(),id_federacion,'secretaria',true),
-(idRolComiteDisciplina,now(),id_federacion,'comite de disciplina',true);
+insert into public.roles (id_rol,created_at,id_foranea_federacion,nombre_rol,estado_rol)
+values 
+(id_rol_developer,now(),id_federacion,'developer',true),
+(id_rol_admin,now(),id_federacion,'admin',true),
+(id_rol_admin_temporal,now(),id_federacion,'admin temporal',true),
+(id_rol_jurado,now(),id_federacion,'jurado',true),
+(id_rol_fiscal,now(),id_federacion,'fiscal',true),
+(id_rol_dirigente,now(),id_federacion,'dirigente',true),
+(id_rol_liderbanda,now(),id_federacion,'lider de banda',true),
+(id_rol_responsable_bandas,now(),id_federacion,'responsable de bandas',true),
+(id_rol_responsable_rubricas,now(),id_federacion,'responsable de rubricas',true),
+(id_rol_responsable_usuarios,now(),id_federacion,'responsable de usuarios',true),
+(id_rol_responsable_eventos,now(),id_federacion,'responsable de eventos',true),
+(id_rol_responsable_mesa,now(),id_federacion,'responsable de mesa',true),
+(id_rol_secretaria,now(),id_federacion,'secretaria',true),
+(id_rol_comite_disciplina,now(),id_federacion,'comite de disciplina',true);
 
 
 
 
 
--- USER en auth.users (tercero)
+-- user en auth.users (tercero)
 -- 1. Insertar el usuario en auth.users
-  INSERT INTO auth.users (
+  insert into auth.users (
     instance_id,
     id,
     aud,
@@ -100,7 +100,7 @@ VALUES
     email_change_token_new,
     recovery_token
   )
-  VALUES (
+  values (
     '00000000-0000-0000-0000-000000000000',
     id_user,
     'authenticated',
@@ -111,7 +111,7 @@ VALUES
     now(),
     now(),
     '{"provider": "email", "providers": ["email"]}',
-    '{"name": "FECCAH Admin", "role": "admin"}',
+    '{"name": "feccah Admin", "role": "admin"}',
     now(),
     now(),
     '',
@@ -121,7 +121,7 @@ VALUES
   );
 
   -- 2. Insertar la identidad (Fundamental para que el login funcione)
-  INSERT INTO auth.identities (
+  insert into auth.identities (
     provider_id,
     id,
     user_id,
@@ -131,7 +131,7 @@ VALUES
     created_at,
     updated_at
   )
-  VALUES (
+  values (
     user_email,
     id_user,
     id_user,
@@ -143,13 +143,13 @@ VALUES
   );
 
 -- Crear perfil en public.perfiles (cuarto)
-INSERT into perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos") 
-VALUES(
-    gen_random_uuid(), now(),'FECCAH Admin',id_federacion,id_user,idRolAdmin,true
+insert into perfiles (id_perfil,"created_at","nombre",id_foranea_federacion,id_foranea_user,id_foranea_rol,"permisos") 
+values(
+    gen_random_uuid(), now(),'feccah Admin',id_federacion,id_user,id_rol_admin,true
 );
 
--- USER secretaria en auth.users
-  INSERT INTO auth.users (
+-- user secretaria en auth.users
+  insert into auth.users (
     instance_id,
     id,
     aud,
@@ -168,7 +168,7 @@ VALUES(
     email_change_token_new,
     recovery_token
   )
-  VALUES (
+  values (
     '00000000-0000-0000-0000-000000000000',
     id_user_secretaria,
     'authenticated',
@@ -179,7 +179,7 @@ VALUES(
     now(),
     now(),
     '{"provider": "email", "providers": ["email"]}',
-    '{"name": "FECCAH Secretaria", "role": "secretaria"}',
+    '{"name": "feccah Secretaria", "role": "secretaria"}',
     now(),
     now(),
     '',
@@ -188,7 +188,7 @@ VALUES(
     ''
   );
 
-  INSERT INTO auth.identities (
+  insert into auth.identities (
     provider_id,
     id,
     user_id,
@@ -198,7 +198,7 @@ VALUES(
     created_at,
     updated_at
   )
-  VALUES (
+  values (
     user_email_secretaria,
     id_user_secretaria,
     id_user_secretaria,
@@ -209,349 +209,349 @@ VALUES(
     now()
   );
 
-INSERT into perfiles ("idPerfil","created_at","nombre","idForaneaFederacion","idForaneaUser","idForaneaRol","permisos")
-VALUES(
-    gen_random_uuid(), now(),'FECCAH Secretaria',id_federacion,id_user_secretaria,idRolSecretaria,true
+insert into perfiles (id_perfil,"created_at","nombre",id_foranea_federacion,id_foranea_user,id_foranea_rol,"permisos")
+values(
+    gen_random_uuid(), now(),'feccah Secretaria',id_federacion,id_user_secretaria,id_rol_secretaria,true
 );
 
 
 
 
--- PERMISOS PARA ADMIN
-INSERT INTO public.permisos ("idPermiso","created_at","idForaneaRol","tabla","accion")
-VALUES 
+-- permisos para admin
+insert into public.permisos (id_permiso,"created_at",id_foranea_rol,"tabla","accion")
+values 
 /* ======================================================================== */
 /* developer */
 /* 01 Bandas */
 
-(gen_random_uuid(), now(), idRolDeveloper,'bandas','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'bandas','select'),
 
 /* 02 Categorias */
 
-(gen_random_uuid(), now(), idRolDeveloper,'categorias','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'categorias','select'),
 
 /* 03 Criterios de Evaluacion */
 
-(gen_random_uuid(), now(), idRolDeveloper,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'criterios_evaluacion','select'),
 
 /* 04 Cumplimientos */
 
-(gen_random_uuid(), now(), idRolDeveloper,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'cumplimientos','select'),
 
 /* 05 Federaciones */
 
-(gen_random_uuid(), now(), idRolDeveloper,'federaciones','INSERT'),
-(gen_random_uuid(), now(), idRolDeveloper,'federaciones','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'federaciones','insert'),
+(gen_random_uuid(), now(), id_rol_developer,'federaciones','select'),
 
 /* 07 Perfiles */
-(gen_random_uuid(), now(), idRolDeveloper,'perfiles','INSERT'),
-(gen_random_uuid(), now(), idRolDeveloper,'perfiles','UPDATE'),
-(gen_random_uuid(), now(), idRolDeveloper,'perfiles','DELETE'),
-(gen_random_uuid(), now(), idRolDeveloper,'perfiles','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'perfiles','insert'),
+(gen_random_uuid(), now(), id_rol_developer,'perfiles','update'),
+(gen_random_uuid(), now(), id_rol_developer,'perfiles','delete'),
+(gen_random_uuid(), now(), id_rol_developer,'perfiles','select'),
 
 /*❌ 08 Permisos */
 
 /* 09 Regiones */
 
 
-(gen_random_uuid(), now(), idRolDeveloper,'regiones','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'regiones','select'),
 
 /* 10 Comentarios */
-(gen_random_uuid(), now(), idRolDeveloper,'registroComentarios','SELECT'),
-(gen_random_uuid(), now(), idRolDeveloper,'registroComentarios','INSERT'),
+(gen_random_uuid(), now(), id_rol_developer,'registro_comentarios','select'),
+(gen_random_uuid(), now(), id_rol_developer,'registro_comentarios','insert'),
 
 /* 11 Cumplimiento Evaluaciones */
 
 
-(gen_random_uuid(), now(), idRolDeveloper,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'registro_cumplimiento_evaluaciones','select'),
 
 /* 12 Equipo Evaluador */
 
-(gen_random_uuid(), now(), idRolDeveloper,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos */
 
-(gen_random_uuid(), now(), idRolDeveloper,'registroEventos','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'registro_eventos','select'),
 
 /*❌ 14 Penalizaciones */
 
 /* 15 Solicitud de revision */
 
-(gen_random_uuid(), now(), idRolDeveloper,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'respuesta_solicitud_revision','select'),
 
 /* 16 Roles */
-(gen_random_uuid(), now(), idRolDeveloper,'roles','INSERT'),
-(gen_random_uuid(), now(), idRolDeveloper,'roles','UPDATE'),
-(gen_random_uuid(), now(), idRolDeveloper,'roles','DELETE'),
-(gen_random_uuid(), now(), idRolDeveloper,'roles','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'roles','insert'),
+(gen_random_uuid(), now(), id_rol_developer,'roles','update'),
+(gen_random_uuid(), now(), id_rol_developer,'roles','delete'),
+(gen_random_uuid(), now(), id_rol_developer,'roles','select'),
 /* ❌ 17 Roles equipo evaluador */
 
 /* 18 Rubricas */
 
-(gen_random_uuid(), now(), idRolDeveloper,'rubricas','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'rubricas','select'),
 
 /* 19 Solicitud de revision */
 
-(gen_random_uuid(), now(), idRolDeveloper,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'solicitud_revision','select'),
 
 /* 20 Confirmacion asistencia */
 
-(gen_random_uuid(), now(), idRolDeveloper,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(), idRolDeveloper,'copas','SELECT'),
+(gen_random_uuid(), now(), id_rol_developer,'copas','select'),
 
 /* 28 Alertas evaluación duplicada */
-(gen_random_uuid(), now(), idRolDeveloper,'alertas_evaluacion','SELECT'),
-(gen_random_uuid(), now(), idRolDeveloper,'alertas_evaluacion','EXECUTE'),
+(gen_random_uuid(), now(), id_rol_developer,'alertas_evaluacion','select'),
+(gen_random_uuid(), now(), id_rol_developer,'alertas_evaluacion','execute'),
 
 /*🔷🔷🔷 ========================================================================🔷🔷🔷 */
-/* ADMIN */
+/* admin */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolAdmin,'bandas','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'bandas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'bandas','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'bandas','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'bandas','update'),
+(gen_random_uuid(), now(),id_rol_admin,'bandas','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'bandas','select'),
 
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolAdmin,'categorias','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'categorias','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'categorias','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'categorias','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'categorias','update'),
+(gen_random_uuid(), now(),id_rol_admin,'categorias','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'categorias','select'),
 
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolAdmin,'criteriosEvalucion','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'criteriosEvalucion','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'criteriosEvalucion','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'criterios_evaluacion','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'criterios_evaluacion','update'),
+(gen_random_uuid(), now(),id_rol_admin,'criterios_evaluacion','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'criterios_evaluacion','select'),
 
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolAdmin,'cumplimientos','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'cumplimientos','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'cumplimientos','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'cumplimientos','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'cumplimientos','update'),
+(gen_random_uuid(), now(),id_rol_admin,'cumplimientos','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'cumplimientos','select'),
 
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolAdmin,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'federaciones','select'),
 
 /* 07 Perfiles */
-(gen_random_uuid(), now(),idRolAdmin,'perfiles','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'perfiles','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'perfiles','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'perfiles','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'perfiles','update'),
+(gen_random_uuid(), now(),id_rol_admin,'perfiles','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'perfiles','select'),
 
 /*❌ 08 Permisos */
 
 /* 09 Regiones */
 
-(gen_random_uuid(), now(),idRolAdmin,'regiones','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'regiones','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'regiones','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'regiones','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'regiones','update'),
+(gen_random_uuid(), now(),id_rol_admin,'regiones','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'regiones','select'),
 
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolAdmin,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_comentarios','select'),
 
 /* 11 Cumplimiento Evaluaciones */
 
-(gen_random_uuid(), now(),idRolAdmin,'registroCumplimientoEvaluaciones','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_cumplimiento_evaluaciones','update'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_cumplimiento_evaluaciones','select'),
 
 /* 12 Equipo Evaluador */
-(gen_random_uuid(), now(),idRolAdmin,'registroEquipoEvaluador','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'registroEquipoEvaluador','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'registroEquipoEvaluador','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_equipo_evaluador','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_equipo_evaluador','update'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_equipo_evaluador','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolAdmin,'registroEventos','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'registroEventos','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'registroEventos','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_eventos','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_eventos','update'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_eventos','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_eventos','select'),
 
 /*❌ 14 Penalizaciones */
 
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolAdmin,'respuestaSolicitudRevicion','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'respuesta_solicitud_revision','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'respuesta_solicitud_revision','select'),
 
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolAdmin,'roles','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'roles','update'),
+(gen_random_uuid(), now(),id_rol_admin,'roles','select'),
 /* ❌ 17 Roles equipo evaluador */
 
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolAdmin,'rubricas','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'rubricas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'rubricas','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'rubricas','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'rubricas','update'),
+(gen_random_uuid(), now(),id_rol_admin,'rubricas','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'rubricas','select'),
 
 /* 19 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolAdmin,'solicitudRevicion','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitud_revision','update'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitud_revision','select'),
 
 /* 20 Confirmacion asistencia */
 
-(gen_random_uuid(), now(),idRolAdmin,'confirmacion_asistencia','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'confirmacion_asistencia','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'confirmacion_asistencia','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'confirmacion_asistencia','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'confirmacion_asistencia','update'),
+(gen_random_uuid(), now(),id_rol_admin,'confirmacion_asistencia','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'confirmacion_asistencia','select'),
 
 /* 21 Escuadras */
-(gen_random_uuid(), now(),idRolAdmin,'escuadras','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'escuadras','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'escuadras','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'escuadras','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'escuadras','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'escuadras','update'),
+(gen_random_uuid(), now(),id_rol_admin,'escuadras','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'escuadras','select'),
 
 /* 22 Premios escuadra (tabla premios_escuadra) */
-(gen_random_uuid(), now(),idRolAdmin,'premios_escuadra','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'premios_escuadra','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'premios_escuadra','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'premios_escuadra','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'premios_escuadra','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'premios_escuadra','update'),
+(gen_random_uuid(), now(),id_rol_admin,'premios_escuadra','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'premios_escuadra','select'),
 
 /* 23 Copas (lectura amplia; gestión admin / admin temporal / mesa) */
-(gen_random_uuid(), now(),idRolAdmin,'copas','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'copas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'copas','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'copas','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'copas','update'),
+(gen_random_uuid(), now(),id_rol_admin,'copas','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'copas','select'),
 
 /* 28 Checkout — admin (consulta) */
-(gen_random_uuid(), now(),idRolAdmin,'checkout','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin,'checkout','select'),
 
-/* 24 Sanciones (catálogo; CRUD completo) */
-(gen_random_uuid(), now(),idRolAdmin,'sanciones','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'sanciones','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'sanciones','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'sanciones','SELECT'),
+/* 24 Sanciones (catálogo; crud completo) */
+(gen_random_uuid(), now(),id_rol_admin,'sanciones','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'sanciones','update'),
+(gen_random_uuid(), now(),id_rol_admin,'sanciones','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'sanciones','select'),
 /* 25 Registro sanciones (lectura + aplicar sanción al aprobar solicitud) */
-(gen_random_uuid(), now(),idRolAdmin,'registro_sanciones','SELECT'),
-(gen_random_uuid(), now(),idRolAdmin,'registro_sanciones','INSERT'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_sanciones','select'),
+(gen_random_uuid(), now(),id_rol_admin,'registro_sanciones','insert'),
 
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
 /* admin temporal */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolAdminTemporal,'bandas','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'bandas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'bandas','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'bandas','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'bandas','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'bandas','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'bandas','select'),
 
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolAdminTemporal,'categorias','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'categorias','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'categorias','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'categorias','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'categorias','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'categorias','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'categorias','select'),
 
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolAdminTemporal,'criteriosEvalucion','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'criteriosEvalucion','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'criteriosEvalucion','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'criterios_evaluacion','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'criterios_evaluacion','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'criterios_evaluacion','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'criterios_evaluacion','select'),
 
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolAdminTemporal,'cumplimientos','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'cumplimientos','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'cumplimientos','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'cumplimientos','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'cumplimientos','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'cumplimientos','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'cumplimientos','select'),
 
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolAdminTemporal,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'federaciones','select'),
 
 /* 07 Perfiles */
 
-(gen_random_uuid(), now(),idRolAdminTemporal,'perfiles','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'perfiles','UPDATE'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'perfiles','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'perfiles','update'),
 
-(gen_random_uuid(), now(),idRolAdminTemporal,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'perfiles','select'),
 
 /*❌ 08 Permisos */
 
 /* 09 Regiones */
 
-(gen_random_uuid(), now(),idRolAdminTemporal,'regiones','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'regiones','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'regiones','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'regiones','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'regiones','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'regiones','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'regiones','select'),
 
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_comentarios','select'),
 
 /* 11 Cumplimiento Evaluaciones */
 
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroCumplimientoEvaluaciones','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_cumplimiento_evaluaciones','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_cumplimiento_evaluaciones','select'),
 
 /* 12 Equipo Evaluador */
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEquipoEvaluador','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEquipoEvaluador','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEquipoEvaluador','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_equipo_evaluador','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_equipo_evaluador','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_equipo_evaluador','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEventos','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEventos','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEventos','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_eventos','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_eventos','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_eventos','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_eventos','select'),
 
 /*❌ 14 Penalizaciones */
 
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolAdminTemporal,'respuestaSolicitudRevicion','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'respuesta_solicitud_revision','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'respuesta_solicitud_revision','select'),
 
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolAdminTemporal,'roles','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'roles','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'roles','select'),
 /* ❌ 17 Roles equipo evaluador */
 
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolAdminTemporal,'rubricas','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'rubricas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'rubricas','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'rubricas','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'rubricas','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'rubricas','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'rubricas','select'),
 
 /* 19 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitudRevicion','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitud_revision','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitud_revision','select'),
 
 /* 20 Confirmacion asistencia */
 
-(gen_random_uuid(), now(),idRolAdminTemporal,'confirmacion_asistencia','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'confirmacion_asistencia','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'confirmacion_asistencia','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'confirmacion_asistencia','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'confirmacion_asistencia','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'confirmacion_asistencia','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'confirmacion_asistencia','select'),
 
 /* 21 Escuadras */
-(gen_random_uuid(), now(),idRolAdminTemporal,'escuadras','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'escuadras','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'escuadras','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'escuadras','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'escuadras','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'escuadras','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'escuadras','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'escuadras','select'),
 
 /* 22 Premios escuadra (tabla premios_escuadra) */
-(gen_random_uuid(), now(),idRolAdminTemporal,'premios_escuadra','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'premios_escuadra','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'premios_escuadra','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'premios_escuadra','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'premios_escuadra','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'premios_escuadra','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'premios_escuadra','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'premios_escuadra','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolAdminTemporal,'copas','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'copas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'copas','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'copas','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'copas','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'copas','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'copas','select'),
 
 /* 28 Checkout — admin temporal (consulta) */
-(gen_random_uuid(), now(),idRolAdminTemporal,'checkout','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'checkout','select'),
 
-/* 24 Sanciones (catálogo; CRUD completo) */
-(gen_random_uuid(), now(),idRolAdminTemporal,'sanciones','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'sanciones','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'sanciones','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'sanciones','SELECT'),
+/* 24 Sanciones (catálogo; crud completo) */
+(gen_random_uuid(), now(),id_rol_admin_temporal,'sanciones','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'sanciones','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'sanciones','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'sanciones','select'),
 /* 25 Registro sanciones (solo lectura) */
-(gen_random_uuid(), now(),idRolAdminTemporal,'registro_sanciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'registro_sanciones','select'),
 
 
 
@@ -560,78 +560,78 @@ VALUES
 /* jurado */
 /* 01 Bandas */
 
-(gen_random_uuid(), now(),idRolJurado,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'bandas','select'),
 
 /* 02 Categorias */
 
-(gen_random_uuid(), now(),idRolJurado,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'categorias','select'),
 
 /* 03 Criterios de Evaluacion */
 
-(gen_random_uuid(), now(),idRolJurado,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'criterios_evaluacion','select'),
 
 /* 04 Cumplimientos */
 
-(gen_random_uuid(), now(),idRolJurado,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'cumplimientos','select'),
 
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolJurado,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'federaciones','select'),
 
 /* 07 Perfiles */
 
-(gen_random_uuid(), now(),idRolJurado,'perfiles','UPDATE'),
+(gen_random_uuid(), now(),id_rol_jurado,'perfiles','update'),
 
-(gen_random_uuid(), now(),idRolJurado,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'perfiles','select'),
 
 /*❌ 08 Permisos */
 
 /* 09 Regiones */
 
 
-(gen_random_uuid(), now(),idRolJurado,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'regiones','select'),
 
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolJurado,'registroComentarios','SELECT'),
-(gen_random_uuid(), now(),idRolJurado,'registroComentarios','INSERT'),
+(gen_random_uuid(), now(),id_rol_jurado,'registro_comentarios','select'),
+(gen_random_uuid(), now(),id_rol_jurado,'registro_comentarios','insert'),
 
 /* 11 Cumplimiento Evaluaciones */
 
-(gen_random_uuid(), now(),idRolJurado,'registroCumplimientoEvaluaciones','INSERT'),
-(gen_random_uuid(), now(),idRolJurado,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'registro_cumplimiento_evaluaciones','insert'),
+(gen_random_uuid(), now(),id_rol_jurado,'registro_cumplimiento_evaluaciones','select'),
 
 /* 12 Equipo Evaluador */
 
-(gen_random_uuid(), now(),idRolJurado,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos */
 
-(gen_random_uuid(), now(),idRolJurado,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'registro_eventos','select'),
 
 /*❌ 14 Penalizaciones */
 
 /* 15 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolJurado,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'respuesta_solicitud_revision','select'),
 
 /* 16 Roles */
 
-(gen_random_uuid(), now(),idRolJurado,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'roles','select'),
 /* ❌ 17 Roles equipo evaluador */
 
 /* 18 Rubricas */
 
-(gen_random_uuid(), now(),idRolJurado,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'rubricas','select'),
 
 /* 19 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolJurado,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'solicitud_revision','select'),
 
 /* 20 Confirmacion asistencia */
 
-(gen_random_uuid(), now(),idRolJurado,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolJurado,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_jurado,'copas','select'),
 
 
 
@@ -640,268 +640,268 @@ VALUES
 /* fiscal */
 /* 01 Bandas */
 
-(gen_random_uuid(), now(),idRolFiscal,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'bandas','select'),
 
 /* 02 Categorias */
 
-(gen_random_uuid(), now(),idRolFiscal,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'categorias','select'),
 
 /* 03 Criterios de Evaluacion */
 
-(gen_random_uuid(), now(),idRolFiscal,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'criterios_evaluacion','select'),
 
 /* 04 Cumplimientos */
 
-(gen_random_uuid(), now(),idRolFiscal,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'cumplimientos','select'),
 
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolFiscal,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'federaciones','select'),
 
 /* 07 Perfiles */
 
-(gen_random_uuid(), now(),idRolFiscal,'perfiles','UPDATE'),
+(gen_random_uuid(), now(),id_rol_fiscal,'perfiles','update'),
 
-(gen_random_uuid(), now(),idRolFiscal,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'perfiles','select'),
 
 /*❌ 08 Permisos */
 
 /* 09 Regiones */
 
 
-(gen_random_uuid(), now(),idRolFiscal,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'regiones','select'),
 
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolFiscal,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'registro_comentarios','select'),
 
 /* 11 Cumplimiento Evaluaciones */
 
 
-(gen_random_uuid(), now(),idRolFiscal,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'registro_cumplimiento_evaluaciones','select'),
 
 /* 12 Equipo Evaluador */
 
-(gen_random_uuid(), now(),idRolFiscal,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos */
 
-(gen_random_uuid(), now(),idRolFiscal,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'registro_eventos','select'),
 
 /*❌ 14 Penalizaciones */
 
 /* 15 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolFiscal,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'respuesta_solicitud_revision','select'),
 
 /* 16 Roles */
 
-(gen_random_uuid(), now(),idRolFiscal,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'roles','select'),
 /* ❌ 17 Roles equipo evaluador */
 
 /* 18 Rubricas */
 
-(gen_random_uuid(), now(),idRolFiscal,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'rubricas','select'),
 
 /* 19 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolFiscal,'solicitudRevicion','INSERT'),
-(gen_random_uuid(), now(),idRolFiscal,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'solicitud_revision','insert'),
+(gen_random_uuid(), now(),id_rol_fiscal,'solicitud_revision','select'),
 
 /* 20 Confirmacion asistencia */
 
-(gen_random_uuid(), now(),idRolFiscal,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolFiscal,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_fiscal,'copas','select'),
 
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
 
-/* dirigente (misma matriz que líder de banda: lectura operativa + SELECT en roles para RLS/embed) */
+/* dirigente (misma matriz que líder de banda: lectura operativa + select en roles para rls/embed) */
 /* 01 Bandas */
 
-(gen_random_uuid(), now(),idRolDirigente,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'bandas','select'),
 
 /* 02 Categorias */
 
-(gen_random_uuid(), now(),idRolDirigente,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'categorias','select'),
 
 /* 03 Criterios de Evaluacion */
 
-(gen_random_uuid(), now(),idRolDirigente,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'criterios_evaluacion','select'),
 
 /* 04 Cumplimientos */
 
-(gen_random_uuid(), now(),idRolDirigente,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'cumplimientos','select'),
 
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolDirigente,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'federaciones','select'),
 
 /* 07 Perfiles */
 
-(gen_random_uuid(), now(),idRolDirigente,'perfiles','UPDATE'),
+(gen_random_uuid(), now(),id_rol_dirigente,'perfiles','update'),
 
-(gen_random_uuid(), now(),idRolDirigente,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'perfiles','select'),
 
 /*❌ 08 Permisos */
 
 /* 09 Regiones */
 
 
-(gen_random_uuid(), now(),idRolDirigente,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'regiones','select'),
 
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolDirigente,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'registro_comentarios','select'),
 
 /* 11 Cumplimiento Evaluaciones */
 
 
-(gen_random_uuid(), now(),idRolDirigente,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'registro_cumplimiento_evaluaciones','select'),
 
 /* 12 Equipo Evaluador */
 
-(gen_random_uuid(), now(),idRolDirigente,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos */
 
-(gen_random_uuid(), now(),idRolDirigente,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'registro_eventos','select'),
 
 /*❌ 14 Penalizaciones */
 
 /* 15 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolDirigente,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'respuesta_solicitud_revision','select'),
 
 /* 16 Roles */
 
-(gen_random_uuid(), now(),idRolDirigente,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'roles','select'),
 /* ❌ 17 Roles equipo evaluador */
 
 /* 18 Rubricas */
 
-(gen_random_uuid(), now(),idRolDirigente,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'rubricas','select'),
 
 /* 19 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolDirigente,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'solicitud_revision','select'),
 
 /* 20 Confirmacion asistencia */
 
-(gen_random_uuid(), now(),idRolDirigente,'confirmacion_asistencia','INSERT'),
-(gen_random_uuid(), now(),idRolDirigente,'confirmacion_asistencia','UPDATE'),
-(gen_random_uuid(), now(),idRolDirigente,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'confirmacion_asistencia','insert'),
+(gen_random_uuid(), now(),id_rol_dirigente,'confirmacion_asistencia','update'),
+(gen_random_uuid(), now(),id_rol_dirigente,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolDirigente,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'copas','select'),
 
 /* 28 Checkout — dirigente (confirmar/denegar llegada e ingreso) */
-(gen_random_uuid(), now(),idRolDirigente,'checkout','UPDATE'),
-(gen_random_uuid(), now(),idRolDirigente,'checkout','SELECT'),
+(gen_random_uuid(), now(),id_rol_dirigente,'checkout','update'),
+(gen_random_uuid(), now(),id_rol_dirigente,'checkout','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
 
 /* secretaria: gestión operativa (usuarios, bandas, categorías, regiones, eventos) + confirmación de asistencia y checkout */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolSecretaria,'bandas','INSERT'),
-(gen_random_uuid(), now(),idRolSecretaria,'bandas','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'bandas','DELETE'),
-(gen_random_uuid(), now(),idRolSecretaria,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'bandas','insert'),
+(gen_random_uuid(), now(),id_rol_secretaria,'bandas','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'bandas','delete'),
+(gen_random_uuid(), now(),id_rol_secretaria,'bandas','select'),
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolSecretaria,'categorias','INSERT'),
-(gen_random_uuid(), now(),idRolSecretaria,'categorias','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'categorias','DELETE'),
-(gen_random_uuid(), now(),idRolSecretaria,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'categorias','insert'),
+(gen_random_uuid(), now(),id_rol_secretaria,'categorias','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'categorias','delete'),
+(gen_random_uuid(), now(),id_rol_secretaria,'categorias','select'),
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolSecretaria,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'criterios_evaluacion','select'),
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolSecretaria,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'cumplimientos','select'),
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolSecretaria,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'federaciones','select'),
 /* 07 Perfiles */
-(gen_random_uuid(), now(),idRolSecretaria,'perfiles','INSERT'),
-(gen_random_uuid(), now(),idRolSecretaria,'perfiles','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'perfiles','DELETE'),
-(gen_random_uuid(), now(),idRolSecretaria,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'perfiles','insert'),
+(gen_random_uuid(), now(),id_rol_secretaria,'perfiles','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'perfiles','delete'),
+(gen_random_uuid(), now(),id_rol_secretaria,'perfiles','select'),
 /* 09 Regiones */
-(gen_random_uuid(), now(),idRolSecretaria,'regiones','INSERT'),
-(gen_random_uuid(), now(),idRolSecretaria,'regiones','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'regiones','DELETE'),
-(gen_random_uuid(), now(),idRolSecretaria,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'regiones','insert'),
+(gen_random_uuid(), now(),id_rol_secretaria,'regiones','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'regiones','delete'),
+(gen_random_uuid(), now(),id_rol_secretaria,'regiones','select'),
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolSecretaria,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_comentarios','select'),
 /* 11 Cumplimiento Evaluaciones */
-(gen_random_uuid(), now(),idRolSecretaria,'registroCumplimientoEvaluaciones','SELECT'),
-/* 12 Equipo Evaluador (DELETE al eliminar eventos) */
-(gen_random_uuid(), now(),idRolSecretaria,'registroEquipoEvaluador','DELETE'),
-(gen_random_uuid(), now(),idRolSecretaria,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_cumplimiento_evaluaciones','select'),
+/* 12 Equipo Evaluador (delete al eliminar eventos) */
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_equipo_evaluador','delete'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_equipo_evaluador','select'),
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolSecretaria,'registroEventos','INSERT'),
-(gen_random_uuid(), now(),idRolSecretaria,'registroEventos','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'registroEventos','DELETE'),
-(gen_random_uuid(), now(),idRolSecretaria,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_eventos','insert'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_eventos','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_eventos','delete'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_eventos','select'),
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolSecretaria,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'respuesta_solicitud_revision','select'),
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolSecretaria,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'roles','select'),
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolSecretaria,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'rubricas','select'),
 /* 19 Solicitud de revision */
-(gen_random_uuid(), now(),idRolSecretaria,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'solicitud_revision','select'),
 /* 20 Confirmacion asistencia */
-(gen_random_uuid(), now(),idRolSecretaria,'confirmacion_asistencia','INSERT'),
-(gen_random_uuid(), now(),idRolSecretaria,'confirmacion_asistencia','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'confirmacion_asistencia','insert'),
+(gen_random_uuid(), now(),id_rol_secretaria,'confirmacion_asistencia','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolSecretaria,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'copas','select'),
 
 /* 24 Sanciones (solo lectura) */
-(gen_random_uuid(), now(),idRolSecretaria,'sanciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'sanciones','select'),
 /* 25 Registro sanciones (solo lectura) */
-(gen_random_uuid(), now(),idRolSecretaria,'registro_sanciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'registro_sanciones','select'),
 
 /* 28 Checkout — secretaria (confirmar/denegar llegada e ingreso) */
-(gen_random_uuid(), now(),idRolSecretaria,'checkout','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'checkout','SELECT'),
+(gen_random_uuid(), now(),id_rol_secretaria,'checkout','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'checkout','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
 
 /* comite de disciplina */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'bandas','select'),
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'categorias','select'),
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'federaciones','select'),
 /* 07 Perfiles */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'perfiles','select'),
 /* 16 Roles (necesario para embed roles(*) en login) */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'roles','select'),
 /* 09 Regiones */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'regiones','select'),
 /* 24 Sanciones (solo lectura) */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'sanciones','SELECT'),
-/* 25 Registro sanciones (CRUD completo) */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'registro_sanciones','INSERT'),
-(gen_random_uuid(), now(),idRolComiteDisciplina,'registro_sanciones','UPDATE'),
-(gen_random_uuid(), now(),idRolComiteDisciplina,'registro_sanciones','DELETE'),
-(gen_random_uuid(), now(),idRolComiteDisciplina,'registro_sanciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'sanciones','select'),
+/* 25 Registro sanciones (crud completo) */
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'registro_sanciones','insert'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'registro_sanciones','update'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'registro_sanciones','delete'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'registro_sanciones','select'),
 
 /* 12 Equipo evaluador (ver asignaciones propias) */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos (ver eventos donde está asignado) */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'registro_eventos','select'),
 
 /* 20 Confirmación asistencia (bandas confirmadas por evento en checkout) */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'confirmacion_asistencia','select'),
 
 /* 28 Checkout — comite de disciplina (registro de llegada e ingreso) */
-(gen_random_uuid(), now(),idRolComiteDisciplina,'checkout','INSERT'),
-(gen_random_uuid(), now(),idRolComiteDisciplina,'checkout','UPDATE'),
-(gen_random_uuid(), now(),idRolComiteDisciplina,'checkout','SELECT'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'checkout','insert'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'checkout','update'),
+(gen_random_uuid(), now(),id_rol_comite_disciplina,'checkout','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
@@ -909,659 +909,659 @@ VALUES
 /* lider banda */
 /* 01 Bandas */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'bandas','select'),
 
 /* 02 Categorias */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'categorias','select'),
 
 /* 03 Criterios de Evaluacion */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'criterios_evaluacion','select'),
 
 /* 04 Cumplimientos */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'cumplimientos','select'),
 
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolLiderbanda,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'federaciones','select'),
 
 /* 07 Perfiles */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'perfiles','UPDATE'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'perfiles','update'),
 
-(gen_random_uuid(), now(),idRolLiderbanda,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'perfiles','select'),
 
 /*❌ 08 Permisos */
 
 /* 09 Regiones */
 
 
-(gen_random_uuid(), now(),idRolLiderbanda,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'regiones','select'),
 
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolLiderbanda,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'registro_comentarios','select'),
 
 /* 11 Cumplimiento Evaluaciones */
 
 
-(gen_random_uuid(), now(),idRolLiderbanda,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'registro_cumplimiento_evaluaciones','select'),
 
 /* 12 Equipo Evaluador */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'registro_equipo_evaluador','select'),
 
 /* 13 Eventos */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'registro_eventos','select'),
 
 /*❌ 14 Penalizaciones */
 
 /* 15 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'respuesta_solicitud_revision','select'),
 
 /* 16 Roles */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'roles','select'),
 /* ❌ 17 Roles equipo evaluador */
 
 /* 18 Rubricas */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'rubricas','select'),
 
 /* 19 Solicitud de revision */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'solicitud_revision','select'),
 
 /* 20 Confirmacion asistencia */
 
-(gen_random_uuid(), now(),idRolLiderbanda,'confirmacion_asistencia','INSERT'),
-(gen_random_uuid(), now(),idRolLiderbanda,'confirmacion_asistencia','UPDATE'),
-(gen_random_uuid(), now(),idRolLiderbanda,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'confirmacion_asistencia','insert'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'confirmacion_asistencia','update'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolLiderbanda,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'copas','select'),
 
 /* 28 Checkout — lider de banda (confirmar/denegar llegada e ingreso) */
-(gen_random_uuid(), now(),idRolLiderbanda,'checkout','UPDATE'),
-(gen_random_uuid(), now(),idRolLiderbanda,'checkout','SELECT'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'checkout','update'),
+(gen_random_uuid(), now(),id_rol_liderbanda,'checkout','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
-/* responsable de bandas: CRUD bandas, categorias y regiones; resto SELECT */
+/* responsable de bandas: crud bandas, categorias y regiones; resto select */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolResponsableBandas,'bandas','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'bandas','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'bandas','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'bandas','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'bandas','update'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'bandas','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'bandas','select'),
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolResponsableBandas,'categorias','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'categorias','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'categorias','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'categorias','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'categorias','update'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'categorias','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'categorias','select'),
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolResponsableBandas,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'criterios_evaluacion','select'),
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolResponsableBandas,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'cumplimientos','select'),
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolResponsableBandas,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'federaciones','select'),
 /* 07 Perfiles */
-(gen_random_uuid(), now(),idRolResponsableBandas,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'perfiles','select'),
 /* 09 Regiones */
-(gen_random_uuid(), now(),idRolResponsableBandas,'regiones','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'regiones','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'regiones','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'regiones','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'regiones','update'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'regiones','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'regiones','select'),
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolResponsableBandas,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'registro_comentarios','select'),
 /* 11 Cumplimiento Evaluaciones */
-(gen_random_uuid(), now(),idRolResponsableBandas,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'registro_cumplimiento_evaluaciones','select'),
 /* 12 Equipo Evaluador */
-(gen_random_uuid(), now(),idRolResponsableBandas,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'registro_equipo_evaluador','select'),
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolResponsableBandas,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'registro_eventos','select'),
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableBandas,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'respuesta_solicitud_revision','select'),
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolResponsableBandas,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'roles','select'),
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolResponsableBandas,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'rubricas','select'),
 /* 19 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableBandas,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'solicitud_revision','select'),
 /* 20 Confirmacion asistencia */
-(gen_random_uuid(), now(),idRolResponsableBandas,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'confirmacion_asistencia','select'),
 
-/* 21 Escuadras (CRUD; premios escuadra solo admin / admin temporal / mesa) */
-(gen_random_uuid(), now(),idRolResponsableBandas,'escuadras','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'escuadras','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'escuadras','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableBandas,'escuadras','SELECT'),
+/* 21 Escuadras (crud; premios escuadra solo admin / admin temporal / mesa) */
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'escuadras','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'escuadras','update'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'escuadras','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'escuadras','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolResponsableBandas,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_bandas,'copas','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
-/* responsable de rubricas: CRUD rubricas/criterios/cumplimientos/categorias/regiones; resto SELECT */
+/* responsable de rubricas: crud rubricas/criterios/cumplimientos/categorias/regiones; resto select */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'bandas','select'),
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'categorias','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'categorias','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'categorias','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'categorias','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'categorias','update'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'categorias','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'categorias','select'),
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'criteriosEvalucion','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'criteriosEvalucion','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'criteriosEvalucion','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'criterios_evaluacion','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'criterios_evaluacion','update'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'criterios_evaluacion','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'criterios_evaluacion','select'),
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'cumplimientos','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'cumplimientos','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'cumplimientos','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'cumplimientos','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'cumplimientos','update'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'cumplimientos','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'cumplimientos','select'),
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'federaciones','select'),
 /* 07 Perfiles */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'perfiles','select'),
 /* 09 Regiones */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'regiones','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'regiones','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'regiones','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'regiones','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'regiones','update'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'regiones','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'regiones','select'),
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'registro_comentarios','select'),
 /* 11 Cumplimiento Evaluaciones */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'registro_cumplimiento_evaluaciones','select'),
 /* 12 Equipo Evaluador */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'registro_equipo_evaluador','select'),
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'registro_eventos','select'),
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'respuesta_solicitud_revision','select'),
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'roles','select'),
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'rubricas','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'rubricas','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'rubricas','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableRubricas,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'rubricas','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'rubricas','update'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'rubricas','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'rubricas','select'),
 /* 19 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'solicitud_revision','select'),
 /* 20 Confirmacion asistencia */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'confirmacion_asistencia','select'),
 /* 21 Escuadras */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'escuadras','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'escuadras','select'),
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolResponsableRubricas,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_rubricas,'copas','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
-/* responsable de usuarios: CRUD perfiles; roles SELECT; resto SELECT */
+/* responsable de usuarios: crud perfiles; roles select; resto select */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'bandas','select'),
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'categorias','select'),
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'criterios_evaluacion','select'),
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'cumplimientos','select'),
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'federaciones','select'),
 /* 07 Perfiles */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'perfiles','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'perfiles','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'perfiles','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'perfiles','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'perfiles','update'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'perfiles','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'perfiles','select'),
 /* 09 Regiones */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'regiones','select'),
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'registro_comentarios','select'),
 /* 11 Cumplimiento Evaluaciones */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'registro_cumplimiento_evaluaciones','select'),
 /* 12 Equipo Evaluador */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'registro_equipo_evaluador','select'),
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'registro_eventos','select'),
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'respuesta_solicitud_revision','select'),
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'roles','select'),
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'rubricas','select'),
 /* 19 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'solicitud_revision','select'),
 /* 20 Confirmacion asistencia */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolResponsableUsuarios,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_usuarios,'copas','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
-/* responsable de eventos: CRUD eventos y regiones; equipo evaluador solo SELECT */
+/* responsable de eventos: crud eventos y regiones; equipo evaluador solo select */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolResponsableEventos,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'bandas','select'),
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolResponsableEventos,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'categorias','select'),
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolResponsableEventos,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'criterios_evaluacion','select'),
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolResponsableEventos,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'cumplimientos','select'),
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolResponsableEventos,'federaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'federaciones','select'),
 /* 07 Perfiles */
-(gen_random_uuid(), now(),idRolResponsableEventos,'perfiles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'perfiles','select'),
 /* 09 Regiones */
-(gen_random_uuid(), now(),idRolResponsableEventos,'regiones','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableEventos,'regiones','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableEventos,'regiones','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableEventos,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'regiones','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'regiones','update'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'regiones','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'regiones','select'),
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolResponsableEventos,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'registro_comentarios','select'),
 /* 11 Cumplimiento Evaluaciones */
-(gen_random_uuid(), now(),idRolResponsableEventos,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'registro_cumplimiento_evaluaciones','select'),
 /* 12 Equipo Evaluador */
-(gen_random_uuid(), now(),idRolResponsableEventos,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'registro_equipo_evaluador','select'),
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolResponsableEventos,'registroEventos','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableEventos,'registroEventos','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableEventos,'registroEventos','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableEventos,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'registro_eventos','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'registro_eventos','update'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'registro_eventos','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'registro_eventos','select'),
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableEventos,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'respuesta_solicitud_revision','select'),
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolResponsableEventos,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'roles','select'),
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolResponsableEventos,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'rubricas','select'),
 /* 19 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableEventos,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'solicitud_revision','select'),
 /* 20 Confirmacion asistencia */
-(gen_random_uuid(), now(),idRolResponsableEventos,'confirmacion_asistencia','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'confirmacion_asistencia','select'),
 
 /* 23 Copas */
-(gen_random_uuid(), now(),idRolResponsableEventos,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_eventos,'copas','select'),
 
 
 /* 🔷🔷🔷========================================================================🔷🔷🔷 */
-/* responsable de mesa: CRUD equipo evaluador; eventos UPDATE+SELECT; solicitudes/revisiones como admin */
+/* responsable de mesa: crud equipo evaluador; eventos update+select; solicitudes/revisiones como admin */
 /* 01 Bandas */
-(gen_random_uuid(), now(),idRolResponsableMesa,'bandas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'bandas','select'),
 /* 02 Categorias */
-(gen_random_uuid(), now(),idRolResponsableMesa,'categorias','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'categorias','select'),
 /* 03 Criterios de Evaluacion */
-(gen_random_uuid(), now(),idRolResponsableMesa,'criteriosEvalucion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'criterios_evaluacion','select'),
 /* 04 Cumplimientos */
-(gen_random_uuid(), now(),idRolResponsableMesa,'cumplimientos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'cumplimientos','select'),
 /* 05 Federaciones */
-(gen_random_uuid(), now(),idRolResponsableMesa,'federaciones','SELECT'),
-/* 07 Perfiles (UPDATE: activar/desactivar acceso por categoría en dashboard Accesos) */
-(gen_random_uuid(), now(),idRolResponsableMesa,'perfiles','SELECT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'perfiles','UPDATE'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'federaciones','select'),
+/* 07 Perfiles (update: activar/desactivar acceso por categoría en dashboard Accesos) */
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'perfiles','select'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'perfiles','update'),
 /* 09 Regiones */
-(gen_random_uuid(), now(),idRolResponsableMesa,'regiones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'regiones','select'),
 /* 10 Comentarios */
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroComentarios','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_comentarios','select'),
 /* 11 Cumplimiento Evaluaciones */
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroCumplimientoEvaluaciones','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_cumplimiento_evaluaciones','select'),
 /* 12 Equipo Evaluador */
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroEquipoEvaluador','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroEquipoEvaluador','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroEquipoEvaluador','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroEquipoEvaluador','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_equipo_evaluador','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_equipo_evaluador','update'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_equipo_evaluador','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_equipo_evaluador','select'),
 /* 13 Eventos */
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroEventos','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroEventos','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_eventos','update'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_eventos','select'),
 /* 15 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableMesa,'respuestaSolicitudRevicion','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'respuestaSolicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'respuesta_solicitud_revision','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'respuesta_solicitud_revision','select'),
 /* 16 Roles */
-(gen_random_uuid(), now(),idRolResponsableMesa,'roles','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'roles','select'),
 /* 18 Rubricas */
-(gen_random_uuid(), now(),idRolResponsableMesa,'rubricas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'rubricas','select'),
 /* 19 Solicitud de revision */
-(gen_random_uuid(), now(),idRolResponsableMesa,'registroCumplimientoEvaluaciones','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'solicitudRevicion','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'solicitudRevicion','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'registro_cumplimiento_evaluaciones','update'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'solicitud_revision','update'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'solicitud_revision','select'),
 /* 20 Confirmacion asistencia */
-(gen_random_uuid(), now(),idRolResponsableMesa,'confirmacion_asistencia','SELECT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'confirmacion_asistencia','UPDATE'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'confirmacion_asistencia','select'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'confirmacion_asistencia','update'),
 
 /* 21 Premios escuadra (tabla premios_escuadra; gestión desde mesa) */
-(gen_random_uuid(), now(),idRolResponsableMesa,'premios_escuadra','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'premios_escuadra','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'premios_escuadra','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'premios_escuadra','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'premios_escuadra','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'premios_escuadra','update'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'premios_escuadra','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'premios_escuadra','select'),
 
 /* 23 Copas (gestión desde mesa) */
-(gen_random_uuid(), now(),idRolResponsableMesa,'copas','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'copas','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'copas','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'copas','SELECT'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'copas','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'copas','update'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'copas','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'copas','select'),
 
-/* 26 Solicitar sanción — secretaria CRUD */
-(gen_random_uuid(), now(),idRolSecretaria,'solicitar_sancion','INSERT'),
-(gen_random_uuid(), now(),idRolSecretaria,'solicitar_sancion','UPDATE'),
-(gen_random_uuid(), now(),idRolSecretaria,'solicitar_sancion','DELETE'),
-(gen_random_uuid(), now(),idRolSecretaria,'solicitar_sancion','SELECT'),
-/* 26 Solicitar sanción — admin CRUD */
-(gen_random_uuid(), now(),idRolAdmin,'solicitar_sancion','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'solicitar_sancion','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'solicitar_sancion','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'solicitar_sancion','SELECT'),
-/* 26 Solicitar sanción — admin temporal CRUD */
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitar_sancion','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitar_sancion','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitar_sancion','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitar_sancion','SELECT'),
+/* 26 Solicitar sanción — secretaria crud */
+(gen_random_uuid(), now(),id_rol_secretaria,'solicitar_sancion','insert'),
+(gen_random_uuid(), now(),id_rol_secretaria,'solicitar_sancion','update'),
+(gen_random_uuid(), now(),id_rol_secretaria,'solicitar_sancion','delete'),
+(gen_random_uuid(), now(),id_rol_secretaria,'solicitar_sancion','select'),
+/* 26 Solicitar sanción — admin crud */
+(gen_random_uuid(), now(),id_rol_admin,'solicitar_sancion','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitar_sancion','update'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitar_sancion','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitar_sancion','select'),
+/* 26 Solicitar sanción — admin temporal crud */
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitar_sancion','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitar_sancion','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitar_sancion','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitar_sancion','select'),
 
-/* 27 Solicitud de copa — fiscal CRUD */
-(gen_random_uuid(), now(),idRolFiscal,'solicitud_copas','INSERT'),
-(gen_random_uuid(), now(),idRolFiscal,'solicitud_copas','UPDATE'),
-(gen_random_uuid(), now(),idRolFiscal,'solicitud_copas','DELETE'),
-(gen_random_uuid(), now(),idRolFiscal,'solicitud_copas','SELECT'),
-/* 27 Solicitud de copa — responsable de mesa CRUD */
-(gen_random_uuid(), now(),idRolResponsableMesa,'solicitud_copas','INSERT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'solicitud_copas','UPDATE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'solicitud_copas','DELETE'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'solicitud_copas','SELECT'),
-/* 27 Solicitud de copa — admin CRUD */
-(gen_random_uuid(), now(),idRolAdmin,'solicitud_copas','INSERT'),
-(gen_random_uuid(), now(),idRolAdmin,'solicitud_copas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdmin,'solicitud_copas','DELETE'),
-(gen_random_uuid(), now(),idRolAdmin,'solicitud_copas','SELECT'),
-/* 27 Solicitud de copa — admin temporal CRUD */
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitud_copas','INSERT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitud_copas','UPDATE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitud_copas','DELETE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'solicitud_copas','SELECT'),
+/* 27 Solicitud de copa — fiscal crud */
+(gen_random_uuid(), now(),id_rol_fiscal,'solicitud_copas','insert'),
+(gen_random_uuid(), now(),id_rol_fiscal,'solicitud_copas','update'),
+(gen_random_uuid(), now(),id_rol_fiscal,'solicitud_copas','delete'),
+(gen_random_uuid(), now(),id_rol_fiscal,'solicitud_copas','select'),
+/* 27 Solicitud de copa — responsable de mesa crud */
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'solicitud_copas','insert'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'solicitud_copas','update'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'solicitud_copas','delete'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'solicitud_copas','select'),
+/* 27 Solicitud de copa — admin crud */
+(gen_random_uuid(), now(),id_rol_admin,'solicitud_copas','insert'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitud_copas','update'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitud_copas','delete'),
+(gen_random_uuid(), now(),id_rol_admin,'solicitud_copas','select'),
+/* 27 Solicitud de copa — admin temporal crud */
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitud_copas','insert'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitud_copas','update'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitud_copas','delete'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'solicitud_copas','select'),
 
 /* 28 Alertas evaluación duplicada */
-(gen_random_uuid(), now(),idRolResponsableMesa,'alertas_evaluacion','SELECT'),
-(gen_random_uuid(), now(),idRolResponsableMesa,'alertas_evaluacion','EXECUTE'),
-(gen_random_uuid(), now(),idRolAdmin,'alertas_evaluacion','SELECT'),
-(gen_random_uuid(), now(),idRolAdmin,'alertas_evaluacion','EXECUTE'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'alertas_evaluacion','SELECT'),
-(gen_random_uuid(), now(),idRolAdminTemporal,'alertas_evaluacion','EXECUTE');
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'alertas_evaluacion','select'),
+(gen_random_uuid(), now(),id_rol_responsable_mesa,'alertas_evaluacion','execute'),
+(gen_random_uuid(), now(),id_rol_admin,'alertas_evaluacion','select'),
+(gen_random_uuid(), now(),id_rol_admin,'alertas_evaluacion','execute'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'alertas_evaluacion','select'),
+(gen_random_uuid(), now(),id_rol_admin_temporal,'alertas_evaluacion','execute');
 
 /* --------------------------------------------------------------------------
    Comité de disciplina: el login hace embed roles(*) en perfiles.
-   Sin permiso roles/SELECT, RLS devuelve roles=null y el front rechaza el acceso.
-   (Idempotente por si el bloque VALUES de arriba corrió sin esta fila.)
+   Sin permiso roles/select, rls devuelve roles=null y el front rechaza el acceso.
+   (Idempotente por si el bloque values de arriba corrió sin esta fila.)
    -------------------------------------------------------------------------- */
-INSERT INTO public.permisos ("idPermiso", "created_at", "idForaneaRol", "tabla", "accion")
-SELECT gen_random_uuid(), now(), idRolComiteDisciplina, 'roles', 'SELECT'
-WHERE NOT EXISTS (
-  SELECT 1
-  FROM public.permisos AS p
-  WHERE p."idForaneaRol" = idRolComiteDisciplina
-    AND p.tabla = 'roles'
-    AND p.accion = 'SELECT'
+insert into public.permisos (id_permiso, "created_at", id_foranea_rol, "tabla", "accion")
+select gen_random_uuid(), now(), id_rol_comite_disciplina, 'roles', 'select'
+where not exists (
+  select 1
+  from public.permisos as p
+  where p.id_foranea_rol = id_rol_comite_disciplina
+    and p.tabla = 'roles'
+    and p.accion = 'select'
 );
 
-INSERT INTO public.permisos ("idPermiso", "created_at", "idForaneaRol", "tabla", "accion")
-SELECT gen_random_uuid(), now(), idRolComiteDisciplina, 'registroEquipoEvaluador', 'SELECT'
-WHERE NOT EXISTS (
-  SELECT 1 FROM public.permisos AS p
-  WHERE p."idForaneaRol" = idRolComiteDisciplina
-    AND p.tabla = 'registroEquipoEvaluador' AND p.accion = 'SELECT'
+insert into public.permisos (id_permiso, "created_at", id_foranea_rol, "tabla", "accion")
+select gen_random_uuid(), now(), id_rol_comite_disciplina, 'registro_equipo_evaluador', 'select'
+where not exists (
+  select 1 from public.permisos as p
+  where p.id_foranea_rol = id_rol_comite_disciplina
+    and p.tabla = 'registro_equipo_evaluador' and p.accion = 'select'
 );
 
-INSERT INTO public.permisos ("idPermiso", "created_at", "idForaneaRol", "tabla", "accion")
-SELECT gen_random_uuid(), now(), idRolComiteDisciplina, 'registroEventos', 'SELECT'
-WHERE NOT EXISTS (
-  SELECT 1 FROM public.permisos AS p
-  WHERE p."idForaneaRol" = idRolComiteDisciplina
-    AND p.tabla = 'registroEventos' AND p.accion = 'SELECT'
+insert into public.permisos (id_permiso, "created_at", id_foranea_rol, "tabla", "accion")
+select gen_random_uuid(), now(), id_rol_comite_disciplina, 'registro_eventos', 'select'
+where not exists (
+  select 1 from public.permisos as p
+  where p.id_foranea_rol = id_rol_comite_disciplina
+    and p.tabla = 'registro_eventos' and p.accion = 'select'
 );
 
-INSERT INTO public.permisos ("idPermiso", "created_at", "idForaneaRol", "tabla", "accion")
-SELECT gen_random_uuid(), now(), idRolComiteDisciplina, 'confirmacion_asistencia', 'SELECT'
-WHERE NOT EXISTS (
-  SELECT 1 FROM public.permisos AS p
-  WHERE p."idForaneaRol" = idRolComiteDisciplina
-    AND p.tabla = 'confirmacion_asistencia' AND p.accion = 'SELECT'
+insert into public.permisos (id_permiso, "created_at", id_foranea_rol, "tabla", "accion")
+select gen_random_uuid(), now(), id_rol_comite_disciplina, 'confirmacion_asistencia', 'select'
+where not exists (
+  select 1 from public.permisos as p
+  where p.id_foranea_rol = id_rol_comite_disciplina
+    and p.tabla = 'confirmacion_asistencia' and p.accion = 'select'
 );
 
-INSERT INTO public.permisos ("idPermiso", "created_at", "idForaneaRol", "tabla", "accion")
-SELECT gen_random_uuid(), now(), idRolComiteDisciplina, t.tabla, t.accion
-FROM (VALUES
-  ('checkout', 'INSERT'),
-  ('checkout', 'UPDATE'),
-  ('checkout', 'SELECT')
-) AS t(tabla, accion)
-WHERE NOT EXISTS (
-  SELECT 1 FROM public.permisos AS p
-  WHERE p."idForaneaRol" = idRolComiteDisciplina
-    AND p.tabla = t.tabla AND p.accion = t.accion
+insert into public.permisos (id_permiso, "created_at", id_foranea_rol, "tabla", "accion")
+select gen_random_uuid(), now(), id_rol_comite_disciplina, t.tabla, t.accion
+from (values
+  ('checkout', 'insert'),
+  ('checkout', 'update'),
+  ('checkout', 'select')
+) as t(tabla, accion)
+where not exists (
+  select 1 from public.permisos as p
+  where p.id_foranea_rol = id_rol_comite_disciplina
+    and p.tabla = t.tabla and p.accion = t.accion
 );
 
-END $$;
+end $$;
 
--- Políticas RLS: sanciones y registro_sanciones (requieren filas en public.permisos arriba)
+-- Políticas rls: sanciones y registro_sanciones (requieren filas en public.permisos arriba)
 
-DROP POLICY IF EXISTS "leer" ON public.sanciones;
-CREATE POLICY "leer" ON public.sanciones
-  FOR SELECT USING (public.revisar_permisos('sanciones'::text, 'SELECT'::text));
+drop policy if exists "leer" on public.sanciones;
+create policy "leer" on public.sanciones
+  for select using (public.revisar_permisos('sanciones'::text, 'select'::text));
 
-DROP POLICY IF EXISTS "crear" ON public.sanciones;
-CREATE POLICY "crear" ON public.sanciones
-  FOR INSERT WITH CHECK (public.revisar_permisos('sanciones'::text, 'INSERT'::text));
+drop policy if exists "crear" on public.sanciones;
+create policy "crear" on public.sanciones
+  for insert with check (public.revisar_permisos('sanciones'::text, 'insert'::text));
 
-DROP POLICY IF EXISTS "actualizar" ON public.sanciones;
-CREATE POLICY "actualizar" ON public.sanciones
-  FOR UPDATE USING (public.revisar_permisos('sanciones'::text, 'UPDATE'::text));
+drop policy if exists "actualizar" on public.sanciones;
+create policy "actualizar" on public.sanciones
+  for update using (public.revisar_permisos('sanciones'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "eliminar" ON public.sanciones;
-CREATE POLICY "eliminar" ON public.sanciones
-  FOR DELETE USING (public.revisar_permisos('sanciones'::text, 'DELETE'::text));
+drop policy if exists "eliminar" on public.sanciones;
+create policy "eliminar" on public.sanciones
+  for delete using (public.revisar_permisos('sanciones'::text, 'delete'::text));
 
-DROP POLICY IF EXISTS "leer" ON public.registro_sanciones;
-CREATE POLICY "leer" ON public.registro_sanciones
-  FOR SELECT USING (public.revisar_permisos('registro_sanciones'::text, 'SELECT'::text));
+drop policy if exists "leer" on public.registro_sanciones;
+create policy "leer" on public.registro_sanciones
+  for select using (public.revisar_permisos('registro_sanciones'::text, 'select'::text));
 
-DROP POLICY IF EXISTS "crear" ON public.registro_sanciones;
-CREATE POLICY "crear" ON public.registro_sanciones
-  FOR INSERT WITH CHECK (public.revisar_permisos('registro_sanciones'::text, 'INSERT'::text));
+drop policy if exists "crear" on public.registro_sanciones;
+create policy "crear" on public.registro_sanciones
+  for insert with check (public.revisar_permisos('registro_sanciones'::text, 'insert'::text));
 
-DROP POLICY IF EXISTS "actualizar" ON public.registro_sanciones;
-CREATE POLICY "actualizar" ON public.registro_sanciones
-  FOR UPDATE USING (public.revisar_permisos('registro_sanciones'::text, 'UPDATE'::text));
+drop policy if exists "actualizar" on public.registro_sanciones;
+create policy "actualizar" on public.registro_sanciones
+  for update using (public.revisar_permisos('registro_sanciones'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "eliminar" ON public.registro_sanciones;
-CREATE POLICY "eliminar" ON public.registro_sanciones
-  FOR DELETE USING (public.revisar_permisos('registro_sanciones'::text, 'DELETE'::text));
+drop policy if exists "eliminar" on public.registro_sanciones;
+create policy "eliminar" on public.registro_sanciones
+  for delete using (public.revisar_permisos('registro_sanciones'::text, 'delete'::text));
 
--- Políticas RLS: copas (requieren filas en public.permisos con tabla 'copas' arriba)
+-- Políticas rls: copas (requieren filas en public.permisos con tabla 'copas' arriba)
 
-DROP POLICY IF EXISTS "editar" ON public.copas;
-DROP POLICY IF EXISTS "leer" ON public.copas;
-CREATE POLICY "leer" ON public.copas
-  FOR SELECT USING (public.revisar_permisos('copas'::text, 'SELECT'::text));
+drop policy if exists "editar" on public.copas;
+drop policy if exists "leer" on public.copas;
+create policy "leer" on public.copas
+  for select using (public.revisar_permisos('copas'::text, 'select'::text));
 
-DROP POLICY IF EXISTS "crear" ON public.copas;
-CREATE POLICY "crear" ON public.copas
-  FOR INSERT WITH CHECK (public.revisar_permisos('copas'::text, 'INSERT'::text));
+drop policy if exists "crear" on public.copas;
+create policy "crear" on public.copas
+  for insert with check (public.revisar_permisos('copas'::text, 'insert'::text));
 
-DROP POLICY IF EXISTS "actualizar" ON public.copas;
-CREATE POLICY "actualizar" ON public.copas
-  FOR UPDATE USING (public.revisar_permisos('copas'::text, 'UPDATE'::text));
+drop policy if exists "actualizar" on public.copas;
+create policy "actualizar" on public.copas
+  for update using (public.revisar_permisos('copas'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "eliminar" ON public.copas;
-CREATE POLICY "eliminar" ON public.copas
-  FOR DELETE USING (public.revisar_permisos('copas'::text, 'DELETE'::text));
+drop policy if exists "eliminar" on public.copas;
+create policy "eliminar" on public.copas
+  for delete using (public.revisar_permisos('copas'::text, 'delete'::text));
 
--- Políticas RLS: solicitudes de revisión (corrige acción CREATE→UPDATE en editar)
+-- Políticas rls: solicitudes de revisión (corrige acción create→update en editar)
 
-DROP POLICY IF EXISTS "editar" ON public."registroCumplimientoEvaluaciones";
-CREATE POLICY "editar" ON public."registroCumplimientoEvaluaciones"
-  FOR UPDATE
-  USING (true)
-  WITH CHECK (public.revisar_permisos('registroCumplimientoEvaluaciones'::text, 'UPDATE'::text));
+drop policy if exists "editar" on public.registro_cumplimiento_evaluaciones;
+create policy "editar" on public.registro_cumplimiento_evaluaciones
+  for update
+  using (true)
+  with check (public.revisar_permisos('registro_cumplimiento_evaluaciones'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "editar" ON public."respuestaSolicitudRevicion";
-CREATE POLICY "editar" ON public."respuestaSolicitudRevicion"
-  FOR UPDATE
-  USING (true)
-  WITH CHECK (public.revisar_permisos('respuestaSolicitudRevicion'::text, 'UPDATE'::text));
+drop policy if exists "editar" on public.respuesta_solicitud_revision;
+create policy "editar" on public.respuesta_solicitud_revision
+  for update
+  using (true)
+  with check (public.revisar_permisos('respuesta_solicitud_revision'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "eliminar" ON public."registroCumplimientoEvaluaciones";
-CREATE POLICY "eliminar" ON public."registroCumplimientoEvaluaciones"
-  FOR DELETE
-  USING (public.revisar_permisos('registroCumplimientoEvaluaciones'::text, 'DELETE'::text));
+drop policy if exists "eliminar" on public.registro_cumplimiento_evaluaciones;
+create policy "eliminar" on public.registro_cumplimiento_evaluaciones
+  for delete
+  using (public.revisar_permisos('registro_cumplimiento_evaluaciones'::text, 'delete'::text));
 
-GRANT SELECT ON public.vista_aplicacion_sanciones TO anon, authenticated, service_role;
+grant select on public.vista_aplicacion_sanciones to anon, authenticated, service_role;
 
--- Políticas RLS: solicitar_sancion (requieren filas en public.permisos arriba)
+-- Políticas rls: solicitar_sancion (requieren filas en public.permisos arriba)
 
-DROP POLICY IF EXISTS "leer" ON public.solicitar_sancion;
-CREATE POLICY "leer" ON public.solicitar_sancion
-  FOR SELECT USING (public.revisar_permisos('solicitar_sancion'::text, 'SELECT'::text));
+drop policy if exists "leer" on public.solicitar_sancion;
+create policy "leer" on public.solicitar_sancion
+  for select using (public.revisar_permisos('solicitar_sancion'::text, 'select'::text));
 
-DROP POLICY IF EXISTS "crear" ON public.solicitar_sancion;
-CREATE POLICY "crear" ON public.solicitar_sancion
-  FOR INSERT WITH CHECK (public.revisar_permisos('solicitar_sancion'::text, 'INSERT'::text));
+drop policy if exists "crear" on public.solicitar_sancion;
+create policy "crear" on public.solicitar_sancion
+  for insert with check (public.revisar_permisos('solicitar_sancion'::text, 'insert'::text));
 
-DROP POLICY IF EXISTS "actualizar" ON public.solicitar_sancion;
-CREATE POLICY "actualizar" ON public.solicitar_sancion
-  FOR UPDATE USING (public.revisar_permisos('solicitar_sancion'::text, 'UPDATE'::text));
+drop policy if exists "actualizar" on public.solicitar_sancion;
+create policy "actualizar" on public.solicitar_sancion
+  for update using (public.revisar_permisos('solicitar_sancion'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "eliminar" ON public.solicitar_sancion;
-CREATE POLICY "eliminar" ON public.solicitar_sancion
-  FOR DELETE USING (public.revisar_permisos('solicitar_sancion'::text, 'DELETE'::text));
+drop policy if exists "eliminar" on public.solicitar_sancion;
+create policy "eliminar" on public.solicitar_sancion
+  for delete using (public.revisar_permisos('solicitar_sancion'::text, 'delete'::text));
 
-GRANT SELECT ON public.vista_solicitud_sancion TO anon, authenticated, service_role;
+grant select on public.vista_solicitud_sancion to anon, authenticated, service_role;
 
--- Políticas RLS: solicitud_copas (requieren filas en public.permisos arriba)
+-- Políticas rls: solicitud_copas (requieren filas en public.permisos arriba)
 
-DROP POLICY IF EXISTS "leer" ON public.solicitud_copas;
-CREATE POLICY "leer" ON public.solicitud_copas
-  FOR SELECT USING (public.revisar_permisos('solicitud_copas'::text, 'SELECT'::text));
+drop policy if exists "leer" on public.solicitud_copas;
+create policy "leer" on public.solicitud_copas
+  for select using (public.revisar_permisos('solicitud_copas'::text, 'select'::text));
 
-DROP POLICY IF EXISTS "crear" ON public.solicitud_copas;
-CREATE POLICY "crear" ON public.solicitud_copas
-  FOR INSERT WITH CHECK (public.revisar_permisos('solicitud_copas'::text, 'INSERT'::text));
+drop policy if exists "crear" on public.solicitud_copas;
+create policy "crear" on public.solicitud_copas
+  for insert with check (public.revisar_permisos('solicitud_copas'::text, 'insert'::text));
 
-DROP POLICY IF EXISTS "actualizar" ON public.solicitud_copas;
-CREATE POLICY "actualizar" ON public.solicitud_copas
-  FOR UPDATE USING (public.revisar_permisos('solicitud_copas'::text, 'UPDATE'::text));
+drop policy if exists "actualizar" on public.solicitud_copas;
+create policy "actualizar" on public.solicitud_copas
+  for update using (public.revisar_permisos('solicitud_copas'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "eliminar" ON public.solicitud_copas;
-CREATE POLICY "eliminar" ON public.solicitud_copas
-  FOR DELETE USING (public.revisar_permisos('solicitud_copas'::text, 'DELETE'::text));
+drop policy if exists "eliminar" on public.solicitud_copas;
+create policy "eliminar" on public.solicitud_copas
+  for delete using (public.revisar_permisos('solicitud_copas'::text, 'delete'::text));
 
-GRANT SELECT ON public.vista_solicitud_copas TO anon, authenticated, service_role;
+grant select on public.vista_solicitud_copas to anon, authenticated, service_role;
 
--- Políticas RLS: checkout (requieren filas en public.permisos arriba)
+-- Políticas rls: checkout (requieren filas en public.permisos arriba)
 
-DROP POLICY IF EXISTS "leer" ON public.checkout;
-CREATE POLICY "leer" ON public.checkout
-  FOR SELECT USING (public.revisar_permisos('checkout'::text, 'SELECT'::text));
+drop policy if exists "leer" on public.checkout;
+create policy "leer" on public.checkout
+  for select using (public.revisar_permisos('checkout'::text, 'select'::text));
 
-DROP POLICY IF EXISTS "crear" ON public.checkout;
-CREATE POLICY "crear" ON public.checkout
-  FOR INSERT WITH CHECK (public.revisar_permisos('checkout'::text, 'INSERT'::text));
+drop policy if exists "crear" on public.checkout;
+create policy "crear" on public.checkout
+  for insert with check (public.revisar_permisos('checkout'::text, 'insert'::text));
 
-DROP POLICY IF EXISTS "actualizar" ON public.checkout;
-CREATE POLICY "actualizar" ON public.checkout
-  FOR UPDATE
-  USING (public.revisar_permisos('checkout'::text, 'UPDATE'::text))
-  WITH CHECK (public.revisar_permisos('checkout'::text, 'UPDATE'::text));
+drop policy if exists "actualizar" on public.checkout;
+create policy "actualizar" on public.checkout
+  for update
+  using (public.revisar_permisos('checkout'::text, 'update'::text))
+  with check (public.revisar_permisos('checkout'::text, 'update'::text));
 
-DROP POLICY IF EXISTS "eliminar" ON public.checkout;
-CREATE POLICY "eliminar" ON public.checkout
-  FOR DELETE USING (public.revisar_permisos('checkout'::text, 'DELETE'::text));
+drop policy if exists "eliminar" on public.checkout;
+create policy "eliminar" on public.checkout
+  for delete using (public.revisar_permisos('checkout'::text, 'delete'::text));
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.checkout TO anon, authenticated, service_role;
-GRANT SELECT ON public.vista_detalle_checkout TO anon, authenticated, service_role;
+grant select, insert, update, delete on table public.checkout to anon, authenticated, service_role;
+grant select on public.vista_detalle_checkout to anon, authenticated, service_role;
 
 -- =============================================================================
--- Storage: buckets y políticas RLS (fotos de perfil y logos de bandas)
--- Deben coincidir con NEXT_PUBLIC_SUPABASE_BUCKET_PERFILES y bandasServices.ts
+-- Storage: buckets y políticas rls (fotos de perfil y logos de bandas)
+-- Deben coincidir con NEXT_PUBLIC_SUPABASE_BUCKET_PERFILES y bandas_services.ts
 -- =============================================================================
 
-INSERT INTO storage.buckets (id, name, public)
-VALUES
+insert into storage.buckets (id, name, public)
+values
   ('img-fotos-perfiles-aurora', 'img-fotos-perfiles-aurora', false),
-  ('imgLogoBandas', 'imgLogoBandas', false)
-ON CONFLICT (id) DO NOTHING;
+  ('img_logo_bandas', 'img_logo_bandas', false)
+on conflict (id) do nothing;
 
 -- Políticas legacy (migración 20260501031419); se reemplazan por nombres explícitos
-DROP POLICY IF EXISTS "agregar 1gmiffv_0" ON storage.objects;
-DROP POLICY IF EXISTS "editar 1gmiffv_0" ON storage.objects;
-DROP POLICY IF EXISTS "eliminar 1gmiffv_0" ON storage.objects;
-DROP POLICY IF EXISTS "eliminar 1gmiffv_1" ON storage.objects;
-DROP POLICY IF EXISTS "leer 1gmiffv_0" ON storage.objects;
+drop policy if exists "agregar 1gmiffv_0" on storage.objects;
+drop policy if exists "editar 1gmiffv_0" on storage.objects;
+drop policy if exists "eliminar 1gmiffv_0" on storage.objects;
+drop policy if exists "eliminar 1gmiffv_1" on storage.objects;
+drop policy if exists "leer 1gmiffv_0" on storage.objects;
 
 -- img-fotos-perfiles-aurora
-DROP POLICY IF EXISTS "storage_perfiles_agregar" ON storage.objects;
-CREATE POLICY "storage_perfiles_agregar"
-  ON storage.objects
-  FOR INSERT
-  TO authenticated
-  WITH CHECK (bucket_id = 'img-fotos-perfiles-aurora');
+drop policy if exists "storage_perfiles_agregar" on storage.objects;
+create policy "storage_perfiles_agregar"
+  on storage.objects
+  for insert
+  to authenticated
+  with check (bucket_id = 'img-fotos-perfiles-aurora');
 
-DROP POLICY IF EXISTS "storage_perfiles_editar" ON storage.objects;
-CREATE POLICY "storage_perfiles_editar"
-  ON storage.objects
-  FOR UPDATE
-  TO authenticated
-  USING (bucket_id = 'img-fotos-perfiles-aurora');
+drop policy if exists "storage_perfiles_editar" on storage.objects;
+create policy "storage_perfiles_editar"
+  on storage.objects
+  for update
+  to authenticated
+  using (bucket_id = 'img-fotos-perfiles-aurora');
 
-DROP POLICY IF EXISTS "storage_perfiles_eliminar" ON storage.objects;
-CREATE POLICY "storage_perfiles_eliminar"
-  ON storage.objects
-  FOR DELETE
-  TO authenticated
-  USING (bucket_id = 'img-fotos-perfiles-aurora');
+drop policy if exists "storage_perfiles_eliminar" on storage.objects;
+create policy "storage_perfiles_eliminar"
+  on storage.objects
+  for delete
+  to authenticated
+  using (bucket_id = 'img-fotos-perfiles-aurora');
 
-DROP POLICY IF EXISTS "storage_perfiles_leer_authenticated" ON storage.objects;
-CREATE POLICY "storage_perfiles_leer_authenticated"
-  ON storage.objects
-  FOR SELECT
-  TO authenticated
-  USING (bucket_id = 'img-fotos-perfiles-aurora');
+drop policy if exists "storage_perfiles_leer_authenticated" on storage.objects;
+create policy "storage_perfiles_leer_authenticated"
+  on storage.objects
+  for select
+  to authenticated
+  using (bucket_id = 'img-fotos-perfiles-aurora');
 
-DROP POLICY IF EXISTS "storage_perfiles_leer_public" ON storage.objects;
-CREATE POLICY "storage_perfiles_leer_public"
-  ON storage.objects
-  FOR SELECT
-  TO public
-  USING (bucket_id = 'img-fotos-perfiles-aurora');
+drop policy if exists "storage_perfiles_leer_public" on storage.objects;
+create policy "storage_perfiles_leer_public"
+  on storage.objects
+  for select
+  to public
+  using (bucket_id = 'img-fotos-perfiles-aurora');
 
--- imgLogoBandas
-DROP POLICY IF EXISTS "storage_logo_banda_agregar" ON storage.objects;
-CREATE POLICY "storage_logo_banda_agregar"
-  ON storage.objects
-  FOR INSERT
-  TO authenticated
-  WITH CHECK (bucket_id = 'imgLogoBandas');
+-- img_logo_bandas
+drop policy if exists "storage_logo_banda_agregar" on storage.objects;
+create policy "storage_logo_banda_agregar"
+  on storage.objects
+  for insert
+  to authenticated
+  with check (bucket_id = 'img_logo_bandas');
 
-DROP POLICY IF EXISTS "storage_logo_banda_editar" ON storage.objects;
-CREATE POLICY "storage_logo_banda_editar"
-  ON storage.objects
-  FOR UPDATE
-  TO authenticated
-  USING (bucket_id = 'imgLogoBandas');
+drop policy if exists "storage_logo_banda_editar" on storage.objects;
+create policy "storage_logo_banda_editar"
+  on storage.objects
+  for update
+  to authenticated
+  using (bucket_id = 'img_logo_bandas');
 
-DROP POLICY IF EXISTS "storage_logo_banda_eliminar" ON storage.objects;
-CREATE POLICY "storage_logo_banda_eliminar"
-  ON storage.objects
-  FOR DELETE
-  TO authenticated
-  USING (bucket_id = 'imgLogoBandas');
+drop policy if exists "storage_logo_banda_eliminar" on storage.objects;
+create policy "storage_logo_banda_eliminar"
+  on storage.objects
+  for delete
+  to authenticated
+  using (bucket_id = 'img_logo_bandas');
 
-DROP POLICY IF EXISTS "storage_logo_banda_leer_authenticated" ON storage.objects;
-CREATE POLICY "storage_logo_banda_leer_authenticated"
-  ON storage.objects
-  FOR SELECT
-  TO authenticated
-  USING (bucket_id = 'imgLogoBandas');
+drop policy if exists "storage_logo_banda_leer_authenticated" on storage.objects;
+create policy "storage_logo_banda_leer_authenticated"
+  on storage.objects
+  for select
+  to authenticated
+  using (bucket_id = 'img_logo_bandas');
 
-DROP POLICY IF EXISTS "storage_logo_banda_leer_public" ON storage.objects;
-CREATE POLICY "storage_logo_banda_leer_public"
-  ON storage.objects
-  FOR SELECT
-  TO public
-  USING (bucket_id = 'imgLogoBandas');
+drop policy if exists "storage_logo_banda_leer_public" on storage.objects;
+create policy "storage_logo_banda_leer_public"
+  on storage.objects
+  for select
+  to public
+  using (bucket_id = 'img_logo_bandas');

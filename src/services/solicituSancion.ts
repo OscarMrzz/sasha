@@ -3,6 +3,41 @@ import {
   solicitudSancionInterface,
   vistaDetalleSolicitudSancionInterface,
 } from "@/models";
+import { toDb } from "@/services/mappers/caseMapper";
+
+/**
+ * `vista_solicitud_sancion` devuelve id_banda/nombre_banda/id_categoria/
+ * nombre_categoria/id_region/nombre_region en snake_case, pero la interfaz
+ * conserva esos campos en camelCase por compatibilidad con la UI existente.
+ */
+function mapVistaDetalleSolicitudSancionRow(
+  row: Record<string, unknown>,
+): vistaDetalleSolicitudSancionInterface {
+  const {
+    id_banda,
+    nombre_banda,
+    id_categoria,
+    nombre_categoria,
+    id_region,
+    nombre_region,
+    ...rest
+  } = row;
+  return {
+    ...rest,
+    idBanda: (id_banda as string | null) ?? null,
+    nombreBanda: (nombre_banda as string | null) ?? null,
+    idCategoria: (id_categoria as string | null) ?? null,
+    nombreCategoria: (nombre_categoria as string | null) ?? null,
+    idRegion: (id_region as string | null) ?? null,
+    nombreRegion: (nombre_region as string | null) ?? null,
+  } as vistaDetalleSolicitudSancionInterface;
+}
+
+function mapVistaDetalleSolicitudSancionRows(
+  rows: Record<string, unknown>[] | null,
+): vistaDetalleSolicitudSancionInterface[] {
+  return (rows ?? []).map(mapVistaDetalleSolicitudSancionRow);
+}
 
 type SolicitudSancionInsert = Omit<
   solicitudSancionInterface,
@@ -29,7 +64,7 @@ export async function getDetalleSolicitudesSancion(): Promise<
   const { data, error } = await dataBaseSupabase.from(vistaDetalle).select("*");
 
   if (error) throw error;
-  return data as vistaDetalleSolicitudSancionInterface[];
+  return mapVistaDetalleSolicitudSancionRows(data);
 }
 
 export async function getSolicitudSancionById(
@@ -55,7 +90,7 @@ export async function getDetalleSolicitudSancionById(
     .single();
 
   if (error) throw error;
-  return data as vistaDetalleSolicitudSancionInterface;
+  return mapVistaDetalleSolicitudSancionRow(data);
 }
 
 export async function createSolicitudSancion(
@@ -63,7 +98,7 @@ export async function createSolicitudSancion(
 ): Promise<solicitudSancionInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tabla)
-    .insert(payload)
+    .insert(toDb(payload as unknown as Record<string, unknown>))
     .select("*")
     .single();
 
@@ -77,7 +112,7 @@ export async function updateSolicitudSancion(
 ): Promise<solicitudSancionInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tabla)
-    .update(payload)
+    .update(toDb(payload as unknown as Record<string, unknown>))
     .eq(elId, id)
     .select("*")
     .single();

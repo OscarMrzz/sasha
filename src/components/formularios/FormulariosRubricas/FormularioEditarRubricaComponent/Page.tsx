@@ -16,6 +16,7 @@ import CategoriasServices from "@/services/categoriaServices";
 import { useDispatch } from "react-redux";
 import { activarRefrescarDataRubricas } from "@/features/RefrescadorData/refrescadorDataSlice";
 import { setRubricaSeleccionada } from "@/features/Rubrica/rubricaSlice";
+import { rubricaUpdateSchema } from "@/models/rubricas/rubricaSchema";
 
 type Props = {
   rubricaAEditar: rubricaInterface;
@@ -190,9 +191,17 @@ export default function FormularioEditarRubricaComponent({
         versionRubrica: formData.versionRubrica.trim(),
       };
 
+      const parsed = rubricaUpdateSchema.safeParse(nuevaRubrica);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        setErrorMensaje(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
       const returned = (await rubricaService.update(
         rubricaAEditar.idRubrica,
-        nuevaRubrica as rubricaInterface
+        parsed.data as rubricaInterface
       )) as rubricaInterface;
 
       const prev = rubricaAEditar as unknown as rubricaDatosAmpleosInterface;

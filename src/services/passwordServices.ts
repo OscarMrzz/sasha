@@ -9,6 +9,7 @@ import {
 } from "@/helpers/errores/mensajesServicio";
 import { normalizarNombreRol } from "@/helpers/usuarios/rolesUsuarios";
 import { validarPassword } from "@/helpers/usuarios/validacionesCrearUsuario";
+import { fromDb } from "@/services/mappers/caseMapper";
 
 /** Autorización por rol de aplicación; auth.users no usa RLS de public.permisos. */
 const ROLES_CON_PERMISO_RESTABLECER = ["developer", "admin"] as const;
@@ -54,8 +55,8 @@ async function validarActorRestablecer() {
 
     const { data: perfilActor, error: perfilError } = await supabaseServidor
         .from("perfiles")
-        .select("permisos, roles(nombreRol, estadoRol)")
-        .eq("idForaneaUser", user.id)
+        .select("permisos, roles(nombre_rol, estado_rol)")
+        .eq("id_foranea_user", user.id)
         .eq("estado", "activo")
         .maybeSingle();
 
@@ -70,7 +71,7 @@ async function validarActorRestablecer() {
         return { ok: false as const, error: "No se encontró un perfil activo asociado a tu cuenta." };
     }
 
-    const perfil = perfilActor as PerfilActor;
+    const perfil = fromDb<PerfilActor>(perfilActor);
     const rol = rolDesdePerfil(perfil);
     const rolActor = normalizarNombreRol(rol?.nombreRol);
     const puedeRestablecer = ROLES_CON_PERMISO_RESTABLECER.some(

@@ -10,6 +10,7 @@ import RegionService from "@/services/regionesServices";
 import RegistroEventossServices from "@/services/registroEventosServices";
 import { useEffect, useState } from "react";
 import SkeletonFormulario from "../../Skeletons/skeletonFormularios/SkeletonFormulario";
+import { registroEventoInsertSchema } from "@/models/eventos/registroEventoSchema";
 type Props = {
   onClose: () => void;
   onCreated?: () => void;
@@ -85,9 +86,19 @@ export default function FormularioAgregarEventoComponet({ onClose, onCreated }: 
         idForaneaRegion: formData.idForaneaRegion,
         estado_evento: "pendiente" as const,
         tipo_evento: formData.tipo_evento,
+        dimensiones_cancha: "",
+        tipo_lugar: "abierto" as const,
       };
 
-      await registoEvntoServices.create(nuevoEvento as RegistroEventoInterface);
+      const parsed = registroEventoInsertSchema.safeParse(nuevoEvento);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      await registoEvntoServices.create(parsed.data as RegistroEventoInterface);
 
       // Limpiar formulario
       setFormData({

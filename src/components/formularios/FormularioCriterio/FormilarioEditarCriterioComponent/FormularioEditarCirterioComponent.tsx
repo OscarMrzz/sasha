@@ -9,6 +9,7 @@ import { desactivarOverleyFormularioEditarCriterio } from "@/features/overleys/o
 import { setCriterioSeleccionado } from "@/features/Criterios/CriteriosSlice";
 import { activarRefrescarDataCriterios } from "@/features/RefrescadorData/refrescadorDataSlice";
 import { activarRefrescarDataRubricas } from "@/features/RefrescadorData/refrescadorDataSlice";
+import { criterioEvaluacionUpdateSchema } from "@/models/criterios/criterioEvaluacionSchema";
 
 const inputBaseClass =
   "w-full rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 shadow-inner transition focus:border-primario/80 focus:bg-white/[0.07] focus:ring-2 focus:ring-primario/35";
@@ -107,7 +108,15 @@ export default  function FormularioEditarCriterioComponet  ({criterioAEditar, re
          
       };
 
-      await criterioServices.update(criterioAEditar.idCriterio, nuevoCriterio as criterioEvaluacionInterface);
+      const parsed = criterioEvaluacionUpdateSchema.safeParse(nuevoCriterio);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      await criterioServices.update(criterioAEditar.idCriterio, parsed.data as criterioEvaluacionInterface);
 
       dispatch(
         setCriterioSeleccionado({

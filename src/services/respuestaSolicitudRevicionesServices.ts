@@ -1,11 +1,12 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import {   perfilDatosAmpleosInterface, respuestaSolicitudRevicionInterface, respuestaSolicitudRevicionDatosAmpleosInterface }from "@/models";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
 import PerfilesServices from "./perfilesServices";
 
 type Interface = respuestaSolicitudRevicionInterface;
 
-const tabla = "respuestaSolicitudRevicion";
-const elId = "idRespuesta";
+const tabla = "respuesta_solicitud_revision";
+const elId = "id_respuesta";
 
 export default class RespuestaSolicitudRevicionesServices {
 
@@ -38,14 +39,14 @@ export default class RespuestaSolicitudRevicionesServices {
                     federaciones(*),
                     solicitudReviciones(*),
                    perfiles(*)
-                `).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+                `).eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
 
             if (error) {
                 console.error("❌ Error obteniendo regiones con federaciones:", error);
                 throw error;
             }
 
-            return data as respuestaSolicitudRevicionDatosAmpleosInterface[];
+            return fromDbMany<respuestaSolicitudRevicionDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getDatosAmpleos:", error);
             throw error;
@@ -54,43 +55,43 @@ export default class RespuestaSolicitudRevicionesServices {
 
 
     async get() {
-        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+        const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
         if (error) throw error;
-        return data;
+        return fromDbMany<respuestaSolicitudRevicionInterface>(data ?? []);
     }
 
     async getOne(id: string) {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq(elId, id).eq("idForaneaFederacion", this.perfil?.idForaneaFederacion)
+            .eq(elId, id).eq("id_foranea_federacion", this.perfil?.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<respuestaSolicitudRevicionInterface>(data);
     }
 
     async create(dataCreate: Interface) {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(dataCreate as unknown as Record<string, unknown>))
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<respuestaSolicitudRevicionInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(dataUpdate as unknown as Record<string, unknown>))
             .eq(elId, id)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<respuestaSolicitudRevicionInterface>(data);
     }
 
     async delete(id: string) {
@@ -115,14 +116,14 @@ async getPorSolicitud(idSolicitud: string): Promise<respuestaSolicitudRevicionDa
                     perfiles(*)
 
                 `)
-                .eq("idForaneaidForaneaSolicitudRevicion",idSolicitud)
-                .eq("idForaneaFederacion", this.perfil?.idForaneaFederacion);
+                .eq("id_foranea_solicitud_revision", idSolicitud)
+                .eq("id_foranea_federacion", this.perfil?.idForaneaFederacion);
             if (error) {
                 console.error("❌ Error obteniendo rubricas por registro cumplido:", error);
                 throw error;
             }
 
-            return data as respuestaSolicitudRevicionDatosAmpleosInterface[];
+            return fromDbMany<respuestaSolicitudRevicionDatosAmpleosInterface>(data ?? []);
         } catch (error) {
             console.error("❌ Error general en getPorRegistroCumplido:", error);
             throw error;

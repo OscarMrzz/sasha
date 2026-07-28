@@ -14,6 +14,7 @@ import RubricasServices, {
 import CategoriasServices from "@/services/categoriaServices";
 import { useDispatch } from "react-redux";
 import { activarRefrescarDataRubricas } from "@/features/RefrescadorData/refrescadorDataSlice";
+import { rubricaInsertSchema } from "@/models/rubricas/rubricaSchema";
 
 type Props = {
   refresacar?: () => void;
@@ -172,7 +173,15 @@ export default function FormularioAgregarRubricaComponent({
         versionRubrica: formData.versionRubrica.trim(),
       };
 
-      await rubricaService.create(nuevaRubrica as rubricaInterface);
+      const parsed = rubricaInsertSchema.safeParse(nuevaRubrica);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        setErrorMensaje(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      await rubricaService.create(parsed.data as rubricaInterface);
 
       setFormData({
         nombreRubrica: "",

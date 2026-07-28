@@ -229,52 +229,52 @@ async function cargarCatalogos(ids: Set<string>): Promise<CatalogosResolucion> {
       federaciones,
       cumplimientos,
     ] = await Promise.all([
-      dataBaseSupabase.from("bandas").select("idBanda, nombreBanda").in("idBanda", part),
-      dataBaseSupabase.from("categorias").select("idCategoria, nombreCategoria").in("idCategoria", part),
-      dataBaseSupabase.from("registroEventos").select("idEvento, LugarEvento").in("idEvento", part),
-      dataBaseSupabase.from("rubricas").select("idRubrica, nombreRubrica").in("idRubrica", part),
+      dataBaseSupabase.from("bandas").select("id_banda, nombre_banda").in("id_banda", part),
+      dataBaseSupabase.from("categorias").select("id_categoria, nombre_categoria").in("id_categoria", part),
+      dataBaseSupabase.from("registro_eventos").select("id_evento, lugar_evento").in("id_evento", part),
+      dataBaseSupabase.from("rubricas").select("id_rubrica, nombre_rubrica").in("id_rubrica", part),
       dataBaseSupabase
-        .from("criteriosEvalucion")
-        .select("idCriterio, nombreCriterio")
-        .in("idCriterio", part),
-      dataBaseSupabase
-        .from("perfiles")
-        .select("idPerfil, nombre, primerApellido, segundoNombre")
-        .in("idPerfil", part),
+        .from("criterios_evaluacion")
+        .select("id_criterio, nombre_criterio")
+        .in("id_criterio", part),
       dataBaseSupabase
         .from("perfiles")
-        .select("idForaneaUser, idPerfil, nombre, primerApellido, segundoNombre")
-        .in("idForaneaUser", part),
-      dataBaseSupabase.from("regiones").select("idRegion, nombreRegion").in("idRegion", part),
+        .select("id_perfil, nombre, primer_apellido, segundo_nombre")
+        .in("id_perfil", part),
+      dataBaseSupabase
+        .from("perfiles")
+        .select("id_foranea_user, id_perfil, nombre, primer_apellido, segundo_nombre")
+        .in("id_foranea_user", part),
+      dataBaseSupabase.from("regiones").select("id_region, nombre_region").in("id_region", part),
       dataBaseSupabase
         .from("federaciones")
-        .select("idFederacion, nombreFederacion")
-        .in("idFederacion", part),
+        .select("id_federacion, nombre_federacion")
+        .in("id_federacion", part),
       dataBaseSupabase
         .from("cumplimientos")
-        .select("idCumplimiento, detalleCumplimiento")
-        .in("idCumplimiento", part),
+        .select("id_cumplimiento, detalle_cumplimiento")
+        .in("id_cumplimiento", part),
     ]);
 
-    for (const r of bandas.data ?? []) cat.bandas.set(r.idBanda, r.nombreBanda);
-    for (const r of categorias.data ?? []) cat.categorias.set(r.idCategoria, r.nombreCategoria);
-    for (const r of eventos.data ?? []) cat.eventos.set(r.idEvento, r.LugarEvento);
-    for (const r of rubricas.data ?? []) cat.rubricas.set(r.idRubrica, r.nombreRubrica);
-    for (const r of criterios.data ?? []) cat.criterios.set(r.idCriterio, r.nombreCriterio);
-    for (const r of regiones.data ?? []) cat.regiones.set(r.idRegion, r.nombreRegion);
-    for (const r of federaciones.data ?? []) cat.federaciones.set(r.idFederacion, r.nombreFederacion);
+    for (const r of bandas.data ?? []) cat.bandas.set(r.id_banda, r.nombre_banda);
+    for (const r of categorias.data ?? []) cat.categorias.set(r.id_categoria, r.nombre_categoria);
+    for (const r of eventos.data ?? []) cat.eventos.set(r.id_evento, r.lugar_evento);
+    for (const r of rubricas.data ?? []) cat.rubricas.set(r.id_rubrica, r.nombre_rubrica);
+    for (const r of criterios.data ?? []) cat.criterios.set(r.id_criterio, r.nombre_criterio);
+    for (const r of regiones.data ?? []) cat.regiones.set(r.id_region, r.nombre_region);
+    for (const r of federaciones.data ?? []) cat.federaciones.set(r.id_federacion, r.nombre_federacion);
     for (const r of cumplimientos.data ?? []) {
-      cat.cumplimientos.set(r.idCumplimiento, r.detalleCumplimiento ?? acortarId(r.idCumplimiento));
+      cat.cumplimientos.set(r.id_cumplimiento, r.detalle_cumplimiento ?? acortarId(r.id_cumplimiento));
     }
     for (const r of perfiles.data ?? []) {
-      const nombre = [r.nombre, r.segundoNombre, r.primerApellido].filter(Boolean).join(" ").trim();
-      cat.perfiles.set(r.idPerfil, nombre || acortarId(r.idPerfil));
+      const nombre = [r.nombre, r.segundo_nombre, r.primer_apellido].filter(Boolean).join(" ").trim();
+      cat.perfiles.set(r.id_perfil, nombre || acortarId(r.id_perfil));
     }
     for (const r of perfilesByUser.data ?? []) {
-      if (!r.idForaneaUser) continue;
-      const nombre = [r.nombre, r.segundoNombre, r.primerApellido].filter(Boolean).join(" ").trim();
-      cat.usuarios.set(r.idForaneaUser, nombre || acortarId(r.idForaneaUser));
-      cat.perfiles.set(r.idPerfil, nombre || acortarId(r.idPerfil));
+      if (!r.id_foranea_user) continue;
+      const nombre = [r.nombre, r.segundo_nombre, r.primer_apellido].filter(Boolean).join(" ").trim();
+      cat.usuarios.set(r.id_foranea_user, nombre || acortarId(r.id_foranea_user));
+      cat.perfiles.set(r.id_perfil, nombre || acortarId(r.id_perfil));
     }
   }
 
@@ -375,9 +375,9 @@ function previewDesde(row: AuditoriaRow, cat: CatalogosResolucion): string {
     return parts.join(" · ");
   }
 
-  const bandaId = pickUuid(meta, "id_foranea_banda", "idForaneaBanda");
-  const rubricaId = pickUuid(meta, "id_foranea_rubrica", "idForaneaRubrica");
-  const nombre = typeof meta.nombreBanda === "string" ? meta.nombreBanda : null;
+  const bandaId = pickUuid(meta, "id_foranea_banda", "id_foranea_banda");
+  const rubricaId = pickUuid(meta, "id_foranea_rubrica", "id_foranea_rubrica");
+  const nombre = typeof meta.nombre_banda === "string" ? meta.nombre_banda : null;
   const parts = [
     row.tabla,
     nombre ?? (bandaId ? resolverUuid(bandaId, "banda", cat) : null),
@@ -426,31 +426,31 @@ function parseAuditoriaRow(raw: Record<string, unknown>): AuditoriaRow {
 
 export async function getEventosEnCurso(): Promise<EventoEnCursoVista[]> {
   const { data, error } = await dataBaseSupabase
-    .from("registroEventos")
+    .from("registro_eventos")
     .select(
       `
-      idEvento,
-      LugarEvento,
-      fechaEvento,
+      id_evento,
+      lugar_evento,
+      fecha_evento,
       estado_evento,
       tipo_evento,
-      regiones ( nombreRegion )
+      regiones ( nombre_region )
     `,
     )
     .eq("estado_evento", "iniciado")
-    .order("fechaEvento", { ascending: true });
+    .order("fecha_evento", { ascending: true });
 
   if (error) throw new Error(mensajeErrorSupabase(error));
 
   return (data ?? []).map((e) => {
-    const region = e.regiones as { nombreRegion?: string } | null;
+    const region = e.regiones as { nombre_region?: string } | null;
     return {
-      idEvento: e.idEvento,
-      lugarEvento: e.LugarEvento,
-      fechaEvento: e.fechaEvento,
+      idEvento: e.id_evento,
+      lugarEvento: e.lugar_evento,
+      fechaEvento: e.fecha_evento,
       estadoEvento: e.estado_evento ?? "iniciado",
       tipoEvento: e.tipo_evento ?? null,
-      nombreRegion: region?.nombreRegion ?? null,
+      nombreRegion: region?.nombre_region ?? null,
     };
   });
 }
@@ -470,7 +470,7 @@ export async function getBandasEnCancha(): Promise<BandaEnCanchaVista[]> {
       id_foranea_banda,
       id_foranea_evento,
       estado_cancha,
-      bandas ( nombreBanda )
+      bandas ( nombre_banda )
     `,
     )
     .in("id_foranea_evento", idsEvento)
@@ -490,14 +490,14 @@ export async function getBandasEnCancha(): Promise<BandaEnCanchaVista[]> {
   if (errAud) {
     if (esTablaAuditoriaAusente(errAud)) {
       return confs.map((c) => {
-        const idBanda = c.id_foranea_banda as string;
-        const idEvento = c.id_foranea_evento as string;
-        const bandaJoin = c.bandas as { nombreBanda?: string } | null;
+        const id_banda = c.id_foranea_banda as string;
+        const id_evento = c.id_foranea_evento as string;
+        const bandaJoin = c.bandas as { nombre_banda?: string } | null;
         return {
-          idEvento,
-          lugarEvento: lugarById.get(idEvento) ?? "—",
-          idBanda,
-          nombreBanda: bandaJoin?.nombreBanda ?? acortarId(idBanda),
+          idEvento: id_evento,
+          lugarEvento: lugarById.get(id_evento) ?? "—",
+          idBanda: id_banda,
+          nombreBanda: bandaJoin?.nombre_banda ?? acortarId(id_banda),
           idConfirmacion: c.id_confirmacion_asistencia as string,
           quienPusoNombre: "—",
           horaPuesta: null,
@@ -517,23 +517,23 @@ export async function getBandasEnCancha(): Promise<BandaEnCanchaVista[]> {
   const resultado: BandaEnCanchaVista[] = [];
 
   for (const c of confs) {
-    const idBanda = c.id_foranea_banda as string;
-    const idEvento = c.id_foranea_evento as string;
-    const bandaJoin = c.bandas as { nombreBanda?: string } | null;
+    const id_banda = c.id_foranea_banda as string;
+    const id_evento = c.id_foranea_evento as string;
+    const bandaJoin = c.bandas as { nombre_banda?: string } | null;
 
     const audit = (audits ?? []).find((a) => {
       const meta = asRecord(a.metadata);
       return (
-        meta.id_foranea_banda === idBanda &&
-        meta.id_foranea_evento === idEvento
+        meta.id_foranea_banda === id_banda &&
+        meta.id_foranea_evento === id_evento
       );
     });
 
     resultado.push({
-      idEvento,
-      lugarEvento: lugarById.get(idEvento) ?? "—",
-      idBanda,
-      nombreBanda: bandaJoin?.nombreBanda ?? acortarId(idBanda),
+      idEvento: id_evento,
+      lugarEvento: lugarById.get(id_evento) ?? "—",
+      idBanda: id_banda,
+      nombreBanda: bandaJoin?.nombre_banda ?? acortarId(id_banda),
       idConfirmacion: c.id_confirmacion_asistencia,
       quienPusoNombre: audit?.id_foranea_user
         ? cat.usuarios.get(audit.id_foranea_user) ?? acortarId(audit.id_foranea_user)
@@ -549,8 +549,8 @@ export async function getBandasEnCancha(): Promise<BandaEnCanchaVista[]> {
 type CanchaAuditLite = {
   accion: string;
   fecha: string;
-  idBanda: string;
-  idEvento: string;
+  id_banda: string;
+  id_evento: string;
 };
 
 function ciclosParticipacion(
@@ -581,15 +581,15 @@ export async function getHistorialParticipacionHoy(): Promise<HistorialParticipa
   const hoy = fechaHoyLocalISO();
 
   const { data: eventos, error } = await dataBaseSupabase
-    .from("registroEventos")
-    .select("idEvento, LugarEvento, fechaEvento")
-    .eq("fechaEvento", hoy)
-    .order("fechaEvento", { ascending: true });
+    .from("registro_eventos")
+    .select("id_evento, lugar_evento, fecha_evento")
+    .eq("fecha_evento", hoy)
+    .order("fecha_evento", { ascending: true });
 
   if (error) throw new Error(mensajeErrorSupabase(error));
   if (!eventos?.length) return [];
 
-  const idsEvento = eventos.map((e) => e.idEvento);
+  const idsEvento = eventos.map((e) => e.id_evento);
 
   const { data: confs, error: errConf } = await dataBaseSupabase
     .from("confirmacion_asistencia")
@@ -600,7 +600,7 @@ export async function getHistorialParticipacionHoy(): Promise<HistorialParticipa
       id_foranea_evento,
       estado_asistencia,
       estado_cancha,
-      bandas ( nombreBanda )
+      bandas ( nombre_banda )
     `,
     )
     .in("id_foranea_evento", idsEvento)
@@ -624,15 +624,15 @@ export async function getHistorialParticipacionHoy(): Promise<HistorialParticipa
   const auditsLite: CanchaAuditLite[] = (audits ?? [])
     .map((a) => {
       const meta = asRecord(a.metadata);
-      const idBanda = pickUuid(meta, "id_foranea_banda");
-      const idEvento = pickUuid(meta, "id_foranea_evento");
-      if (!idBanda || !idEvento) return null;
-      if (!idsEvento.includes(idEvento)) return null;
+      const id_banda = pickUuid(meta, "id_foranea_banda");
+      const id_evento = pickUuid(meta, "id_foranea_evento");
+      if (!id_banda || !id_evento) return null;
+      if (!idsEvento.includes(id_evento)) return null;
       return {
         accion: String(a.accion),
         fecha: String(a.fecha),
-        idBanda,
-        idEvento,
+        id_banda,
+        id_evento,
       };
     })
     .filter((x): x is CanchaAuditLite => x != null);
@@ -640,15 +640,15 @@ export async function getHistorialParticipacionHoy(): Promise<HistorialParticipa
   const out: HistorialParticipacionEvento[] = [];
 
   for (const ev of eventos) {
-    const confEvento = (confs ?? []).filter((c) => c.id_foranea_evento === ev.idEvento);
+    const confEvento = (confs ?? []).filter((c) => c.id_foranea_evento === ev.id_evento);
     const participaciones: ParticipacionBandaVista[] = [];
 
     for (const c of confEvento) {
-      const idBanda = c.id_foranea_banda as string;
-      const nombreBanda =
-        (c.bandas as { nombreBanda?: string } | null)?.nombreBanda ?? acortarId(idBanda);
+      const id_banda = c.id_foranea_banda as string;
+      const nombre_banda =
+        (c.bandas as { nombre_banda?: string } | null)?.nombre_banda ?? acortarId(id_banda);
       const auditsBanda = auditsLite.filter(
-        (a) => a.idBanda === idBanda && a.idEvento === ev.idEvento,
+        (a) => a.id_banda === id_banda && a.id_evento === ev.id_evento,
       );
       const ciclos = ciclosParticipacion(auditsBanda);
       const ultimo = ciclos.length ? ciclos[ciclos.length - 1] : null;
@@ -676,10 +676,10 @@ export async function getHistorialParticipacionHoy(): Promise<HistorialParticipa
           : null;
 
       participaciones.push({
-        idEvento: ev.idEvento,
-        lugarEvento: ev.LugarEvento,
-        idBanda,
-        nombreBanda,
+        idEvento: ev.id_evento,
+        lugarEvento: ev.lugar_evento,
+        idBanda: id_banda,
+        nombreBanda: nombre_banda,
         estado,
         horaInicio,
         horaFin,
@@ -699,9 +699,9 @@ export async function getHistorialParticipacionHoy(): Promise<HistorialParticipa
     const pendientes = participaciones.filter((p) => p.estado === "pendiente");
 
     out.push({
-      idEvento: ev.idEvento,
-      lugarEvento: ev.LugarEvento,
-      fechaEvento: ev.fechaEvento,
+      idEvento: ev.id_evento,
+      lugarEvento: ev.lugar_evento,
+      fechaEvento: ev.fecha_evento,
       participaciones: [...enCancha, ...finalizadas, ...pendientes],
     });
   }
@@ -730,8 +730,8 @@ export async function getAccesosPorEventoCategoria(): Promise<AccesoCategoriaVis
   const map = new Map<
     string,
     {
-      idEvento: string;
-      idCategoria: string;
+      id_evento: string;
+      id_categoria: string;
       horaBloqueo: string | null;
       horaDesbloqueo: string | null;
     }
@@ -741,19 +741,19 @@ export async function getAccesosPorEventoCategoria(): Promise<AccesoCategoriaVis
 
   for (const raw of data ?? []) {
     const meta = asRecord(raw.metadata);
-    const idEvento = pickUuid(meta, "id_evento", "id_foranea_evento");
-    const idCategoria = pickUuid(meta, "id_categoria", "id_foranea_categoria");
-    if (!idEvento || !idCategoria) continue;
+    const id_evento = pickUuid(meta, "id_evento", "id_foranea_evento");
+    const id_categoria = pickUuid(meta, "id_categoria", "id_foranea_categoria");
+    if (!id_evento || !id_categoria) continue;
     // Preferir eventos en curso; si no hay, incluir todos los del día
-    if (idsEnCurso.size > 0 && !idsEnCurso.has(idEvento)) {
+    if (idsEnCurso.size > 0 && !idsEnCurso.has(id_evento)) {
       // aún así incluir si es del día (ya filtrado por fecha)
     }
-    ids.add(idEvento);
-    ids.add(idCategoria);
-    const key = `${idEvento}::${idCategoria}`;
+    ids.add(id_evento);
+    ids.add(id_categoria);
+    const key = `${id_evento}::${id_categoria}`;
     const cur = map.get(key) ?? {
-      idEvento,
-      idCategoria,
+      id_evento,
+      id_categoria,
       horaBloqueo: null,
       horaDesbloqueo: null,
     };
@@ -772,10 +772,10 @@ export async function getAccesosPorEventoCategoria(): Promise<AccesoCategoriaVis
   }
 
   return [...map.values()].map((v) => ({
-    idEvento: v.idEvento,
-    lugarEvento: lugarByEvento.get(v.idEvento) ?? cat.eventos.get(v.idEvento) ?? "—",
-    idCategoria: v.idCategoria,
-    nombreCategoria: cat.categorias.get(v.idCategoria) ?? acortarId(v.idCategoria),
+    idEvento: v.id_evento,
+    lugarEvento: lugarByEvento.get(v.id_evento) ?? cat.eventos.get(v.id_evento) ?? "—",
+    idCategoria: v.id_categoria,
+    nombreCategoria: cat.categorias.get(v.id_categoria) ?? acortarId(v.id_categoria),
     horaBloqueo: v.horaBloqueo,
     horaDesbloqueo: v.horaDesbloqueo,
   }));
@@ -802,14 +802,14 @@ export async function getCardsDesbloqueoCategoria(): Promise<DesbloqueoCategoria
 
   // Necesitamos categoría de cada banda
   const bandaIds = new Set<string>();
-  const finByEventoBanda: { idEvento: string; idBanda: string; fecha: string }[] = [];
+  const finByEventoBanda: { id_evento: string; id_banda: string; fecha: string }[] = [];
   for (const a of auditsFin ?? []) {
     const meta = asRecord(a.metadata);
-    const idEvento = pickUuid(meta, "id_foranea_evento");
-    const idBanda = pickUuid(meta, "id_foranea_banda");
-    if (!idEvento || !idBanda) continue;
-    bandaIds.add(idBanda);
-    finByEventoBanda.push({ idEvento, idBanda, fecha: String(a.fecha) });
+    const id_evento = pickUuid(meta, "id_foranea_evento");
+    const id_banda = pickUuid(meta, "id_foranea_banda");
+    if (!id_evento || !id_banda) continue;
+    bandaIds.add(id_banda);
+    finByEventoBanda.push({ id_evento, id_banda, fecha: String(a.fecha) });
   }
 
   if (bandaIds.size === 0) {
@@ -830,15 +830,15 @@ export async function getCardsDesbloqueoCategoria(): Promise<DesbloqueoCategoria
 
   const { data: bandas, error: errB } = await dataBaseSupabase
     .from("bandas")
-    .select("idBanda, nombreBanda, idForaneaCategoria")
-    .in("idBanda", [...bandaIds]);
+    .select("id_banda, nombre_banda, id_foranea_categoria")
+    .in("id_banda", [...bandaIds]);
 
   if (errB) throw new Error(mensajeErrorSupabase(errB));
 
   const bandaInfo = new Map(
     (bandas ?? []).map((b) => [
-      b.idBanda,
-      { nombre: b.nombreBanda as string, idCategoria: b.idForaneaCategoria as string | null },
+      b.id_banda,
+      { nombre: b.nombre_banda as string, id_categoria: b.id_foranea_categoria as string | null },
     ]),
   );
 
@@ -846,9 +846,9 @@ export async function getCardsDesbloqueoCategoria(): Promise<DesbloqueoCategoria
 
   for (const acc of accesos) {
     const fins = finByEventoBanda.filter((f) => {
-      if (f.idEvento !== acc.idEvento) return false;
-      const info = bandaInfo.get(f.idBanda);
-      return info?.idCategoria === acc.idCategoria;
+      if (f.id_evento !== acc.idEvento) return false;
+      const info = bandaInfo.get(f.id_banda);
+      return info?.id_categoria === acc.idCategoria;
     });
     // ya ordenados desc por query; tomar el más reciente
     const ultima = fins[0] ?? null;
@@ -864,8 +864,8 @@ export async function getCardsDesbloqueoCategoria(): Promise<DesbloqueoCategoria
       lugarEvento: acc.lugarEvento,
       idCategoria: acc.idCategoria,
       nombreCategoria: acc.nombreCategoria,
-      idUltimaBanda: ultima?.idBanda ?? null,
-      nombreUltimaBanda: ultima ? bandaInfo.get(ultima.idBanda)?.nombre ?? null : null,
+      idUltimaBanda: ultima?.id_banda ?? null,
+      nombreUltimaBanda: ultima ? bandaInfo.get(ultima.id_banda)?.nombre ?? null : null,
       horaUltimaFinalizacion: horaUltima,
       horaDesbloqueo: horaDes,
       duracionMs,
@@ -891,11 +891,11 @@ export async function getAuditoriaPaginada(
     const q = filtros.textoUsuario.trim();
     const { data: perfiles } = await dataBaseSupabase
       .from("perfiles")
-      .select('"idForaneaUser", nombre, "primerApellido"')
-      .or(`nombre.ilike.%${q}%,primerApellido.ilike.%${q}%`)
+      .select('"id_foranea_user", nombre, "primer_apellido"')
+      .or(`nombre.ilike.%${q}%,primer_apellido.ilike.%${q}%`)
       .limit(50);
     userIdsFiltro = (perfiles ?? [])
-      .map((p) => p.idForaneaUser as string | null)
+      .map((p) => p.id_foranea_user as string | null)
       .filter((id): id is string => !!id);
     if (userIdsFiltro.length === 0) {
       return { rows: [], total: 0, page: safePage, pageSize, totalPages: 0 };
@@ -963,18 +963,18 @@ export async function listarUsuariosConAuditoria(): Promise<PerfilUsuarioFiltro[
   const cat = await cargarCatalogos(new Set(ids));
   const { data: perfiles } = await dataBaseSupabase
     .from("perfiles")
-    .select("idPerfil, idForaneaUser, nombre, primerApellido")
-    .in("idForaneaUser", ids);
+    .select("id_perfil, id_foranea_user, nombre, primer_apellido")
+    .in("id_foranea_user", ids);
 
   return (perfiles ?? [])
-    .filter((p) => p.idForaneaUser)
+    .filter((p) => p.id_foranea_user)
     .map((p) => ({
-      idForaneaUser: p.idForaneaUser as string,
-      idPerfil: p.idPerfil as string,
+      idForaneaUser: p.id_foranea_user as string,
+      idPerfil: p.id_perfil as string,
       nombreCompleto:
-        cat.usuarios.get(p.idForaneaUser as string) ??
-        ([p.nombre, p.primerApellido].filter(Boolean).join(" ") ||
-          acortarId(p.idForaneaUser as string)),
+        cat.usuarios.get(p.id_foranea_user as string) ??
+        ([p.nombre, p.primer_apellido].filter(Boolean).join(" ") ||
+          acortarId(p.id_foranea_user as string)),
     }))
     .sort((a, b) => a.nombreCompleto.localeCompare(b.nombreCompleto, "es"));
 }
@@ -993,8 +993,8 @@ export const AUDITORIA_ACCIONES_FILTRO: string[] = [
 export const AUDITORIA_TABLAS_FILTRO: string[] = [
   "acceso_categoria",
   "confirmacion_asistencia",
-  "registroCumplimientoEvaluaciones",
-  "registroEventos",
+  "registro_cumplimiento_evaluaciones",
+  "registro_eventos",
   "bandas",
   "perfiles",
   "categorias",

@@ -3,6 +3,47 @@ import {
   solicitudCopaInterface,
   detalleSolicitudCopaInterface,
 } from "@/models";
+import { toDb } from "@/services/mappers/caseMapper";
+
+/**
+ * `vista_solicitud_copas` devuelve sus columnas en snake_case, pero
+ * `detalleSolicitudCopaInterface` conserva varios campos en camelCase por
+ * compatibilidad con la UI existente. Se remapean solo esos alias.
+ */
+function mapDetalleSolicitudCopaRow(
+  row: Record<string, unknown>,
+): detalleSolicitudCopaInterface {
+  const {
+    id_evento,
+    lugar_evento,
+    fecha_evento,
+    id_banda,
+    nombre_banda,
+    id_categoria,
+    nombre_categoria,
+    id_region,
+    nombre_region,
+    ...rest
+  } = row;
+  return {
+    ...rest,
+    idEvento: (id_evento as string | null) ?? null,
+    LugarEvento: (lugar_evento as string | null) ?? null,
+    fechaEvento: (fecha_evento as string | null) ?? null,
+    idBanda: (id_banda as string | null) ?? null,
+    nombreBanda: (nombre_banda as string | null) ?? null,
+    idCategoria: (id_categoria as string | null) ?? null,
+    nombreCategoria: (nombre_categoria as string | null) ?? null,
+    idRegion: (id_region as string | null) ?? null,
+    nombreRegion: (nombre_region as string | null) ?? null,
+  } as detalleSolicitudCopaInterface;
+}
+
+function mapDetalleSolicitudCopaRows(
+  rows: Record<string, unknown>[] | null,
+): detalleSolicitudCopaInterface[] {
+  return (rows ?? []).map(mapDetalleSolicitudCopaRow);
+}
 
 type SolicitudCopaInsert = Omit<
   solicitudCopaInterface,
@@ -29,7 +70,7 @@ export async function getDetalleSolicitudesCopas(): Promise<
   const { data, error } = await dataBaseSupabase.from(vistaDetalle).select("*");
 
   if (error) throw error;
-  return data as detalleSolicitudCopaInterface[];
+  return mapDetalleSolicitudCopaRows(data);
 }
 
 export async function getSolicitudCopaById(
@@ -55,7 +96,7 @@ export async function getDetalleSolicitudCopaById(
     .single();
 
   if (error) throw error;
-  return data as detalleSolicitudCopaInterface;
+  return mapDetalleSolicitudCopaRow(data);
 }
 
 export async function createSolicitudCopa(
@@ -63,7 +104,7 @@ export async function createSolicitudCopa(
 ): Promise<solicitudCopaInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tabla)
-    .insert(payload)
+    .insert(toDb(payload as unknown as Record<string, unknown>))
     .select("*")
     .single();
 
@@ -77,7 +118,7 @@ export async function updateSolicitudCopa(
 ): Promise<solicitudCopaInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tabla)
-    .update(payload)
+    .update(toDb(payload as unknown as Record<string, unknown>))
     .eq(elId, id)
     .select("*")
     .single();

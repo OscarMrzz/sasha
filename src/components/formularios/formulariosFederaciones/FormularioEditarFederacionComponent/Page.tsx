@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react'
 import FederacionesServices from "@/services/federacionesServices";
 import { federacionInterface } from "@/models";
+import { federacionUpdateSchema } from "@/models/federaciones/federacionSchema";
 
 type Props = {
     federacionAEditar:federacionInterface
@@ -48,8 +49,16 @@ export default function FormularioEditarFederacionComponent  ({refresacar, onClo
             nombreFederacion: formData.nombreFederacion,
           
           };
-    
-          await bandasServices.update(federacionAEditar.idFederacion, nuevaFederacion as federacionInterface);
+
+          const parsed = federacionUpdateSchema.safeParse(nuevaFederacion);
+          if (!parsed.success) {
+            const msg = parsed.error.issues.map((i) => i.message).join("; ");
+            alert(msg || "Datos inválidos");
+            setLoading(false);
+            return;
+          }
+
+          await bandasServices.update(federacionAEditar.idFederacion, parsed.data as federacionInterface);
         
     
           // Limpiar formulario

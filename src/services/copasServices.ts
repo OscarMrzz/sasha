@@ -11,6 +11,7 @@ import {
   MENSAJE_COPAS_EVENTO_BLOQUEADO,
 } from "@/helpers/copas/eventoPermiteEdicionCopas";
 import PerfilesServices from "./perfilesServices";
+import { fromDbMany, toDb } from "@/services/mappers/caseMapper";
 
 type CopaInsert = Omit<copaInterface, "id_copas" | "created_at">;
 type CopaUpdate = Partial<Omit<copaInterface, "id_copas" | "created_at">>;
@@ -55,40 +56,40 @@ export default class CopasServices {
 
   private federacionId(): string {
     const id = this.perfil?.idForaneaFederacion;
-    if (!id) throw new Error("No hay federación en el perfil del usuario.");
+    if (!id) throw new Error("No hay federaci?n en el perfil del usuario.");
     return id;
   }
 
-  /** IDs de eventos pertenecientes a la federación del perfil. */
+  /** IDs de eventos pertenecientes a la federaci?n del perfil. */
   private async idsEventosFederacion(): Promise<string[]> {
     const fed = this.federacionId();
     const { data, error } = await dataBaseSupabase
-      .from("registroEventos")
-      .select("idEvento")
-      .eq("idForaneaFederacion", fed);
+      .from("registro_eventos")
+      .select("id_evento")
+      .eq("id_foranea_federacion", fed);
     if (error) throw error;
-    return (data ?? []).map((row: { idEvento: string }) => row.idEvento);
+    return (data ?? []).map((row: { id_evento: string }) => row.id_evento);
   }
 
-  /** IDs de bandas de la federación del perfil. */
+  /** IDs de bandas de la federaci?n del perfil. */
   private async idsBandasFederacion(): Promise<string[]> {
     const fed = this.federacionId();
     const { data, error } = await dataBaseSupabase
       .from("bandas")
-      .select("idBanda")
-      .eq("idForaneaFederacion", fed);
+      .select("id_banda")
+      .eq("id_foranea_federacion", fed);
     if (error) throw error;
-    return (data ?? []).map((row: { idBanda: string }) => row.idBanda);
+    return (data ?? []).map((row: { id_banda: string }) => row.id_banda);
   }
 
   private async assertEventoEnFederacion(idEvento: string): Promise<void> {
     const ids = await this.idsEventosFederacion();
     if (!ids.includes(idEvento)) {
-      throw new Error("El evento no pertenece a la federación del usuario.");
+      throw new Error("El evento no pertenece a la federaci?n del usuario.");
     }
   }
 
-  /** Comprueba que el evento sea de la federación del perfil activo (uso desde UI). */
+  /** Comprueba que el evento sea de la federaci?n del perfil activo (uso desde UI). */
   async validarEventoEnFederacion(idEvento: string): Promise<void> {
     await this.initPerfil();
     await this.assertEventoEnFederacion(idEvento);
@@ -97,15 +98,15 @@ export default class CopasServices {
   private async assertBandaEnFederacion(idBanda: string): Promise<void> {
     const ids = await this.idsBandasFederacion();
     if (!ids.includes(idBanda)) {
-      throw new Error("La banda no pertenece a la federación del usuario.");
+      throw new Error("La banda no pertenece a la federaci?n del usuario.");
     }
   }
 
   private async assertEventoEditable(idEvento: string): Promise<void> {
     const { data, error } = await dataBaseSupabase
-      .from("registroEventos")
+      .from("registro_eventos")
       .select("estado_evento")
-      .eq("idEvento", idEvento)
+      .eq("id_evento", idEvento)
       .single();
 
     if (error) throw error;
@@ -114,7 +115,7 @@ export default class CopasServices {
     }
   }
 
-  /** Todas las copas cuyo evento está en la federación del perfil. */
+  /** Todas las copas cuyo evento est? en la federaci?n del perfil. */
   async get(): Promise<copaInterface[]> {
     const ids = await this.idsEventosFederacion();
     if (ids.length === 0) return [];
@@ -129,7 +130,7 @@ export default class CopasServices {
     return data as copaInterface[];
   }
 
-  /** Copas de un evento concreto (validando federación). */
+  /** Copas de un evento concreto (validando federaci?n). */
   async getPorEvento(idEvento: string): Promise<copaInterface[]> {
     await this.assertEventoEnFederacion(idEvento);
     return obtenerCopasPorEventoAccion(idEvento);
@@ -138,7 +139,7 @@ export default class CopasServices {
   async getOne(id: string): Promise<copaInterface> {
     const ids = await this.idsEventosFederacion();
     if (ids.length === 0) {
-      throw new Error("No se encontró la copa.");
+      throw new Error("No se encontr? la copa.");
     }
 
     const { data, error } = await dataBaseSupabase
@@ -159,7 +160,7 @@ export default class CopasServices {
 
     const { data, error } = await dataBaseSupabase
       .from(tabla)
-      .insert(dataCreate)
+      .insert(toDb(dataCreate as unknown as Record<string, unknown>))
       .select("*")
       .single();
 
@@ -182,7 +183,7 @@ export default class CopasServices {
 
     const { data, error } = await dataBaseSupabase
       .from(tabla)
-      .update(dataUpdate)
+      .update(toDb(dataUpdate as unknown as Record<string, unknown>))
       .eq(elId, id)
       .select("*")
       .single();
@@ -202,8 +203,8 @@ export default class CopasServices {
   }
 
   /**
-   * Filas de la vista enriquecida evento + banda (año actual / reglas del SQL de la vista).
-   * Restringido a eventos de la federación del perfil.
+   * Filas de la vista enriquecida evento + banda (a?o actual / reglas del SQL de la vista).
+   * Restringido a eventos de la federaci?n del perfil.
    */
   async getVistaCopasEventos(): Promise<vistaCopasEventosInterface[]> {
     const ids = await this.idsEventosFederacion();
@@ -218,7 +219,7 @@ export default class CopasServices {
     return data as vistaCopasEventosInterface[];
   }
 
-  /** Vista global agregada, limitada a bandas de la federación del perfil. */
+  /** Vista global agregada, limitada a bandas de la federaci?n del perfil. */
   async getVistaCopasGlobal(): Promise<vistaCopasGlobalInterface[]> {
     const bandaIds = await this.idsBandasFederacion();
     if (bandaIds.length === 0) return [];
@@ -226,9 +227,9 @@ export default class CopasServices {
     const { data, error } = await dataBaseSupabase
       .from(vistaCopasGlobal)
       .select("*")
-      .in("idBanda", bandaIds);
+      .in("id_banda", bandaIds);
 
     if (error) throw error;
-    return data as vistaCopasGlobalInterface[];
+    return fromDbMany<vistaCopasGlobalInterface>(data ?? []);
   }
 }

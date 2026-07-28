@@ -3,6 +3,7 @@
 import React from 'react'
 import FederacionesServices from "@/services/federacionesServices";
 import { federacionInterface } from "@/models";
+import { federacionInsertSchema } from "@/models/federaciones/federacionSchema";
 
 type Props = {
   refresacar: () => void;
@@ -36,8 +37,16 @@ export default function FormularioAgregarFederacionComponent  ({refresacar, onCl
             nombreFederacion: formData.nombreFederacion,
           
           };
-    
-          await bandasServices.create(nuevaFederacion as federacionInterface);
+
+          const parsed = federacionInsertSchema.safeParse(nuevaFederacion);
+          if (!parsed.success) {
+            const msg = parsed.error.issues.map((i) => i.message).join("; ");
+            alert(msg || "Datos inválidos");
+            setLoading(false);
+            return;
+          }
+
+          await bandasServices.create(parsed.data as federacionInterface);
          
     
           // Limpiar formulario

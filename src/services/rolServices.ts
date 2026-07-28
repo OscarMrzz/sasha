@@ -1,5 +1,8 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { perfilDatosAmpleosInterface, rolInterface } from "@/models";
+import { rolInsertSchema, rolUpdateSchema } from "@/models/roles/rolSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import PerfilesServices from "./perfilesServices";
 import { filtrarRolesPermitidos } from "@/helpers/usuarios/rolesUsuarios";
 
@@ -8,7 +11,7 @@ import { filtrarRolesPermitidos } from "@/helpers/usuarios/rolesUsuarios";
 type Interface = rolInterface;
 
 const tabla = "roles";
-const elId = "idRol";
+const elId = "id_rol";
 
 export default class RolesServices {
     perfil: perfilDatosAmpleosInterface | null = null;
@@ -51,14 +54,14 @@ export default class RolesServices {
         }
         const { data, error } = await dataBaseSupabase
             .from(tabla).select("*")
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
-        return data;
+        return fromDbMany<rolInterface>(data ?? []);
     }
 
     async getPermitidos(rolesExcluidos: readonly string[] = [], soloActivos = true) {
         const roles = await this.get();
-        return filtrarRolesPermitidos(roles as rolInterface[], rolesExcluidos, soloActivos);
+        return filtrarRolesPermitidos(roles, rolesExcluidos, soloActivos);
     }
 
 
@@ -77,11 +80,11 @@ export default class RolesServices {
             .from(tabla)
             .select("*")
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<rolInterface>(data);
     }
     async comprobarRolTienePermiso(nombreRol: string) {
 
@@ -91,8 +94,8 @@ export default class RolesServices {
         const { data, error } = await dataBaseSupabase
             .from(tabla)
             .select("*")
-            .eq("nombreRol", nombreRol)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("nombre_rol", nombreRol)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
@@ -100,7 +103,7 @@ export default class RolesServices {
         if (!data) return false;
 
 
-        return data.estadoRol;
+        return fromDb<rolInterface>(data).estadoRol;
     }
 
 
@@ -109,15 +112,16 @@ export default class RolesServices {
         if (!this.perfil || !this.perfil.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
+        const parsed = parseCamel(rolInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .insert(toDb(parsed as Record<string, unknown>))
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single()
 
         if (error) throw error;
-        return data;
+        return fromDb<rolInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
@@ -125,16 +129,17 @@ export default class RolesServices {
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
+        const parsed = parseCamel(rolUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<rolInterface>(data);
     }
 
     async delete(id: string) {
@@ -146,7 +151,7 @@ export default class RolesServices {
             .from(tabla)
             .delete()
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return true;

@@ -8,6 +8,7 @@ import {
   confirmacionConBandaInterface,
   vistaBandasConfirmadasParaEventoInterface,
 } from "@/models";
+import { fromDb, toDb } from "@/services/mappers/caseMapper";
 
 const tabla = "confirmacion_asistencia";
 
@@ -33,7 +34,7 @@ export default class ConfirmacionAsistenciaServices {
     idEvento: string,
   ): Promise<confirmacionAsistenciaInterface | null> {
     if (!idBanda?.trim() || !idEvento?.trim()) {
-      throw new Error("idBanda e idEvento son obligatorios.");
+      throw new Error("id_banda e id_evento son obligatorios.");
     }
     return this.rowPorBandaEvento(idBanda, idEvento);
   }
@@ -43,7 +44,7 @@ export default class ConfirmacionAsistenciaServices {
     idEvento: string,
   ): Promise<confirmacionAsistenciaInterface[]> {
     if (!idEvento?.trim()) {
-      throw new Error("idEvento es obligatorio.");
+      throw new Error("id_evento es obligatorio.");
     }
     const { data, error } = await dataBaseSupabase
       .from(tabla)
@@ -71,7 +72,7 @@ export default class ConfirmacionAsistenciaServices {
     todasBandasFederacion?: bandaInterface[],
   ): Promise<bandaInterface[]> {
     if (!idEvento?.trim()) {
-      throw new Error("idEvento es obligatorio.");
+      throw new Error("id_evento es obligatorio.");
     }
 
     const { data, error } = await dataBaseSupabase
@@ -114,7 +115,7 @@ export default class ConfirmacionAsistenciaServices {
     idBanda: string,
   ): Promise<confirmacionAsistenciaInterface[]> {
     if (!idBanda?.trim()) {
-      throw new Error("idBanda es obligatorio.");
+      throw new Error("id_banda es obligatorio.");
     }
     const { data, error } = await dataBaseSupabase
       .from(tabla)
@@ -135,7 +136,7 @@ export default class ConfirmacionAsistenciaServices {
     idEvento: string,
   ): Promise<confirmacionAsistenciaInterface> {
     if (!idBanda?.trim() || !idEvento?.trim()) {
-      throw new Error("idBanda e idEvento son obligatorios.");
+      throw new Error("id_banda e id_evento son obligatorios.");
     }
 
     const actual = await this.rowPorBandaEvento(idBanda, idEvento);
@@ -147,7 +148,7 @@ export default class ConfirmacionAsistenciaServices {
       };
       const { data, error } = await dataBaseSupabase
         .from(tabla)
-        .insert(insertRow)
+        .insert(toDb(insertRow as unknown as Record<string, unknown>))
         .select("*")
         .single();
       if (error) throw error;
@@ -163,7 +164,7 @@ export default class ConfirmacionAsistenciaServices {
     };
     const { data, error } = await dataBaseSupabase
       .from(tabla)
-      .update(cambioEstado)
+      .update(toDb(cambioEstado as unknown as Record<string, unknown>))
       .eq("id_confirmacion_asistencia", actual.id_confirmacion_asistencia)
       .select("*")
       .single();
@@ -180,7 +181,7 @@ export default class ConfirmacionAsistenciaServices {
     idEvento: string,
   ): Promise<confirmacionAsistenciaInterface> {
     if (!idBanda?.trim() || !idEvento?.trim()) {
-      throw new Error("idBanda e idEvento son obligatorios.");
+      throw new Error("id_banda e id_evento son obligatorios.");
     }
 
     const actual = await this.rowPorBandaEvento(idBanda, idEvento);
@@ -192,7 +193,7 @@ export default class ConfirmacionAsistenciaServices {
       };
       const { data, error } = await dataBaseSupabase
         .from(tabla)
-        .insert(insertRow)
+        .insert(toDb(insertRow as unknown as Record<string, unknown>))
         .select("*")
         .single();
       if (error) throw error;
@@ -208,7 +209,7 @@ export default class ConfirmacionAsistenciaServices {
     };
     const { data, error } = await dataBaseSupabase
       .from(tabla)
-      .update(cambioEstado)
+      .update(toDb(cambioEstado as unknown as Record<string, unknown>))
       .eq("id_confirmacion_asistencia", actual.id_confirmacion_asistencia)
       .select("*")
       .single();
@@ -218,7 +219,7 @@ export default class ConfirmacionAsistenciaServices {
 
   async getBandasConfirmadasByEvento(idEvento: string): Promise<vistaBandasConfirmadasParaEventoInterface[]> {
     if (!idEvento?.trim()) {
-      throw new Error("idEvento es obligatorio.");
+      throw new Error("id_evento es obligatorio.");
     }
     const { data, error } = await dataBaseSupabase
       .from("vista_bandas_confirmadas")
@@ -237,7 +238,7 @@ export default class ConfirmacionAsistenciaServices {
     }
     const { data, error } = await dataBaseSupabase
       .from(tabla)
-      .update({ estado_cancha: estadoCancha })
+      .update(toDb({ estado_cancha: estadoCancha }))
       .eq("id_confirmacion_asistencia", idConfirmacion)
       .select("*")
       .single();
@@ -249,7 +250,7 @@ export default class ConfirmacionAsistenciaServices {
     idEvento: string,
   ): Promise<confirmacionConBandaInterface[]> {
     if (!idEvento?.trim()) {
-      throw new Error("idEvento es obligatorio.");
+      throw new Error("id_evento es obligatorio.");
     }
 
     const { data, error } = await dataBaseSupabase
@@ -268,8 +269,9 @@ export default class ConfirmacionAsistenciaServices {
     if (error) throw error;
 
     return (data ?? []).map((row: Record<string, unknown>) => {
-      const banda = row.bandas as Record<string, unknown> | null;
-      const categoria = banda?.categorias as Record<string, unknown> | null;
+      const bandaRaw = row.bandas as Record<string, unknown> | null;
+      const banda = bandaRaw ? fromDb<bandaInterface & { categorias?: Record<string, unknown> }>(bandaRaw) : null;
+      const categoria = banda?.categorias ? fromDb<{ nombreCategoria?: string }>(banda.categorias) : null;
       return {
         id_confirmacion_asistencia: row.id_confirmacion_asistencia as string,
         created_at: row.created_at as string,
@@ -278,11 +280,11 @@ export default class ConfirmacionAsistenciaServices {
         estado_asistencia: row.estado_asistencia as boolean,
         estado_cancha:
           (row.estado_cancha as confirmacionAsistenciaInterface["estado_cancha"]) ?? "pendiente",
-        nombreBanda: (banda?.nombreBanda as string) ?? "—",
-        AliasBanda: (banda?.AliasBanda as string | null) ?? null,
-        urlLogoBanda: (banda?.urlLogoBanda as string | null) ?? null,
-        idForaneaCategoria: (banda?.idForaneaCategoria as string) ?? "",
-        nombreCategoria: (categoria?.nombreCategoria as string) ?? "—",
+        nombreBanda: banda?.nombreBanda ?? "—",
+        AliasBanda: banda?.AliasBanda ?? null,
+        urlLogoBanda: banda?.urlLogoBanda ?? null,
+        idForaneaCategoria: banda?.idForaneaCategoria ?? "",
+        nombreCategoria: categoria?.nombreCategoria ?? "—",
       } satisfies confirmacionConBandaInterface;
     });
   }

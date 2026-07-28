@@ -1,5 +1,6 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { sancionInterface } from "@/models";
+import { toDb } from "@/services/mappers/caseMapper";
 
 type SancionInsert = Omit<sancionInterface, "id_sancion" | "created_at">;
 type SancionUpdate = Partial<SancionInsert>;
@@ -33,7 +34,7 @@ export async function createSancion(
 ): Promise<sancionInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tabla)
-    .insert(payload)
+    .insert(toDb(payload as unknown as Record<string, unknown>))
     .select("*")
     .single();
 
@@ -47,7 +48,7 @@ export async function updateSancion(
 ): Promise<sancionInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tabla)
-    .update(payload)
+    .update(toDb(payload as unknown as Record<string, unknown>))
     .eq(elId, id)
     .select("*")
     .single();

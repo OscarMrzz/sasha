@@ -2,6 +2,7 @@ import type {
   vistaAsistenciaEventosGlobalInterface,
   vistaAsistenciaEventosInterface,
 } from "@/models";
+import { fromDbMany } from "@/services/mappers/caseMapper";
 import { getSupabaseAdmin } from "@/services/servidor/supabaseAdmin";
 import { unstable_cache } from "next/cache";
 
@@ -15,7 +16,7 @@ export async function getVistaAsistenciaEventos(): Promise<
         .from("vista_asistencia_eventos")
         .select("*");
       if (error) throw error;
-      return (data ?? []) as vistaAsistenciaEventosInterface[];
+      return fromDbMany<vistaAsistenciaEventosInterface>(data ?? []);
     },
     ["vista-asistencia-eventos-todas-las-filas"],
     {
@@ -35,9 +36,9 @@ export async function getVistaAsistenciaEventosByIdBanda(
       const { data, error } = await getSupabaseAdmin()
         .from("vista_asistencia_eventos")
         .select("*")
-        .eq("idBanda", id);
+        .eq("id_banda", id);
       if (error) throw error;
-      return (data ?? []) as vistaAsistenciaEventosInterface[];
+      return fromDbMany<vistaAsistenciaEventosInterface>(data ?? []);
     },
     [`vista-asistencia-eventos-por-banda-${idBanda}`],
     {
@@ -52,7 +53,7 @@ export async function getVistaAsistenciaEventosByIdBanda(
   return fetcher(idBanda);
 }
 
-/** Agregado global (nombreBanda + cantidad); sin `idBanda` en la vista. */
+/** Agregado global (nombre_banda + cantidad); sin `idBanda` en la vista. */
 export async function getVistaAsistenciaEventosGlobal(): Promise<
   vistaAsistenciaEventosGlobalInterface[]
 > {
@@ -62,7 +63,7 @@ export async function getVistaAsistenciaEventosGlobal(): Promise<
         .from("vista_asistencia_eventos_global")
         .select("*");
       if (error) throw error;
-      return (data ?? []) as vistaAsistenciaEventosGlobalInterface[];
+      return fromDbMany<vistaAsistenciaEventosGlobalInterface>(data ?? []);
     },
     ["vista-asistencia-eventos-global-agregada"],
     {

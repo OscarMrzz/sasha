@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import RegionesServices from "@/services/regionesServices";
 import { perfilDatosAmpleosInterface, regionesInterface } from "@/models";
 import PerfilesServices from "@/services/perfilesServices";
+import { regionesUpdateSchema } from "@/models/regiones/regionesSchema";
 
 type Props = {
   refresacar: () => void | Promise<void>;
@@ -82,7 +83,15 @@ export default function FormularioEditarRegionComponent({
         idForaneaFederacion: perfil.idForaneaFederacion || ""
       };
 
-      const actualizada = await regionesServices.update(regionAEditar.idRegion, nuevaRegion as regionesInterface);
+      const parsed = regionesUpdateSchema.safeParse(nuevaRegion);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        openErrorModal ? openErrorModal(msg || "Datos inválidos") : alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      const actualizada = await regionesServices.update(regionAEditar.idRegion, parsed.data as regionesInterface);
 
       // Limpiar formulario
       setFormData({

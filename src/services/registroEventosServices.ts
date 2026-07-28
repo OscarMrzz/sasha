@@ -1,13 +1,50 @@
  import { dataBaseSupabase } from "@/lib/supabase";
  import { bandaInterface, perfilDatosAmpleosInterface, registroEventoDatosAmpleosInterface, RegistroEventoInterface, vistaAsistenBandasModel, vistaBandasEventoInterface } from "@/models";
+import { registroEventoInsertSchema, registroEventoUpdateSchema } from "@/models/eventos/registroEventoSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import PerfilesServices from "./perfilesServices";
  
 
  
- type Interface = RegistroEventoInterface; 
+type Interface = RegistroEventoInterface; 
  
- const tabla = "registroEventos";
- const elId = "idEvento";
+const tabla = "registro_eventos";
+const elId = "id_evento";
+
+/**
+ * `vistaBandasEventoInterface` conserva algunas claves en snake_case
+ * (id_confirmacion_asistencia, estado_asistencia, estado_cancha,
+ * estado_evento, id_foranea_rubrica) mientras el resto se expone en
+ * camelCase/PascalCase; la vista `vista_bandas_evento` devuelve todo en
+ * snake_case, así que se convierte selectivamente.
+ */
+function mapVistaBandasEventoRow(
+  row: Record<string, unknown>,
+): vistaBandasEventoInterface {
+  const {
+    id_evento,
+    lugar_evento,
+    id_banda,
+    nombre_banda,
+    alias_banda,
+    id_categoria,
+    nombre_categoria,
+    id_foranea_perfil,
+    ...rest
+  } = row;
+  return {
+    ...rest,
+    idEvento: id_evento as string,
+    LugarEvento: lugar_evento as string,
+    idBanda: id_banda as string,
+    nombreBanda: nombre_banda as string,
+    AliasBanda: alias_banda as string,
+    idCategoria: id_categoria as string,
+    nombreCategoria: nombre_categoria as string,
+    idForaneaPerfil: id_foranea_perfil as string,
+  } as vistaBandasEventoInterface;
+}
  
  export default class RegistroEventossServices   {
   perfil: perfilDatosAmpleosInterface | null = null;
@@ -46,16 +83,16 @@ async initPerfil() {
                  federaciones(*),
                  regiones(*)
              `)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .order("fechaEvento", { ascending: true });
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+             .order("fecha_evento", { ascending: true });
  
          if (error) {
              console.error("❌ Error obteniendo regiones con federaciones:", error);
              throw error;
          }
- 
+
       
-         return data as registroEventoDatosAmpleosInterface[];
+         return fromDbMany<registroEventoDatosAmpleosInterface>(data ?? []);
      } catch (error) {
          console.error("❌ Error general en getDatosAmpleos:", error);
          throw error;
@@ -75,17 +112,17 @@ async initPerfil() {
                  federaciones(*),
                  regiones(*)
              `)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-             .eq("idForaneaRegion", idForaneaRegion)
-             .order("fechaEvento", { ascending: true });
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+             .eq("id_foranea_region", idForaneaRegion)
+             .order("fecha_evento", { ascending: true });
  
          if (error) {
              console.error("❌ Error obteniendo regiones con federaciones:", error);
              throw error;
          }
- 
+
       
-         return data as registroEventoDatosAmpleosInterface[];
+         return fromDbMany<registroEventoDatosAmpleosInterface>(data ?? []);
      } catch (error) {
          console.error("❌ Error general en getDatosAmpleos:", error);
          throw error;
@@ -101,9 +138,9 @@ async initPerfil() {
          }
          const { data, error } = await dataBaseSupabase
          .from(tabla).select("*")
-         .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+         .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
          if (error) throw error;
-         return data;
+         return fromDbMany<RegistroEventoInterface>(data ?? []);
      }
      async getAsistenciaBandasEvento(idEvento:string) {
         if (!this.perfil?.idForaneaFederacion) {
@@ -117,9 +154,9 @@ async initPerfil() {
 
         const { data, error } = await dataBaseSupabase
             .from("vista_asistencia_bandas").select("*")
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             
-            .eq("idForaneaEvento", idEvento)
+            .eq("id_foranea_evento", idEvento)
 
         if (error) throw error;
 
@@ -166,10 +203,10 @@ async initPerfil() {
             .from("vista_asistencia_bandas")
             .select(`
                 *,
-                registroEventos!inner(
-                    idEvento,
-                    fechaEvento,
-                    LugarEvento,
+                registro_eventos!inner(
+                    id_evento,
+                    fecha_evento,
+                    lugar_evento,
                     created_at,
                     estado_evento,
                     tipo_evento,
@@ -177,8 +214,8 @@ async initPerfil() {
                     tipo_lugar
                 )
             `)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .eq("idBanda", idForaneaBanda)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+            .eq("id_banda", idForaneaBanda)
          
         if (error) throw error;
 
@@ -227,45 +264,47 @@ async initPerfil() {
              .from(tabla)
              .select("*")
              .eq(elId, id)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
              .single();
  
          if (error) throw error;
-         return data;
+         return fromDb<RegistroEventoInterface>(data);
      }
- 
- 
+
+
      async create(dataCreate: Interface) {
       
          if (!this.perfil || !this.perfil.idForaneaFederacion) {
              throw new Error("No hay federación en el perfil del usuario.");
          }
+         const parsed = parseCamel(registroEventoInsertSchema, dataCreate);
          const { data, error } = await dataBaseSupabase
              .from(tabla)
-             .insert(dataCreate)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+             .insert(toDb(parsed as Record<string, unknown>))
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
              .select("*")
              .single()
- 
+
          if (error) throw error;
-         return data;
+         return fromDb<RegistroEventoInterface>(data);
      }
- 
+
      async update(id: string, dataUpdate: Interface) {
       
          if (!this.perfil?.idForaneaFederacion) {
              throw new Error("No hay federación en el perfil del usuario.");
          }
+         const parsed = parseCamel(registroEventoUpdateSchema, dataUpdate);
          const { data, error } = await dataBaseSupabase
              .from(tabla)
-             .update(dataUpdate)
+             .update(toDb(parsed as Record<string, unknown>))
              .eq(elId, id)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
              .select("*")
              .single();
- 
+
          if (error) throw error;
-         return data;
+         return fromDb<RegistroEventoInterface>(data);
      }
  
      async delete(id: string) {
@@ -277,7 +316,7 @@ async initPerfil() {
              .from(tabla)
              .delete()
              .eq(elId, id)
-             .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+             .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
  
          if (error) throw error;
          return true;
@@ -289,14 +328,14 @@ async initPerfil() {
         }
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update({ estado_evento: "iniciado" })
-            .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
-            .select("*")
-            .single();
+           .update({ estado_evento: "iniciado" })
+           .eq(elId, id)
+           .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
+           .select("*")
+           .single();
 
-        if (error) throw error;
-        return data;
+       if (error) throw error;
+       return fromDb<RegistroEventoInterface>(data);
      }
      async finalizarEvento(id: string) {
         if (!this.perfil?.idForaneaFederacion) {
@@ -306,12 +345,12 @@ async initPerfil() {
             .from(tabla)
             .update({ estado_evento: "finalizado" })
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single();
 
-        if (error) throw error;
-        return data;
+       if (error) throw error;
+       return fromDb<RegistroEventoInterface>(data);
      }
      async cancelarEvento(id: string) {
         if (!this.perfil?.idForaneaFederacion) {
@@ -321,12 +360,12 @@ async initPerfil() {
             .from(tabla)
             .update({ estado_evento: "cancelado" })
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single();
 
-        if (error) throw error;
-        return data;
+       if (error) throw error;
+       return fromDb<RegistroEventoInterface>(data);
      }
 
 
@@ -338,10 +377,10 @@ async initPerfil() {
         const { data, error } = await dataBaseSupabase
             .from("vista_bandas_evento")
             .select("*")
-            .eq("idEvento", idEvento)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_evento", idEvento)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
-        return data;
+        return (data ?? []).map(mapVistaBandasEventoRow);
     }
      async getVistaBandasEventoByIdEventoIdBanda(idEvento: string, idBanda: string) {
         if (!this.perfil?.idForaneaFederacion) {
@@ -350,15 +389,15 @@ async initPerfil() {
         const { data, error } = await dataBaseSupabase
             .from("vista_bandas_evento")
             .select("*")
-            .eq("idEvento", idEvento)
-            .eq("idBanda", idBanda)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_evento", idEvento)
+            .eq("id_banda", idBanda)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
-        return data;
+        return (data ?? []).map(mapVistaBandasEventoRow);
     }
      async getVistaBandasEventoByBandaEnCancha(idEvento: string, idEvaluador: string): Promise<vistaBandasEventoInterface> {
         if (!idEvento?.trim() || !idEvaluador?.trim()) {
-            throw new Error("idEvento e idEvaluador son obligatorios.");
+            throw new Error("id_evento e idEvaluador son obligatorios.");
         }
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
@@ -366,13 +405,13 @@ async initPerfil() {
         const { data, error } = await dataBaseSupabase
             .from("vista_bandas_evento")
             .select("*")
-            .eq("idEvento", idEvento)
+            .eq("id_evento", idEvento)
             .eq("estado_cancha", "ya_en_cancha")
-            .eq("idForaneaPerfil", idEvaluador)
+            .eq("id_foranea_perfil", idEvaluador)
             .single();
 
         if (error) throw error;
-        return data as vistaBandasEventoInterface;
+        return mapVistaBandasEventoRow(data);
     }
  }
 

@@ -16,6 +16,7 @@ import {
 } from "@/models";
 import Image from "next/image";
 import { useBandaAgregadaStore } from "@/store/BandasStore/bandaAgregadaStore";
+import { bandaInsertSchema } from "@/models/bandas/bandaSchema";
 
 type Props = {
   refresacar: () => void;
@@ -167,7 +168,15 @@ const FormularioAgregarBandaComponent = ({ refresacar, onClose }: Props) => {
         ubicacionSedeBanda: formData.ubicacionSedeBanda,
       };
 
-      const creada = await bandaServices.current.create(nuevaBanda as bandaInterface);
+      const parsed = bandaInsertSchema.safeParse(nuevaBanda);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      const creada = await bandaServices.current.create(parsed.data as bandaInterface);
       if (creada?.idBanda) {
         setUltimaBanda({ codigo: creada.idBanda });
       }

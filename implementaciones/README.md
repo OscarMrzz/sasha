@@ -56,3 +56,4 @@ NN-slug-corto/
 | # | Carpeta | Resumen |
 |---|---|---|
 | 01 | [01-restructura-carpetas](./01-restructura-carpetas/) | Reorganización de carpetas en capas + unificación de components + models |
+| 02 | [02-snake-case-zod](./02-snake-case-zod/) | DB snake_case + Next camelCase + mappers + Zod en forms/services |

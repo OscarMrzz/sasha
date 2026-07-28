@@ -9,6 +9,38 @@ import {
   esLlegadaConfirmadaPorDirigente,
   esPendienteRegistroIngreso,
 } from "@/components/diciplina/checkoutUtils";
+import { toDb } from "@/services/mappers/caseMapper";
+
+/**
+ * `vista_detalle_checkout` devuelve sus columnas en snake_case (incluidas
+ * nombre_banda / nombre_categoria / nombre_region / lugar_evento), pero
+ * `CheckoutDetalleInterface` conserva esos cuatro campos en camelCase por
+ * compatibilidad con la UI existente. Se remapean solo esos alias.
+ */
+function mapVistaDetalleCheckoutRow(
+  row: Record<string, unknown>,
+): CheckoutDetalleInterface {
+  const {
+    nombre_banda,
+    nombre_categoria,
+    nombre_region,
+    lugar_evento,
+    ...rest
+  } = row;
+  return {
+    ...rest,
+    nombreBanda: (nombre_banda as string | null) ?? null,
+    nombreCategoria: (nombre_categoria as string | null) ?? null,
+    nombreRegion: (nombre_region as string | null) ?? null,
+    LugarEvento: (lugar_evento as string) ?? "",
+  } as CheckoutDetalleInterface;
+}
+
+function mapVistaDetalleCheckoutRows(
+  rows: Record<string, unknown>[] | null,
+): CheckoutDetalleInterface[] {
+  return (rows ?? []).map(mapVistaDetalleCheckoutRow);
+}
 
 export type CheckoutLlegadaInsert = Pick<
   checkoutBandaInterface,
@@ -49,7 +81,7 @@ const tabla = "checkout";
 export async function getAllCheckout(): Promise<CheckoutDetalleInterface[]> {
   const { data, error } = await dataBaseSupabase.from(vista).select("*");
   if (error) throw error;
-  return (data ?? []) as CheckoutDetalleInterface[];
+  return mapVistaDetalleCheckoutRows(data);
 }
 
 export async function getCheckoutBandaById(
@@ -61,7 +93,7 @@ export async function getCheckoutBandaById(
     .eq("id_foranea_banda", id)
     .single();
   if (error) throw error;
-  return data as CheckoutDetalleInterface;
+  return mapVistaDetalleCheckoutRow(data);
 }
 
 export async function getCheckoutBandaByIdByEvento(
@@ -75,7 +107,7 @@ export async function getCheckoutBandaByIdByEvento(
     .eq("id_foranea_evento", idEvento)
     .single();
   if (error) throw error;
-  return data as CheckoutDetalleInterface;
+  return mapVistaDetalleCheckoutRow(data);
 }
 
 export async function getAllCheckoutByEvento(
@@ -86,14 +118,16 @@ export async function getAllCheckoutByEvento(
     .select("*")
     .eq("id_foranea_evento", idEvento);
   if (error) throw error;
-  return (data ?? []) as CheckoutDetalleInterface[];
+  return mapVistaDetalleCheckoutRows(data);
 }
 
 export async function createCheckout(
   payload: checkoutBandaInterface,
 ): Promise<checkoutBandaInterface> {
   // Sin .select(): con solo permiso INSERT, PostgREST exige SELECT para devolver la fila.
-  const { error } = await dataBaseSupabase.from(tabla).insert(payload);
+  const { error } = await dataBaseSupabase
+    .from(tabla)
+    .insert(toDb(payload as unknown as Record<string, unknown>));
   if (error) throw error;
   return {
     ...payload,
@@ -105,7 +139,9 @@ export async function createCheckout(
 export async function createCheckoutLlegada(
   payload: CheckoutLlegadaInsert,
 ): Promise<checkoutBandaInterface> {
-  const { error } = await dataBaseSupabase.from(tabla).insert(payload);
+  const { error } = await dataBaseSupabase
+    .from(tabla)
+    .insert(toDb(payload as unknown as Record<string, unknown>));
   if (error) throw error;
   return {
     ...payload,
@@ -120,7 +156,7 @@ export async function updateCheckout(
 ): Promise<checkoutBandaInterface> {
   const { data, error } = await dataBaseSupabase
     .from(tabla)
-    .update(payload)
+    .update(toDb(payload as unknown as Record<string, unknown>))
     .eq("id_checkout", idCheckout)
     .select("id_checkout");
 
@@ -128,7 +164,7 @@ export async function updateCheckout(
 
   if (!data?.length) {
     throw new Error(
-      "No se actualizó el registro: sin permiso en checkout o el perfil no tiene idForaneaBanda vinculado a esta banda. Ejecuta supabase/snippets/politicas/politicas.sql en Supabase.",
+      "No se actualizó el registro: sin permiso en checkout o el perfil no tiene id_foranea_banda vinculado a esta banda. Ejecuta supabase/snippets/politicas/politicas.sql en Supabase.",
     );
   }
 
@@ -159,7 +195,7 @@ export async function getCheckoutNotificacionesLlegada(
     .not("time_envio_confirmacion_llegada", "is", null)
     .is("confirmacion_horallegada", null);
   if (error) throw error;
-  return (data ?? []) as CheckoutDetalleInterface[];
+  return mapVistaDetalleCheckoutRows(data);
 }
 
 export async function getCheckoutNotificacionesIngreso(
@@ -172,7 +208,7 @@ export async function getCheckoutNotificacionesIngreso(
     .not("time_envio_confirmacion_ingreso", "is", null)
     .is("confirmacion_hora_ingreso", null);
   if (error) throw error;
-  return (data ?? []) as CheckoutDetalleInterface[];
+  return mapVistaDetalleCheckoutRows(data);
 }
 
 export async function getCheckoutConfirmadosLlegada(
@@ -184,7 +220,7 @@ export async function getCheckoutConfirmadosLlegada(
     .eq("id_foranea_evento", idEvento)
     .eq("confirmacion_horallegada", true);
   if (error) throw error;
-  return (data ?? []) as CheckoutDetalleInterface[];
+  return mapVistaDetalleCheckoutRows(data);
 }
 
 function filtrarPendientesEntrada(
@@ -264,7 +300,7 @@ export async function getCheckoutPendientesEntrada(
   if (error) throw error;
 
   const desdeVista = filtrarPendientesEntrada(
-    (data ?? []) as CheckoutDetalleInterface[],
+    mapVistaDetalleCheckoutRows(data),
   );
   if (desdeVista.length > 0) return desdeVista;
 
@@ -319,5 +355,5 @@ export async function getHistorialCheckout(
     .eq("confirmacion_hora_ingreso", true)
     .order("hora_llegada_banda", { ascending: true });
   if (error) throw error;
-  return (data ?? []) as CheckoutDetalleInterface[];
+  return mapVistaDetalleCheckoutRows(data);
 }

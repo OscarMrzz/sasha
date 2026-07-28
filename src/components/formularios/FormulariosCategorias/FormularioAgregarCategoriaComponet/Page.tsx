@@ -6,6 +6,7 @@ import {categoriaInterface,  perfilDatosAmpleosInterface,} from "@/models";
 import PerfilesServices from "@/services/perfilesServices";
 import CategoriasServices from "@/services/categoriaServices";
 import { useCategoriaAgregadaStore } from "@/store/CategoriasStore/categoriaAgregadaStore";
+import { categoriaInsertSchema } from "@/models/categorias/categoriaSchema";
 
 type Props = {
   refresacar: () => void;
@@ -90,7 +91,15 @@ export default  function FormularioAgregarCategoriaComponent  ({
         idForaneaFederacion: perfil.idForaneaFederacion || ""
       };
 
-      const creada = await categoriasServices.create(nuevaCategoria as categoriaInterface);
+      const parsed = categoriaInsertSchema.safeParse(nuevaCategoria);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map((i) => i.message).join("; ");
+        openErrorModal ? openErrorModal(msg || "Datos inválidos") : alert(msg || "Datos inválidos");
+        setLoading(false);
+        return;
+      }
+
+      const creada = await categoriasServices.create(parsed.data as categoriaInterface);
       if (creada?.idCategoria) {
         setUltimaCategoria({ codigo: creada.idCategoria });
       }

@@ -1,5 +1,8 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { categoriaDatosAmpleosInterface, categoriaInterface, perfilDatosAmpleosInterface, perfilInterface } from "@/models";
+import { categoriaInsertSchema, categoriaUpdateSchema } from "@/models/categorias/categoriaSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 import PerfilesServices from "./perfilesServices";
 
 
@@ -7,7 +10,7 @@ import PerfilesServices from "./perfilesServices";
 type Interface = categoriaInterface;
 
 const tabla = "categorias";
-const elId = "idCategoria";
+const elId = "id_categoria";
 
 export default class CategoriasServices   {
   perfil: perfilDatosAmpleosInterface | null = null;
@@ -45,7 +48,7 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
                 *,
                 federaciones(*)
             `)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) {
             console.error("❌ Error obteniendo regiones con federaciones:", error);
@@ -53,7 +56,7 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
         }
 
       
-        return data as categoriaDatosAmpleosInterface[];
+        return fromDbMany<categoriaDatosAmpleosInterface>(data ?? []);
     } catch (error) {
         console.error("❌ Error general en getDatosAmpleos:", error);
         throw error;
@@ -67,10 +70,10 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
         }
         const { data, error } = await dataBaseSupabase
         .from(tabla).select("*")
-        .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+        .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
         if (error) throw error;
 
-        return data;
+        return fromDbMany<categoriaInterface>(data ?? []);
     }
 
     async getOne(id: string) {
@@ -82,11 +85,11 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
             .from(tabla)
             .select("*")
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<categoriaInterface>(data);
     }
 
 
@@ -95,15 +98,16 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
         if (!this.perfil || !this.perfil.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
+        const parsed = parseCamel(categoriaInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .insert(toDb(parsed as Record<string, unknown>))
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single()
 
         if (error) throw error;
-        return data;
+        return fromDb<categoriaInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
@@ -111,16 +115,17 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
+        const parsed = parseCamel(categoriaUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion)
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion)
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<categoriaInterface>(data);
     }
 
     async delete(id: string) {
@@ -132,7 +137,7 @@ async getDatosAmpleos(): Promise<categoriaDatosAmpleosInterface[]> {
             .from(tabla)
             .delete()
             .eq(elId, id)
-            .eq("idForaneaFederacion", this.perfil.idForaneaFederacion);
+            .eq("id_foranea_federacion", this.perfil.idForaneaFederacion);
 
         if (error) throw error;
         return true;

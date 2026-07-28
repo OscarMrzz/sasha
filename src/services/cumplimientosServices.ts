@@ -1,12 +1,15 @@
 import { dataBaseSupabase } from "@/lib/supabase";
 import { cumplimientosDatosAmpleosInterface, cumplimientosInterface, perfilDatosAmpleosInterface } from "@/models";
+import { cumplimientosInsertSchema, cumplimientosUpdateSchema } from "@/models/cumplimientos/cumplimientosSchema";
+import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { parseCamel } from "@/services/mappers/parseCamel";
 
 
 
 type Interface = cumplimientosInterface;
 
 const tabla = "cumplimientos";
-const elId = "idCumplimiento";
+const elId = "id_cumplimiento";
 
 export default class cumplimientossServices   {
   perfil: perfilDatosAmpleosInterface | null = null;
@@ -42,19 +45,19 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
         const { data, error } = await dataBaseSupabase
             .from("vistacumplimientoscondatosampleosidforaneafederacion")
             .select(`
-                idCumplimiento,
+                id_cumplimiento,
                 created_at,
-                detalleCumplimiento,
-                puntosCumplimiento,
-                idForaneaCriterio,
-                idCriterio,
-                nombreCriterio,
-                detallesCriterio,
-                puntosCriterio,
-                idForaneaRubrica
+                detalle_cumplimiento,
+                puntos_cumplimiento,
+                id_foranea_criterio,
+                id_criterio,
+                nombre_criterio,
+                detalles_criterio,
+                puntos_criterio,
+                id_foranea_rubrica
                
             `)
-            .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
+            .eq('id_foranea_federacion', this.perfil.idForaneaFederacion)
 
 
         if (error) {
@@ -63,7 +66,7 @@ async getDatosAmpleos(): Promise<cumplimientosDatosAmpleosInterface[]> {
         }
 
        
-        return data as cumplimientosDatosAmpleosInterface[];
+        return fromDbMany<cumplimientosDatosAmpleosInterface>(data ?? []);
     } catch (error) {
         console.error("❌ Error general en getDatosAmpleos:", error);
         throw error;
@@ -78,20 +81,20 @@ async getByIdCriterio(idCriterio: string): Promise<cumplimientosDatosAmpleosInte
         const { data, error } = await dataBaseSupabase
             .from("vistacumplimientoscondatosampleosidforaneafederacion")
             .select(`
-                idCumplimiento,
+                id_cumplimiento,
                 created_at,
-                detalleCumplimiento,
-                puntosCumplimiento,
-                idForaneaCriterio,
-                idCriterio,
-                nombreCriterio,
-                detallesCriterio,
-                puntosCriterio,
-                idForaneaRubrica
+                detalle_cumplimiento,
+                puntos_cumplimiento,
+                id_foranea_criterio,
+                id_criterio,
+                nombre_criterio,
+                detalles_criterio,
+                puntos_criterio,
+                id_foranea_rubrica
                
             `)
-            .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
-            .eq('idForaneaCriterio', idCriterio).order('puntosCumplimiento', { ascending: true });
+            .eq('id_foranea_federacion', this.perfil.idForaneaFederacion)
+            .eq('id_foranea_criterio', idCriterio).order('puntos_cumplimiento', { ascending: true });
 
 
         if (error) {
@@ -102,7 +105,7 @@ async getByIdCriterio(idCriterio: string): Promise<cumplimientosDatosAmpleosInte
     
 
        
-        return data as cumplimientosDatosAmpleosInterface[];
+        return fromDbMany<cumplimientosDatosAmpleosInterface>(data ?? []);
     } catch (error) {
         console.error("❌ Error general en getByIdCriterio:", error);
         throw error;
@@ -117,19 +120,19 @@ async getByIdCriterio(idCriterio: string): Promise<cumplimientosDatosAmpleosInte
         const { data, error } = await dataBaseSupabase
         .from("vistacumplimientosconidforaneafederacion")
             .select(`
-                idCumplimiento,
+                id_cumplimiento,
                 created_at,
-                detalleCumplimiento,
-                puntosCumplimiento,
-                idForaneaCriterio
+                detalle_cumplimiento,
+                puntos_cumplimiento,
+                id_foranea_criterio
                 
             `) 
         
         
-        .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
+        .eq('id_foranea_federacion', this.perfil.idForaneaFederacion)
     
         if (error) throw error;
-        return data;
+        return fromDbMany<cumplimientosInterface>(data ?? []);
     }
     async getPorCriterio(idCriterio: string) {
        
@@ -139,20 +142,20 @@ async getByIdCriterio(idCriterio: string): Promise<cumplimientosDatosAmpleosInte
         const { data, error } = await dataBaseSupabase
         .from("vistacumplimientosconidforaneafederacion")
             .select(`
-                idCumplimiento,
+                id_cumplimiento,
                 created_at,
-                detalleCumplimiento,
-                puntosCumplimiento,
-                idForaneaCriterio
+                detalle_cumplimiento,
+                puntos_cumplimiento,
+                id_foranea_criterio
                 
             `) 
         
         
-        .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
-        .eq('idForaneaCriterio', idCriterio);
+        .eq('id_foranea_federacion', this.perfil.idForaneaFederacion)
+        .eq('id_foranea_criterio', idCriterio);
     
         if (error) throw error;
-    return data as cumplimientosInterface[];
+    return fromDbMany<cumplimientosInterface>(data ?? []);
     }
 
     async getOne(id: string) {
@@ -164,12 +167,12 @@ async getByIdCriterio(idCriterio: string): Promise<cumplimientosDatosAmpleosInte
             .from("vistacumplimientosconidforaneafederacion")
             .select("*")
             .eq(elId, id)
-            .eq('idForaneaFederacion', this.perfil.idForaneaFederacion)
+            .eq('id_foranea_federacion', this.perfil.idForaneaFederacion)
            
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<cumplimientosInterface>(data);
     }
 
 
@@ -178,15 +181,16 @@ async getByIdCriterio(idCriterio: string): Promise<cumplimientosDatosAmpleosInte
         if (!this.perfil || !this.perfil.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
+        const parsed = parseCamel(cumplimientosInsertSchema, dataCreate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .insert(dataCreate)
+            .insert(toDb(parsed as Record<string, unknown>))
        
             .select("*")
             .single()
 
         if (error) throw error;
-        return data;
+        return fromDb<cumplimientosInterface>(data);
     }
 
     async update(id: string, dataUpdate: Interface) {
@@ -194,16 +198,17 @@ async getByIdCriterio(idCriterio: string): Promise<cumplimientosDatosAmpleosInte
         if (!this.perfil?.idForaneaFederacion) {
             throw new Error("No hay federación en el perfil del usuario.");
         }
+        const parsed = parseCamel(cumplimientosUpdateSchema, dataUpdate);
         const { data, error } = await dataBaseSupabase
             .from(tabla)
-            .update(dataUpdate)
+            .update(toDb(parsed as Record<string, unknown>))
             .eq(elId, id)
       
             .select("*")
             .single();
 
         if (error) throw error;
-        return data;
+        return fromDb<cumplimientosInterface>(data);
     }
 
     async delete(id: string) {

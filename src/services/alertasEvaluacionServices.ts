@@ -1,4 +1,5 @@
 import { dataBaseSupabase } from "@/lib/supabase";
+import { fromDbMany } from "@/services/mappers/caseMapper";
 
 export type TipoAlertaEvaluacion = "cumplimiento_duplicado" | "rubrica_duplicada";
 
@@ -22,7 +23,9 @@ export default class AlertasEvaluacionServices {
     const { data, error } = await dataBaseSupabase.rpc("obtener_alertas_evaluacion_duplicada");
 
     if (error) throw error;
-    return (data ?? []) as AlertaEvaluacionInterface[];
+    return fromDbMany<AlertaEvaluacionInterface>(
+      (data ?? []) as Record<string, unknown>[],
+    );
   }
 
   async resolverCumplimientosDuplicados(): Promise<number> {
