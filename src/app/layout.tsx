@@ -199,9 +199,10 @@ export default function RootLayout({
       <html lang="es" className={cn("font-sans", geist.variable)}>
         <head>
           <title>Sasha</title>
-          <link rel="icon" href="/favicon.ico?v=blank" sizes="any" />
-          <link rel="shortcut icon" href="/favicon.ico?v=blank" />
-          <link rel="apple-touch-icon" href="/favicon.ico?v=blank" />
+          <link rel="icon" href="/favicon.ico?v=logo2" sizes="any" />
+          <link rel="icon" type="image/png" href="/logo.png?v=logo2" sizes="any" />
+          <link rel="shortcut icon" href="/favicon.ico?v=logo2" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=logo2" />
         </head>
         <body
           className={`app-bg lg:pt-0 w-full flex min-h-screen font-poppins ${poppins.className}`}
@@ -221,9 +222,10 @@ export default function RootLayout({
     <html lang="es" className={cn("font-sans", geist.variable)}>
       <head>
         <title>Sasha</title>
-        <link rel="icon" href="/favicon.ico?v=blank" sizes="any" />
-        <link rel="shortcut icon" href="/favicon.ico?v=blank" />
-        <link rel="apple-touch-icon" href="/favicon.ico?v=blank" />
+        <link rel="icon" href="/favicon.ico?v=logo2" sizes="any" />
+        <link rel="icon" type="image/png" href="/logo.png?v=logo2" sizes="any" />
+        <link rel="shortcut icon" href="/favicon.ico?v=logo2" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=logo2" />
       </head>
       <body
         className={`app-bg w-full flex flex-col h-full font-poppins ${poppins.className}`}
