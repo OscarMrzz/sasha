@@ -11,9 +11,9 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
 const inputClass =
-  "h-11 w-full rounded-xl border border-slate-500 bg-slate-700/50 px-3 text-sm text-gray-100 placeholder:text-gray-500 transition focus:border-primario focus:outline-none focus:ring-2 focus:ring-primario/35";
+  "h-11 w-full rounded-xl border border-[var(--vz-border-strong)] bg-white px-3 text-sm text-[var(--app-fg)] placeholder:text-[var(--app-fg-muted)] transition focus:border-primario focus:outline-none focus:ring-2 focus:ring-primario/35";
 
-const labelClass = "mb-1.5 block text-xs font-medium uppercase tracking-wide text-gray-400";
+const labelClass = "field-label";
 
 type Props = {
   rutaCancelar?: string;
@@ -107,21 +107,21 @@ export default function RecuperarContrasenaAdmin({ rutaCancelar = "/" }: Props) 
     <div className="mx-auto w-full max-w-lg pb-2">
       <header className="mb-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primario">Administración</p>
-        <h1 className="mt-1 flex items-center gap-2 text-2xl font-bold tracking-tight text-gray-50">
+        <h1 className="mt-1 flex items-center gap-2 text-2xl font-bold tracking-tight">
           <KeyIcon className="h-7 w-7 text-primario" aria-hidden />
           Recuperar contraseña
         </h1>
-        <p className="mt-1 text-sm text-gray-400">
+        <p className="mt-1 text-sm text-[var(--app-fg-muted)]">
           Selecciona un usuario por correo y asigna una contraseña nueva.
         </p>
       </header>
 
-      <section className="rounded-2xl border border-slate-500/60 bg-slate-800/35 p-4 sm:p-5">
+      <section className="rounded-2xl border border-[var(--vz-border-strong)] bg-white p-4 sm:p-5">
         {cargandoCorreos ? (
-          <p className="text-sm text-gray-400">Cargando correos…</p>
+          <p className="text-sm text-[var(--app-fg-muted)]">Cargando correos…</p>
         ) : errorCarga ? (
           <p
-            className="rounded-xl border border-red-500/40 bg-red-950/40 px-3 py-2 text-sm text-red-200"
+            className="rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700"
             role="alert"
           >
             {errorCarga}
@@ -130,7 +130,7 @@ export default function RecuperarContrasenaAdmin({ rutaCancelar = "/" }: Props) 
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             {errorMsg ? (
               <p
-                className="rounded-xl border border-red-500/40 bg-red-950/40 px-3 py-2 text-sm text-red-200"
+                className="rounded-xl border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700"
                 role="alert"
               >
                 {errorMsg}
@@ -139,7 +139,7 @@ export default function RecuperarContrasenaAdmin({ rutaCancelar = "/" }: Props) 
 
             {exito ? (
               <p
-                className="rounded-xl border border-emerald-500/40 bg-emerald-950/40 px-3 py-2 text-sm text-emerald-200"
+                className="rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-sm text-emerald-800"
                 role="status"
               >
                 Contraseña restablecida correctamente.
@@ -203,14 +203,14 @@ export default function RecuperarContrasenaAdmin({ rutaCancelar = "/" }: Props) 
                 type="button"
                 onClick={onClickCancelar}
                 disabled={loading}
-                className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-500 bg-slate-700/50 px-5 text-sm font-semibold text-gray-100 transition hover:border-slate-400 hover:bg-slate-600/50 disabled:pointer-events-none disabled:opacity-45"
+                className="inline-flex h-11 items-center justify-center rounded-xl border border-[var(--vz-border-strong)] bg-white px-5 text-sm font-semibold text-[var(--app-fg)] transition hover:bg-[#f5f5f5] disabled:pointer-events-none disabled:opacity-45"
               >
                 Cancelar
               </button>
               <button
                 type="submit"
                 disabled={loading || cargandoCorreos || !!errorCarga}
-                className="inline-flex h-11 items-center justify-center rounded-xl bg-primario px-6 text-sm font-semibold text-slate-900 shadow-lg shadow-primario/20 transition hover:brightness-110 disabled:pointer-events-none disabled:opacity-45"
+                className="btn-surface inline-flex h-11 items-center justify-center rounded-xl px-6 text-sm font-semibold disabled:pointer-events-none disabled:opacity-45"
               >
                 {loading ? "Guardando…" : "Aceptar"}
               </button>

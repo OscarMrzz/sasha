@@ -51,22 +51,22 @@ export default function SeccionEventosDelDia({
 
   return (
     <>
-      <section className="rounded-xl border border-slate-600/40 bg-slate-800/40 p-5">
-        <h2 className="mb-2 border-l-4 border-[#00b4d8] pl-3 text-xl font-bold text-white">
+      <section className="panel-outline p-5">
+        <h2 className="mb-2 border-l-4 border-[#00b4d8] pl-3 text-xl font-bold">
           Eventos ({fechaHoyISO})
         </h2>
-        <p className="mb-4 text-sm text-slate-400">
+        <p className="mb-4 text-sm text-[var(--app-fg-muted)]">
           Progreso del evento, inicializacion y finalizacion de eventos.
         </p>
         <div className="max-h-[40rem] min-h-[14rem] overflow-y-auto pr-1">
           {cargando ? (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-36 animate-pulse rounded-xl bg-slate-700" />
+                <div key={i} className="h-36 animate-pulse rounded-xl border border-neutral-200 bg-[#f5f5f5]" />
               ))}
             </div>
           ) : eventosDelDia.length === 0 ? (
-            <p className="py-8 text-center text-slate-400">
+            <p className="empty-state">
               No hay eventos programados para hoy
             </p>
           ) : (

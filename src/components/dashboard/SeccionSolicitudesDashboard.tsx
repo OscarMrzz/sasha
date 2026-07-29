@@ -51,20 +51,20 @@ export default function SeccionSolicitudesDashboard({
   };
 
   return (
-    <div className="rounded-xl border border-slate-600/40 bg-slate-800/40 p-5">
+    <div className="panel-outline p-5">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-l-4 border-[#00b4d8] pl-3">
-        <h2 className="text-xl font-bold text-white">Solicitudes de revisión</h2>
+        <h2 className="text-xl font-bold">Solicitudes de revisión</h2>
         <div className="flex items-center gap-2 pr-1">
           <div
-            className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-slate-700/80 text-slate-200"
+            className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-200 bg-[#f5f5f5] text-[var(--app-fg-muted)]"
             title={`${total} solicitud${total === 1 ? "" : "es"}`}
           >
             <BellIcon className="h-5 w-5" aria-hidden />
             <span
               className={`absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold ${
                 total > 0
-                  ? "bg-[#00b4d8] text-slate-900"
-                  : "bg-slate-500/90 text-slate-100"
+                  ? "bg-[#00b4d8] text-white"
+                  : "bg-neutral-300 text-[var(--app-fg-muted)]"
               }`}
             >
               {textoContadorSolicitudes(total)}
@@ -75,7 +75,7 @@ export default function SeccionSolicitudesDashboard({
               type="button"
               onClick={() => void onRefrescarSolicitudes()}
               disabled={iconoCargando}
-              className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-500/50 bg-slate-700/80 px-3 text-sm font-medium text-white transition hover:bg-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn-surface inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
               title="Actualizar solicitudes"
             >
               <ArrowPathIcon
@@ -97,35 +97,35 @@ export default function SeccionSolicitudesDashboard({
         />
       )}
 
-      <div className="max-h-[38rem] overflow-y-auto rounded-lg border border-slate-600/30 pr-1">
+      <div className="max-h-[38rem] overflow-y-auto rounded-lg border border-[var(--vz-border)] pr-1">
         {cargando ? (
           <div className="space-y-3 p-2">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-20 animate-pulse rounded-lg bg-slate-700" />
+              <div key={i} className="h-20 animate-pulse rounded-lg bg-[#f5f5f5]" />
             ))}
           </div>
         ) : lista.length === 0 ? (
-          <p className="p-6 text-center text-slate-400">No hay solicitudes registradas</p>
+          <p className="empty-state m-2">No hay solicitudes registradas</p>
         ) : (
           <div className="flex flex-col gap-3 p-2">
             {lista.map((solicitud, index) => (
               <div
                 key={solicitud.idSolicitud}
                 onDoubleClick={() => abrir(solicitud)}
-                className="flex cursor-pointer flex-row justify-between rounded-lg bg-slate-700 p-4 shadow-md transition-colors hover:bg-slate-600"
+                className="flex cursor-pointer flex-row justify-between rounded-lg border border-[var(--vz-border)] bg-white p-4 transition-colors hover:bg-[#fafafa]"
               >
                 <div className="min-w-0 pr-2">
                   <div className="flex gap-3">
-                    <span className="text-2xl font-black text-slate-500">{index + 1}</span>
+                    <span className="text-2xl font-black text-neutral-300">{index + 1}</span>
                     <div>
-                      <h3 className="text-lg font-bold text-white">{solicitud.nombreBanda}</h3>
-                      <p className="truncate text-sm text-slate-400">
+                      <h3 className="text-lg font-bold">{solicitud.nombreBanda}</h3>
+                      <p className="truncate text-sm text-[var(--app-fg-muted)]">
                         {solicitud.LugarEvento} · {solicitud.nombreRegion}
                       </p>
-                      <p className="mt-1 line-clamp-2 text-gray-400">
+                      <p className="mt-1 line-clamp-2 text-[var(--app-fg-muted)]">
                         Detalles: {solicitud.detallesSolicitud}
                       </p>
-                      <p className="mt-1 text-xs uppercase text-[#00b4d8]/90">
+                      <p className="mt-1 text-xs uppercase text-[#00b4d8]">
                         Estado: {solicitud.estado}
                       </p>
                     </div>
@@ -134,7 +134,7 @@ export default function SeccionSolicitudesDashboard({
                 <div className="shrink-0">
                   <EllipsisVerticalIcon
                     onClick={() => abrir(solicitud)}
-                    className="h-6 w-6 cursor-pointer text-gray-400 hover:text-gray-300"
+                    className="h-6 w-6 cursor-pointer text-[var(--app-fg-muted)] hover:text-[var(--app-fg)]"
                   />
                 </div>
               </div>

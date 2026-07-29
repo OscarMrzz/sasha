@@ -22,7 +22,7 @@ export default function CardRowSolicitudSancion({
   return (
     <div
       onDoubleClick={onView}
-      className="flex min-h-[5rem] w-full flex-wrap items-center justify-between gap-3 rounded-lg bg-slate-700 p-4 shadow-md cursor-pointer hover:bg-slate-600"
+      className="flex min-h-[5rem] w-full flex-wrap items-center justify-between gap-3 rounded-lg card-row-bg p-4 shadow-md cursor-pointer"
     >
       <div className="min-w-0 flex-1 pr-4">
         <div className="flex flex-wrap items-center gap-2">

@@ -103,7 +103,7 @@ export default function CardRowAgendaBanda({
 
   const cardClass = tenue
     ? "border-slate-600/60 bg-slate-800/35 text-slate-500"
-    : "border-slate-600/90 bg-slate-700/55 text-slate-100 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]";
+    : "border-slate-600/90 card-row-bg text-slate-100 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]";
 
   const ejecutarConfirmar = async () => {
     if (!idBanda?.trim()) return;

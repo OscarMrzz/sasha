@@ -10,7 +10,7 @@ type Props = {
 
 export default function CardRowHistorialCheckout({ registro, onView }: Props) {
   return (
-    <div className="flex min-h-[5rem] w-full flex-wrap items-center justify-between gap-3 rounded-lg bg-slate-700 p-4 shadow-md">
+    <div className="flex min-h-[5rem] w-full flex-wrap items-center justify-between gap-3 rounded-lg card-row-bg p-4 shadow-md">
       <div className="min-w-0 flex-1 pr-4">
         <h2 className="text-lg font-semibold text-white">
           {registro.nombreBanda ?? "Banda sin nombre"}

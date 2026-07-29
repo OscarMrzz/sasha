@@ -20,11 +20,11 @@ export default function CardRowSancion({
   return (
     <div
       onDoubleClick={() => abrirInformacion(sancion)}
-      className="flex min-h-[5rem] w-full flex-wrap items-center justify-between rounded-lg bg-slate-700 p-4 shadow-md cursor-pointer hover:bg-slate-600"
+      className="flex min-h-[5rem] w-full flex-wrap items-center justify-between rounded-lg card-row-bg p-4 shadow-md cursor-pointer"
     >
       <div className="flex min-w-0 flex-1 items-center gap-4 pr-4">
         {index != null ? (
-          <p className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-600 text-lg font-bold text-slate-100">
+          <p className="card-row-index text-lg">
             {index}
           </p>
         ) : null}

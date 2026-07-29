@@ -43,7 +43,7 @@ export default function CardRowJuradoConRubrica({
     <div
       data-testid="card-row-jurado"
       data-codigo={registro.idRegistroEvaluador ?? registro.idForaneaPerfil}
-      className="w-full rounded-lg bg-slate-600 p-4 shadow-md"
+      className="w-full rounded-lg card-row-bg p-4 shadow-md"
     >
       <div className="flex flex-row items-start justify-between gap-3">
         <div className="min-w-0">

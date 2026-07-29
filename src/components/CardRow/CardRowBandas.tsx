@@ -16,10 +16,10 @@ export default function CardRowBandas({ index, banda, abrirInformacion, abrirEdi
       data-testid="card-row"
       data-codigo={banda.idBanda}
       onDoubleClick={() => abrirInformacion(banda)}
-      className="w-full min-h-25 bg-slate-700 flex flex-row justify-between p-4 cursor-pointer hover:bg-slate-600 rounded-lg shadow-md"
+      className="w-full min-h-25 card-row-bg flex flex-row justify-between p-4 cursor-pointer rounded-lg shadow-md"
     >
       <div className="flex min-w-0 items-center gap-4">
-        <p className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-600 text-lg font-bold text-slate-100">
+        <p className="card-row-index text-lg">
           {index}
         </p>
         <div className="min-w-0">

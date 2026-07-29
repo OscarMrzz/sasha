@@ -86,7 +86,7 @@ const NavBard = () => {
   if (!haySesionIniciada || !perfil || !perfil.roles?.nombreRol) {
     // Puedes mostrar un loader, mensaje neutro, o simplemente nada
     return (
-      <header className="bg-grey-500/5 backdrop-blur-md h-25 w-full flex text-white items-center justify-between px-15 fixed top-0 z-50">
+      <header className="bg-grey-500/5 backdrop-blur-md h-25 w-full flex text-[var(--app-fg)] items-center justify-between px-15 fixed top-0 z-50">
         <div className="flex flex-row items-center">
           <div className="text-xl lg:text-xl font-bold text-slate-400" style={{ letterSpacing: "0.3em" }}>
             <span>SASHA</span>
@@ -96,7 +96,7 @@ const NavBard = () => {
     );
   } 
   return (
-    <div className=" bg-grey-500/5 backdrop-blur-md h-18  w-full flex text-white items-center justify-between px-8 ls:px-15 fixed   top-0 z-50">
+    <div className=" bg-grey-500/5 backdrop-blur-md h-18  w-full flex text-[var(--app-fg)] items-center justify-between px-8 ls:px-15 fixed   top-0 z-50">
       <div className="flex flex-row  items-center   ">
         <div className="text-xl lg:text-xl font-bold " style={{ letterSpacing: "0.3em" }}>
           <Link href={direcionHomesegunRol}>SASHA</Link>

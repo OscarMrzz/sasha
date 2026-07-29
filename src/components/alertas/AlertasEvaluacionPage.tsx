@@ -101,11 +101,11 @@ export default function AlertasEvaluacionPage() {
         variante="peligro"
       />
 
-      <section className="rounded-xl border border-slate-600/40 bg-slate-800/40 p-5">
+      <section className="rounded-xl border border-[var(--vz-border-strong)] p-5">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-l-4 border-amber-500 pl-3">
           <div>
-            <h1 className="text-2xl font-bold text-white">Alertas</h1>
-            <p className="mt-1 text-sm text-slate-400">
+            <h1 className="text-2xl font-bold">Alertas</h1>
+            <p className="mt-1 text-sm text-[var(--app-fg-muted)]">
               Evaluaciones duplicadas detectadas en cumplimientos o comentarios de rúbrica.
             </p>
           </div>
@@ -113,7 +113,7 @@ export default function AlertasEvaluacionPage() {
             type="button"
             onClick={() => void cargarAlertas()}
             disabled={cargando || resolviendo}
-            className="inline-flex items-center gap-2 rounded-lg bg-[var(--color-primario)] px-4 py-2 font-semibold text-slate-950 transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+            className="btn-surface inline-flex items-center gap-2 rounded-lg px-4 py-2 font-semibold disabled:cursor-not-allowed disabled:opacity-50"
           >
             <ArrowPathIcon className={`h-5 w-5 ${cargando ? "animate-spin" : ""}`} aria-hidden />
             {cargando ? "Refrescando…" : "Refrescar"}
@@ -121,9 +121,9 @@ export default function AlertasEvaluacionPage() {
         </div>
 
         {cargando ? (
-          <p className="py-8 text-center text-sm text-slate-400">Cargando alertas…</p>
+          <p className="py-8 text-center text-sm text-[var(--app-fg-muted)]">Cargando alertas…</p>
         ) : alertas.length === 0 ? (
-          <p className="rounded-lg bg-slate-700/50 py-8 text-center text-sm text-slate-300">
+          <p className="rounded-lg border border-[var(--vz-border)] bg-[#f5f5f5] py-8 text-center text-sm text-[var(--app-fg-muted)]">
             No hay alertas de evaluación duplicada.
           </p>
         ) : (

@@ -34,7 +34,7 @@ const ConfirmAsistenciaModal = ({
         onClose={onClose}
         className="fixed z-[200] inset-0 m-auto flex border-0 outline-none bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-xs animate-zoom-in duration-500"
       >
-        <div className="bg-slate-700 rounded-2xl w-sm flex flex-col gap-4 p-6">
+        <div className="modal-bg rounded-2xl w-sm flex flex-col gap-4 p-6">
           <div className="flex items-center gap-3">
             <ExclamationTriangleIcon className="w-7 h-7 shrink-0 text-sky-400" />
             <h2 className="text-white text-lg font-bold">Confirmar asistencia</h2>

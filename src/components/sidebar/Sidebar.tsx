@@ -46,19 +46,19 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`desaparecer-scrollbar sticky  hidden min-h-screen h-full shrink-0 flex-col border-r border-slate-700/50 bg-slate-800/50 transition-[width] duration-200 lg:flex ${widthClass} ${
+      className={`desaparecer-scrollbar sidebar-bg sticky hidden min-h-screen h-full shrink-0 flex-col border-r transition-[width] duration-200 lg:flex ${widthClass} ${
         hydrated ? "opacity-100" : "opacity-0"
       }`}
     >
       <div className="h-full pt-16">
 
     
-      <div className={`flex shrink-0 items-center border-b border-slate-700/50 py-2 ${collapsed ? "justify-center px-2" : "justify-end px-3"}`}>
+      <div className={`flex shrink-0 items-center border-b border-[var(--sidebar-border)] py-2 ${collapsed ? "justify-center px-2" : "justify-end px-3"}`}>
         <button
           type="button"
           onClick={toggle}
           aria-label={collapsed ? "Expandir menú" : "Colapsar menú"}
-          className="rounded-md p-2 text-slate-300 transition-colors hover:bg-slate-700/50 hover:text-white"
+          className="rounded-md p-2 text-[var(--sidebar-fg-muted)] transition-colors hover:bg-[var(--vz-surface-hover)] hover:text-[var(--sidebar-fg)]"
         >
           {collapsed ? (
             <ChevronDoubleRightIcon className="h-5 w-5" />

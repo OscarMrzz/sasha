@@ -52,7 +52,7 @@ import CriteriosServices from "@/services/criteriosServices";
 import { criterioEvaluacionDatosAmpleosInterface } from "@/models";
 
 const selectBaseClass =
-  "h-11 w-full rounded-lg border border-slate-600 bg-slate-700/50 px-3 text-sm text-slate-100 transition-[border-color,box-shadow] focus:border-[var(--color-primario)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)]";
+  "field-select h-11 w-full rounded-lg border px-3 text-sm transition-[border-color,box-shadow] focus:border-[var(--color-primario)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)]";
 
 export default function RubricaHomeContent() {
   const dispatch = useDispatch();
@@ -464,14 +464,14 @@ export default function RubricaHomeContent() {
           <BuscadorRow filtrarBuscador={filtrarBuscador} />
           <div className="flex items-center gap-2">
             <button
-              className="bg-slate-100 px-4 py-2 rounded-lg text-slate-700 hover:bg-slate-300 cursor-pointer flex gap-2"
+              className="btn-surface flex cursor-pointer gap-2 rounded-lg px-4 py-2"
               onClick={abrirModalCargarPaquete}
             >
               <ArrowUpTrayIcon className="w-5 h-5 rounded-2xl" />
               Cargar
             </button>
             <button
-              className="bg-slate-100 px-4 py-2 rounded-lg text-slate-700 hover:bg-slate-300 cursor-pointer flex gap-2"
+              className="btn-surface flex cursor-pointer gap-2 rounded-lg px-4 py-2"
               onClick={abrirFormularioAgregar}
             >
               <PlusIcon className="w-5 h-5 rounded-2xl" />
@@ -482,7 +482,7 @@ export default function RubricaHomeContent() {
 
         <div className="grid gap-3 sm:grid-cols-2 sm:max-w-2xl">
           <div className="min-w-0">
-            <label htmlFor="filtro-categoria" className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/70">
+            <label htmlFor="filtro-categoria" className="field-label">
               Categoría
             </label>
             <select
@@ -492,11 +492,11 @@ export default function RubricaHomeContent() {
               onChange={seleccionarCategoria}
               disabled={!cargandoFiltros}
             >
-              <option className="bg-slate-800 text-slate-100" value="">
+              <option value="">
                 Todas las categorías
               </option>
               {categoriasLista.map((categoria) => (
-                <option className="bg-slate-800 text-slate-100" key={categoria.idCategoria} value={categoria.idCategoria}>
+                <option key={categoria.idCategoria} value={categoria.idCategoria}>
                   {categoria.nombreCategoria}
                 </option>
               ))}
@@ -504,7 +504,7 @@ export default function RubricaHomeContent() {
           </div>
 
           <div className="min-w-0">
-            <label htmlFor="filtro-version" className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/70">
+            <label htmlFor="filtro-version" className="field-label">
               Versión
             </label>
             <select
@@ -514,11 +514,11 @@ export default function RubricaHomeContent() {
               onChange={seleccionarVersion}
               disabled={!cargandoFiltros}
             >
-              <option className="bg-slate-800 text-slate-100" value="">
+              <option value="">
                 Todas las versiones
               </option>
               {versionesList.map((version) => (
-                <option className="bg-slate-800 text-slate-100" key={version} value={version}>
+                <option key={version} value={version}>
                   {version}
                 </option>
               ))}

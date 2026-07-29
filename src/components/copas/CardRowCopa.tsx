@@ -32,7 +32,7 @@ export default function CardRowCopa({
       data-testid="card-row-copa"
       data-codigo={copa.id_copas}
       onDoubleClick={() => abrirInformacion(copa)}
-      className="flex w-full min-h-25 cursor-pointer flex-row justify-between rounded-lg bg-slate-700 p-4 shadow-md hover:bg-slate-600"
+      className="flex w-full min-h-25 cursor-pointer flex-row justify-between rounded-lg card-row-bg p-4 shadow-md"
     >
       <div className="min-w-0">
         <h2 className="text-xl font-bold text-white">

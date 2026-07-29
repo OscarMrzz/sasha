@@ -15,7 +15,7 @@ export default function CardRowAsistencia({ fila, index }: Props) {
       data-testid="card-row-asistencia"
       data-codigo={fila.id_foranea_banda}
       className={cn(
-        "flex w-full flex-col gap-4 rounded-xl bg-slate-700 p-5 shadow-md sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-6 animate-blurred-fade-in hover:bg-slate-600/95",
+        "flex w-full flex-col gap-4 rounded-xl card-row-bg p-5 shadow-md sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:p-6 animate-blurred-fade-in",
       )}
       style={
         index != null && index > 0

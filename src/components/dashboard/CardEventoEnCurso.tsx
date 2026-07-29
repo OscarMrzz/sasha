@@ -20,7 +20,7 @@ type Props = {
 };
 
 const btnClass =
-  "rounded-lg border border-slate-500/60 px-2 py-1.5 text-xs font-medium text-white transition hover:border-[#00b4d8]/60 hover:bg-slate-600/80";
+  "rounded-lg border border-[var(--vz-border-strong)] px-2 py-1.5 text-xs font-medium transition hover:border-[#00b4d8]/60 hover:bg-[#f5f5f5]";
 
 export default function CardEventoEnCurso({
   evento,
@@ -47,20 +47,20 @@ export default function CardEventoEnCurso({
   return (
     <div
       onDoubleClick={() => onDoubleClick?.(evento)}
-      className="relative flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border border-slate-600/50 bg-slate-700 p-4 shadow-md transition-colors hover:bg-slate-600"
+      className="relative flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border border-[var(--vz-border-strong)] bg-white p-4 transition-colors hover:bg-[#fafafa]"
     >
       <div className="absolute right-3 top-3 z-[1]" onDoubleClick={(e) => e.stopPropagation()}>
         <IndicadorEstadoEvento iniciado={evento.estado_evento === "iniciado"} />
       </div>
       <CirculoProgreso porcentaje={porcentaje} size={100} stroke={9} />
       <div className="min-w-0 flex-1">
-        <h3 className=" text-lg font-bold text-white">{evento.LugarEvento || "—"}</h3>
-        <p className="mt-1 text-sm text-slate-400">
+        <h3 className="text-lg font-bold">{evento.LugarEvento || "—"}</h3>
+        <p className="mt-1 text-sm text-[var(--app-fg-muted)]">
           Región: {evento.regiones?.nombreRegion ?? "—"}
         </p>
-        <p className="mt-2 text-sm text-slate-300">
+        <p className="mt-2 text-sm">
           <span className="font-semibold text-[#00b4d8]">{participaron}</span>
-          <span className="text-slate-500"> / </span>
+          <span className="text-[var(--app-fg-muted)]"> / </span>
           <span className="font-medium">{confirmadas}</span>
         </p>
       </div>

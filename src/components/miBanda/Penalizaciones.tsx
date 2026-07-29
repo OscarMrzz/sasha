@@ -21,38 +21,38 @@ export function Penalizaciones({
         className
       )}
     >
-      <section className="rounded-2xl border border-amber-500/20 bg-slate-700/60 p-4 backdrop-blur-sm md:p-5">
+      <section className="rounded-2xl border border-amber-500/30 bg-transparent p-4 md:p-5">
         <div className="flex items-start gap-3">
-          <div className="rounded-lg bg-amber-500/15 p-2 text-amber-400">
+          <div className="rounded-lg bg-amber-500/15 p-2 text-amber-600">
             <AlertTriangle className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-white">
+            <h2 className="text-sm font-semibold">
               Penalizaciones
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[var(--app-fg-muted)]">
               Registros de sanción en la federación
             </p>
-            <p className="mt-2 text-3xl font-black tabular-nums text-amber-200">
+            <p className="mt-2 text-3xl font-black tabular-nums text-amber-600">
               {penalizacionesCount}
             </p>
           </div>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-blue-500/20 bg-slate-700/60 p-4 backdrop-blur-sm md:p-5">
+      <section className="rounded-2xl border border-[#00b4d8]/30 bg-transparent p-4 md:p-5">
         <div className="flex items-start gap-3">
-          <div className="rounded-lg bg-blue-500/15 p-2 text-blue-400">
+          <div className="rounded-lg bg-[#00b4d8]/15 p-2 text-[#00b4d8]">
             <CalendarDays className="h-5 w-5" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-white">
+            <h2 className="text-sm font-semibold">
               Eventos (temporada)
             </h2>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-[var(--app-fg-muted)]">
               Asistencia según ranking de temporada
             </p>
-            <p className="mt-2 text-3xl font-black tabular-nums text-blue-200">
+            <p className="mt-2 text-3xl font-black tabular-nums text-[#00b4d8]">
               {asistenciaEventos ?? "—"}
             </p>
           </div>

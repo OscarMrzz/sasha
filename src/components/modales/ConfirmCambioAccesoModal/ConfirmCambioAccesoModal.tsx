@@ -44,7 +44,7 @@ export default function ConfirmCambioAccesoModal({
         onClose={onClose}
         className="fixed z-[200] inset-0 m-auto flex border-0 outline-none bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-xs animate-zoom-in duration-500"
       >
-        <div className="bg-slate-700 rounded-2xl w-sm max-w-[calc(100vw-2rem)] flex flex-col gap-4 p-6">
+        <div className="modal-bg rounded-2xl w-sm max-w-[calc(100vw-2rem)] flex flex-col gap-4 p-6">
           <div className="flex items-center gap-3">
             <Icon
               className={`h-7 w-7 shrink-0 ${activando ? "text-emerald-400" : "text-amber-400"}`}

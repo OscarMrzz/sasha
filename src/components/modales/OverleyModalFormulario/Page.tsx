@@ -31,8 +31,8 @@ const OverleyModalFormulario = ({ open, onClose, children }: OverleyModalProps) 
         onClose={onClose}
         className="fixed z-[100] inset-0 m-auto flex border-0 outline-none backdrop:bg-black/50 backdrop:backdrop-blur-xs animate-zoom-in duration-500  "
       >
-        <div onDoubleClick={(e) => e.stopPropagation()} className={`modal-scroll w-2xl  h-[90vh]  bg-slate-600 `}>
-          <div className="p-6 pb-28 text-white ">{children}</div>
+        <div onDoubleClick={(e) => e.stopPropagation()} className="modal-scroll modal-form-bg w-2xl h-[90vh]">
+          <div className="p-6 pb-28 modal-form-text">{children}</div>
         </div>
       </dialog>
     ) : null;

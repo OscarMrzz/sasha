@@ -22,12 +22,12 @@ export default function CardAccesosEvento({
   const tags = etiquetasEventoDashboard(evento, fechaHoyISO);
 
   return (
-    <article className="flex min-h-0 flex-col overflow-hidden rounded-xl border border-slate-600/50 bg-slate-700/40 shadow-md">
-      <header className="shrink-0 border-b border-slate-600/50 bg-slate-800/60 px-3 py-3">
-        <h3 className="line-clamp-2 text-base font-bold leading-tight text-white">
+    <article className="flex min-h-0 flex-col overflow-hidden rounded-xl border border-[var(--vz-border-strong)]">
+      <header className="shrink-0 border-b border-[var(--vz-border)] px-3 py-3">
+        <h3 className="line-clamp-2 text-base font-bold leading-tight">
           {evento.LugarEvento || "—"}
         </h3>
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-xs text-[var(--app-fg-muted)]">
           {evento.regiones?.nombreRegion ?? "—"} · {evento.fechaEvento ?? "—"}
         </p>
         {tags.length > 0 ? (
@@ -35,7 +35,7 @@ export default function CardAccesosEvento({
             {tags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-[#00b4d8]/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#00b4d8]"
+                className="rounded-full bg-[#00b4d8]/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#00b4d8]"
               >
                 {tag}
               </span>
@@ -46,7 +46,7 @@ export default function CardAccesosEvento({
 
       <div className="max-h-[26rem] min-h-[10rem] flex-1 space-y-2 overflow-y-auto p-2 xl:max-h-[30rem]">
         {categorias.length === 0 ? (
-          <p className="py-6 text-center text-xs text-slate-400">
+          <p className="empty-state py-6 text-xs">
             No hay categorías con bandas confirmadas en este evento
           </p>
         ) : (
@@ -62,7 +62,7 @@ export default function CardAccesosEvento({
         )}
       </div>
 
-      <p className="shrink-0 border-t border-slate-600/40 px-3 py-2 text-center text-xs text-slate-500">
+      <p className="shrink-0 border-t border-[var(--vz-border)] px-3 py-2 text-center text-xs text-[var(--app-fg-muted)]">
         {categorias.length} categoría{categorias.length !== 1 ? "s" : ""}
       </p>
     </article>

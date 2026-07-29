@@ -28,9 +28,9 @@ export default function SidebarNav({ links, collapsed = false, onNavigate, class
               type="button"
               aria-label={label}
               aria-current={isActive ? "page" : undefined}
-              className={`flex w-full cursor-pointer items-center py-3 text-left  font-bold transition-colors hover:text-slate-400 ${
+              className={`sidebar-link flex w-full cursor-pointer items-center py-3 text-left font-bold ${
                 collapsed ? "justify-center px-2" : "px-3"
-              } ${isActive ? "border-l-4 border-sky-400 text-sky-300" : "text-white"}`}
+              } ${isActive ? "sidebar-link-active" : ""}`}
             >
               <Icon className={`h-6 w-6 shrink-0 ${collapsed ? "" : "ml-1"}`} aria-hidden="true" />
               {!collapsed && <span className="ml-3 truncate font-light">{label}</span>}

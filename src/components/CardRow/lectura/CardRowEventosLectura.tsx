@@ -32,7 +32,7 @@ export default function CardRowEventosLectura({
       data-testid="card-row"
       data-codigo={evento.idEvento}
    
-      className="relative w-full min-h-25 rounded-lg bg-slate-700 p-4 shadow-md flex cursor-pointer flex-row justify-between hover:bg-slate-600"
+      className="relative w-full min-h-25 rounded-lg card-row-bg p-4 shadow-md flex cursor-pointer flex-row justify-between"
     >
     
 

@@ -33,7 +33,7 @@ export default function CardRowEquipoEvaluadorLectura({ registro, compact = fals
   }
 
   return (
-    <div className="w-full min-h-20 rounded-lg bg-slate-600 p-4 shadow-md">
+    <div className="w-full min-h-20 rounded-lg card-row-bg p-4 shadow-md">
       <h2 className="text-xl font-bold text-white">{nombre}</h2>
       <p className="text-slate-200">Rol: {rol}</p>
     </div>

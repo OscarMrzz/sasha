@@ -13,7 +13,7 @@ function fmtFecha(val: string | Date | null | undefined): string {
 
 export default function CardRowAplicacionSancion({ registro }: Props) {
   return (
-    <div className="flex min-h-[5rem] w-full flex-col gap-1 rounded-lg border border-slate-700  shadow-md hover:bg-slate-600">
+    <div className="flex min-h-[5rem] w-full flex-col gap-1 rounded-lg border border-slate-700 shadow-md">
       <div className="flex items-start justify-between gap-2 p-4">
         <h2 className="text-lg font-semibold text-white">
           {registro.nombreBanda ?? "—"}
@@ -30,7 +30,7 @@ export default function CardRowAplicacionSancion({ registro }: Props) {
 
 
       {registro.justificacion && (
-        <p className="mt-1 text-xs italic text-slate-500  line-clamp-2">
+        <p className="mt-1 text-xs italic text-slate-500 line-clamp-2">
           "{registro.justificacion}"
         </p>
       )}

@@ -8,9 +8,10 @@
 @plugin "@midudev/tailwind-animations";
 
 @theme {
+  /* Light + acento brand */
   --color-primario: #00b4d8;
-  --theme-color-secundario: #3d405b;
-  --color-terciario: #f9a18c;
+  --theme-color-secundario: #f5f5f5;
+  --color-terciario: #737373;
 }
 
 *:focus {
@@ -23,13 +24,13 @@ body:has(dialog:modal) {
 /* Estilo para scrollbars modernas */
 .scrollbar-estetica {
   scrollbar-width: thin;
-  scrollbar-color: #92b2f7 rgba(0, 0, 0, 0.08); /* thumb color, track color */
+  scrollbar-color: #a3a3a3 rgba(0, 0, 0, 0.06);
 }
 
 .modal-scroll {
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.8) transparent;
+  scrollbar-color: rgba(0, 0, 0, 0.35) transparent;
 }
 
 /* Para navegadores Webkit (Chrome, Edge, Safari) */
@@ -39,17 +40,442 @@ body:has(dialog:modal) {
 }
 
 .scrollbar-estetica::-webkit-scrollbar-thumb {
-  background: #2563eb;
+  background: #d4d4d4;
   border-radius: 8px;
 }
 
 .scrollbar-estetica::-webkit-scrollbar-track {
-  background: #ff8400;
+  background: transparent;
 }
 
 /* Fondo plano login / páginas de error */
 .login {
-  background-color: rgb(2 6 23);
+  background-color: #ffffff;
+}
+
+/*
+ * Tema claro — fondo blanco, textos oscuros, cards en gris claro.
+ * Cambiá solo las variables para retemar.
+ */
+:root {
+  --vz-black: #171717;
+  --vz-elevated: #ffffff;
+  --vz-surface: #f5f5f5;
+  --vz-surface-hover: #eeeeee;
+  --vz-border: #e5e5e5;
+  --vz-border-strong: #d4d4d4;
+  --vz-muted: #737373;
+  --vz-secondary: #525252;
+  --vz-foreground: #404040; /* gris oscuro, no negro */
+  --vz-white: #ffffff;
+
+  --app-bg: #f5f5f5;
+  --app-fg: #404040;
+  --app-fg-muted: #737373;
+
+  --modal-bg: #ffffff;
+  --modal-fg: var(--vz-foreground);
+  --modal-fg-muted: var(--vz-secondary);
+
+  --modal-form-bg: #ffffff;
+  --modal-form-fg: var(--vz-foreground);
+  --modal-form-fg-muted: var(--vz-secondary);
+
+  --card-row-bg: #ffffff;
+  --card-row-bg-hover: #fafafa;
+  --card-row-fg: var(--vz-foreground);
+  --card-row-fg-muted: var(--vz-secondary);
+
+  --sidebar-bg: #fafafa;
+  --sidebar-border: var(--vz-border);
+  --sidebar-fg: var(--vz-foreground);
+  --sidebar-fg-muted: var(--vz-muted);
+  --sidebar-active: #00b4d8;
+  --sidebar-active-border: #00b4d8;
+
+  --buscador-bg: #ffffff;
+  --buscador-border: var(--vz-border-strong);
+  --buscador-fg: var(--vz-foreground);
+  --buscador-placeholder: var(--vz-muted);
+
+  --btn-surface-bg: #00b4d8;
+  --btn-surface-fg: #ffffff;
+  --btn-surface-hover: #0096b4;
+
+  --brand: #00b4d8;
+  --brand-hover: #0096b4;
+  --brand-fg: #ffffff;
+}
+
+.app-bg {
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+}
+
+.app-text {
+  color: var(--app-fg);
+}
+
+.app-text-muted {
+  color: var(--app-fg-muted);
+}
+
+.modal-bg {
+  background-color: var(--modal-bg);
+  color: var(--modal-fg);
+}
+
+.modal-text {
+  color: var(--modal-fg);
+}
+
+.modal-text-muted {
+  color: var(--modal-fg-muted);
+}
+
+.modal-form-bg {
+  background-color: var(--modal-form-bg);
+  color: var(--modal-form-fg);
+}
+
+.modal-form-text {
+  color: var(--modal-form-fg);
+}
+
+.modal-form-text-muted {
+  color: var(--modal-form-fg-muted);
+}
+
+.card-row-bg {
+  background-color: var(--card-row-bg);
+  color: var(--card-row-fg);
+  border: 1px solid var(--vz-border);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.card-row-bg.cursor-pointer:hover,
+.card-row-bg[role="button"]:hover {
+  background-color: var(--card-row-bg-hover);
+  border-color: var(--vz-border-strong);
+}
+
+/* Textos Tailwind claros / blancos → legibles en tema light */
+.app-bg .text-white,
+.app-bg .text-slate-50,
+.app-bg .text-slate-100,
+.app-bg .text-gray-50,
+.app-bg .text-gray-100,
+.card-row-bg .text-white,
+.card-row-bg .text-slate-50,
+.card-row-bg .text-slate-100,
+.modal-bg .text-white,
+.modal-bg .text-slate-50,
+.modal-bg .text-slate-100,
+.modal-form-bg .text-white,
+.modal-form-bg .text-slate-50,
+.modal-form-bg .text-slate-100,
+.sidebar-bg .text-white,
+.app-bg [class*="text-white"],
+.card-row-bg [class*="text-white"],
+.modal-bg [class*="text-white"],
+.modal-form-bg [class*="text-white"] {
+  color: var(--app-fg) !important;
+}
+
+.app-bg .text-slate-200,
+.app-bg .text-slate-300,
+.app-bg .text-slate-400,
+.app-bg .text-gray-200,
+.app-bg .text-gray-300,
+.app-bg .text-gray-400,
+.card-row-bg .text-slate-200,
+.card-row-bg .text-slate-300,
+.card-row-bg .text-slate-400,
+.modal-bg .text-slate-200,
+.modal-bg .text-slate-300,
+.modal-bg .text-slate-400,
+.modal-form-bg .text-slate-200,
+.modal-form-bg .text-slate-300,
+.modal-form-bg .text-slate-400 {
+  color: var(--app-fg-muted) !important;
+}
+
+/* Chips / badges pensados para fondo oscuro */
+.app-bg [class*="border-white"],
+.card-row-bg [class*="border-white"],
+.modal-bg [class*="border-white"],
+.modal-form-bg [class*="border-white"] {
+  border-color: var(--vz-border-strong) !important;
+}
+
+.app-bg [class*="bg-white/"],
+.card-row-bg [class*="bg-white/"],
+.modal-bg [class*="bg-white/"],
+.modal-form-bg [class*="bg-white/"] {
+  background-color: #f5f5f5 !important;
+}
+
+.chip-meta {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--vz-border-strong);
+  background-color: #f5f5f5;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--app-fg-muted);
+}
+
+/* Selects / inputs oscuros → claros */
+.app-bg select[class*="bg-slate-700"],
+.app-bg select[class*="border-slate-600"],
+.modal-bg select[class*="bg-slate-700"],
+.modal-form-bg select[class*="bg-slate-700"],
+.app-bg button[class*="bg-slate-700"],
+.field-select {
+  background-color: #ffffff !important;
+  border-color: var(--vz-border-strong) !important;
+  color: var(--app-fg) !important;
+}
+
+.app-bg select option,
+.field-select option {
+  background-color: #ffffff;
+  color: var(--app-fg);
+}
+
+/* Botones tipo Agregar/Cargar (slate claro) → azul brand */
+.app-bg button.bg-slate-100 {
+  background-color: var(--btn-surface-bg) !important;
+  color: var(--btn-surface-fg) !important;
+}
+
+.app-bg button.bg-slate-100:hover {
+  background-color: var(--btn-surface-hover) !important;
+  color: var(--btn-surface-fg) !important;
+}
+
+.field-label {
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--app-fg-muted);
+}
+
+/*
+ * Remapeo global tema light: paneles oscuros residuales.
+ * Secciones → solo borde; bloques internos → blanco/gris claro.
+ */
+.app-bg input[class*="bg-slate-"],
+.app-bg textarea[class*="bg-slate-"],
+.app-bg input[class*="bg-white/"],
+.app-bg textarea[class*="bg-white/"] {
+  background-color: #ffffff !important;
+  border-color: var(--vz-border-strong) !important;
+  color: var(--app-fg) !important;
+}
+
+.app-bg input::placeholder,
+.app-bg textarea::placeholder {
+  color: var(--app-fg-muted) !important;
+}
+
+/* Cards de formulario: blanco (no transparente) */
+.app-bg section[class*="bg-slate-"],
+.app-bg section[class*="bg-gray-"] {
+  background-color: #ffffff !important;
+  border-color: var(--vz-border-strong) !important;
+}
+
+.app-bg :is(section, article, aside)[class*="border-slate-"],
+.app-bg :is(section, article, aside)[class*="border-gray-"] {
+  border-color: var(--vz-border-strong) !important;
+}
+
+.app-bg :is(div, article, li, dl)[class*="bg-slate-800"],
+.app-bg :is(div, article, li, dl)[class*="bg-slate-900"],
+.app-bg :is(div, article, li, dl)[class*="bg-gray-800"],
+.app-bg :is(div, article, li, dl)[class*="bg-gray-900"] {
+  background-color: #ffffff !important;
+  border-color: var(--vz-border-strong) !important;
+  color: var(--app-fg);
+}
+
+.app-bg :is(div, article, li)[class*="bg-slate-700"]:not(.rounded-full) {
+  background-color: #ffffff !important;
+  border-color: var(--vz-border-strong) !important;
+  color: var(--app-fg) !important;
+}
+
+.app-bg p[class*="bg-slate-700"],
+.app-bg p[class*="bg-slate-600"] {
+  background-color: #f5f5f5 !important;
+  border: 1px solid var(--vz-border);
+  color: var(--app-fg-muted) !important;
+}
+
+.app-bg :is(div, p, span, section, article)[class*="border-slate-"],
+.app-bg :is(div, p, span, section, article)[class*="border-gray-6"],
+.app-bg :is(div, p, span, section, article)[class*="border-gray-7"] {
+  border-color: var(--vz-border-strong) !important;
+}
+
+/*
+ * Empty states (p.ej. "No hay solicitudes…"):
+ * se corrigen desde CSS, no hace falta tocar Tailwind en cada página.
+ */
+.app-bg p[class*="bg-slate-"],
+.app-bg p[class*="text-center"][class*="rounded"][class*="border-slate"],
+.app-bg div[class*="text-center"][class*="bg-slate-800"],
+.app-bg div[class*="text-center"][class*="bg-slate-900"],
+.app-bg div[class*="items-center"][class*="justify-center"][class*="bg-slate-800"] {
+  background-color: #f5f5f5 !important;
+  border-color: var(--vz-border-strong) !important;
+  color: var(--app-fg-muted) !important;
+}
+
+.app-bg p[class*="text-center"][class*="text-slate-"],
+.app-bg p[class*="text-center"][class*="text-gray-"] {
+  color: var(--app-fg-muted) !important;
+}
+
+.app-bg .card-row-index {
+  background-color: #00b4d8 !important;
+  color: #ffffff !important;
+}
+
+.app-bg .btn-surface {
+  background-color: var(--btn-surface-bg) !important;
+  color: var(--btn-surface-fg) !important;
+}
+
+.app-bg .btn-surface:hover {
+  background-color: var(--btn-surface-hover) !important;
+}
+
+.panel-outline {
+  background-color: transparent;
+  border: 1px solid var(--vz-border-strong);
+  border-radius: 0.75rem;
+}
+
+.empty-state {
+  border-radius: 0.5rem;
+  border: 1px solid var(--vz-border);
+  background-color: #f5f5f5;
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--app-fg-muted);
+}
+
+.card-row-text {
+  color: var(--card-row-fg);
+}
+
+.card-row-text-muted {
+  color: var(--card-row-fg-muted);
+}
+
+.sidebar-bg {
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-fg);
+  border-color: var(--sidebar-border);
+}
+
+.sidebar-link {
+  color: var(--sidebar-fg);
+  transition: color 0.15s ease;
+}
+
+.sidebar-link svg {
+  color: #00b4d8 !important;
+  fill: currentColor;
+}
+
+.sidebar-link:hover {
+  color: var(--sidebar-fg-muted);
+}
+
+.sidebar-link:hover svg {
+  color: #0096b4 !important;
+}
+
+.sidebar-link-active {
+  border-left: 2px solid #00b4d8;
+  color: #00b4d8;
+}
+
+.sidebar-link-active svg {
+  color: #00b4d8 !important;
+  fill: currentColor;
+}
+
+.sidebar-link-active:hover {
+  color: #00b4d8;
+}
+
+.sidebar-link-active:hover svg {
+  color: #00b4d8 !important;
+}
+
+/* Badge / índice circular en CardRows */
+.card-row-index {
+  display: flex;
+  height: 2.5rem;
+  width: 2.5rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background-color: #00b4d8 !important;
+  color: #ffffff !important;
+  font-weight: 700;
+}
+
+.card-row-bg > div > p.rounded-full,
+.card-row-bg p.flex.rounded-full {
+  background-color: #00b4d8 !important;
+  color: #ffffff !important;
+}
+
+.buscador-row {
+  border-color: var(--buscador-border);
+  background-color: var(--buscador-bg);
+  color: var(--buscador-fg);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.buscador-row:focus-within {
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 22%, transparent);
+}
+
+.buscador-row-icon {
+  color: var(--buscador-placeholder);
+}
+
+.buscador-row-input {
+  color: var(--buscador-fg);
+}
+
+.buscador-row-input::placeholder {
+  color: var(--buscador-placeholder);
+  opacity: 0.85;
+}
+
+.btn-surface {
+  background-color: var(--btn-surface-bg);
+  color: var(--btn-surface-fg);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-surface:hover {
+  background-color: var(--btn-surface-hover);
 }
 
 /* PDF */
@@ -258,19 +684,20 @@ body:has(dialog:modal) {
  * Sin animaciones, solo un borde sutil para indicar elementos importantes
  */
 .card-border-chase {
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  border: 1px solid var(--vz-border);
   border-radius: 0.5rem;
-  background: rgb(51 65 85);
-  transition: border-color 0.2s ease;
+  background: var(--card-row-bg);
+  transition: border-color 0.2s ease, background-color 0.15s ease;
 }
 
 .card-border-chase:hover {
-  border-color: rgba(59, 130, 246, 0.5);
+  border-color: var(--vz-border-strong);
+  background: var(--card-row-bg-hover);
 }
 
 .card-border-chase__surface {
   border-radius: 0.375rem;
-  background: rgb(51 65 85);
+  background: var(--card-row-bg);
 }
 
 /*sin SCROLLBAR */

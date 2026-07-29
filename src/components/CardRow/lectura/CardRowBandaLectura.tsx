@@ -12,7 +12,7 @@ export default function CardRowBandaLectura({ banda }: Props) {
     <div
       data-testid="card-row"
       data-codigo={banda.idBanda}
-      className="w-full min-h-25 bg-slate-700 flex flex-row justify-between p-4 cursor-pointer hover:bg-slate-600 rounded-lg shadow-md"
+      className="w-full min-h-25 card-row-bg flex flex-row justify-between p-4 cursor-pointer rounded-lg shadow-md"
     >
       <div className="min-w-0">
         <h2 className="text-xl font-bold text-white">{banda.nombreBanda}</h2>

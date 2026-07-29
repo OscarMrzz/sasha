@@ -17,28 +17,28 @@ export default function CardRowRubricas({ index, rubrica, criteriosCount, onVer,
       data-testid="card-row"
       data-codigo={rubrica.idRubrica}
       onDoubleClick={() => onVer(rubrica)}
-      className="flex cursor-pointer items-center justify-between rounded-lg bg-slate-700 p-4 shadow-md hover:bg-slate-600"
+      className="flex cursor-pointer items-center justify-between rounded-lg card-row-bg p-4 shadow-md"
     >
       <div className="flex min-w-0 items-center gap-4">
         {index != null ? (
-          <p className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-600 text-lg font-bold text-slate-100">
+          <p className="card-row-index text-lg">
             {index}
           </p>
         ) : null}
         <div className="min-w-0">
-          <h2 className="text-lg font-semibold text-slate-200">{rubrica.nombreRubrica}</h2>
+          <h2 className="text-lg font-semibold">{rubrica.nombreRubrica}</h2>
 
           <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/75">
+          <span className="chip-meta">
             Versión: {rubrica.versionRubrica || "—"}
           </span>
-          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/75">
+          <span className="chip-meta">
             Categoría: {rubrica.categorias?.nombreCategoria ?? "—"}
           </span>
-          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/80">
+          <span className="chip-meta">
             Puntos: {rubrica.puntosRubrica ?? 0}%
           </span>
-          <span className="inline-flex items-center rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-semibold text-white/75">
+          <span className="chip-meta">
             Criterios: {criteriosCount}
           </span>
           </div>

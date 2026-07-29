@@ -25,7 +25,7 @@ export default function CardRow({
 
   const indexBadge =
     index != null ? (
-      <p className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-600 text-lg font-bold text-slate-100">
+      <p className="card-row-index text-lg">
         {index}
       </p>
     ) : null;
@@ -36,7 +36,7 @@ export default function CardRow({
         data-testid="card-row-nuevo"
         data-codigo={perfil.codigo}
         onDoubleClick={() => abrirInformacion(perfil)}
-        className="animate-pulse "
+        className="animate-pulse"
       >
         <div className="bg-slate-400 text-slate-700 rounded-lg flex h-25 w-full flex-wrap items-center justify-between p-4">
           <div className="flex min-w-0 items-center gap-4">
@@ -62,7 +62,7 @@ export default function CardRow({
       data-testid="card-row"
       data-codigo={perfil.codigo}
       onDoubleClick={() => abrirInformacion(perfil)}
-      className=" flex h-25 w-full flex-wrap items-center justify-between rounded-lg bg-slate-700 p-4 shadow-md cursor-pointer hover:bg-slate-600"
+      className="flex h-25 w-full flex-wrap items-center justify-between rounded-lg card-row-bg p-4 shadow-md cursor-pointer"
     >
       <div className="flex min-w-0 items-center gap-4">
         {indexBadge}

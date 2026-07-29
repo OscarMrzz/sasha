@@ -25,7 +25,7 @@ export default function CardRowRegiones({
 
   const indexBadge =
     index != null ? (
-      <p className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-600 text-lg font-bold text-slate-100">
+      <p className="card-row-index text-lg">
         {index}
       </p>
     ) : null;
@@ -62,7 +62,7 @@ export default function CardRowRegiones({
       data-testid="card-row"
       data-codigo={region.idRegion}
       onDoubleClick={() => abrirInformacion(region)}
-      className="flex h-25 w-full flex-wrap items-center justify-between rounded-lg bg-slate-700 p-4 shadow-md cursor-pointer hover:bg-slate-600"
+      className="flex h-25 w-full flex-wrap items-center justify-between rounded-lg card-row-bg p-4 shadow-md cursor-pointer"
     >
       <div className="flex min-w-0 items-center gap-4">
         {indexBadge}

@@ -20,10 +20,10 @@ export default function SeccionAccesos({ eventos, fechaHoyISO, cargando }: Props
   const cargandoSeccion = cargando || cargandoAccesos;
 
   return (
-    <section className="rounded-xl border border-slate-600/40 bg-slate-800/40 p-5">
+    <section className="panel-outline p-5">
       <div className="mb-4">
-        <h2 className="border-l-4 border-[#00b4d8] pl-3 text-xl font-bold text-white">Accesos</h2>
-        <p className="mt-2 text-sm text-slate-400">
+        <h2 className="border-l-4 border-[#00b4d8] pl-3 text-xl font-bold">Accesos</h2>
+        <p className="mt-2 text-sm text-[var(--app-fg-muted)]">
           Activa o desactiva el acceso a la plataforma por categoría en cada evento.
         </p>
       </div>
@@ -34,18 +34,18 @@ export default function SeccionAccesos({ eventos, fechaHoyISO, cargando }: Props
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="flex flex-col overflow-hidden rounded-xl border border-slate-600/40 bg-slate-700/50"
+                className="flex flex-col overflow-hidden rounded-xl border border-neutral-200"
               >
-                <div className="h-16 animate-pulse bg-slate-600/50" />
+                <div className="h-16 animate-pulse bg-[#f5f5f5]" />
                 <div className="space-y-2 p-2">
-                  <div className="h-12 animate-pulse rounded-lg bg-slate-700" />
-                  <div className="h-12 animate-pulse rounded-lg bg-slate-700" />
+                  <div className="h-12 animate-pulse rounded-lg bg-[#f5f5f5]" />
+                  <div className="h-12 animate-pulse rounded-lg bg-[#f5f5f5]" />
                 </div>
               </div>
             ))}
           </div>
         ) : eventosDelDia.length === 0 ? (
-          <p className="py-10 text-center text-slate-400">
+          <p className="empty-state">
             No hay eventos para hoy con accesos que gestionar
           </p>
         ) : (

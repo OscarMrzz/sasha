@@ -4,17 +4,17 @@ import React from 'react'
 export default function page() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 justify-center items-center w-full    ">
-        <Link href="/sup/federaciones" className=" h-25 bg-slate-700  p-4 rounded-lg shadow cursor-pointer hover:bg-slate-600 transition-colors duration-300">
-            <h1 className="text-2xl font-bold  text-slate-300">Federaciones</h1>
+        <Link href="/sup/federaciones" className="h-25 rounded-lg border border-[var(--vz-border-strong)] p-4 transition-colors duration-300 hover:bg-[#f5f5f5]">
+            <h1 className="text-2xl font-bold">Federaciones</h1>
         </Link>
-        <Link href="/sup/usuarios" className=" h-25 bg-slate-700  p-4 rounded-lg shadow cursor-pointer hover:bg-slate-600 transition-colors duration-300">
-            <h1 className="text-2xl font-bold text-slate-300 ">Usuarios</h1>
+        <Link href="/sup/usuarios" className="h-25 rounded-lg border border-[var(--vz-border-strong)] p-4 transition-colors duration-300 hover:bg-[#f5f5f5]">
+            <h1 className="text-2xl font-bold">Usuarios</h1>
         </Link>
-        <Link href="/sup/permisos" className=" h-25 bg-slate-700  p-4 rounded-lg shadow cursor-pointer hover:bg-slate-600 transition-colors duration-300">
-            <h1 className="text-2xl font-bold text-slate-300 ">Permisos</h1>
+        <Link href="/sup/permisos" className="h-25 rounded-lg border border-[var(--vz-border-strong)] p-4 transition-colors duration-300 hover:bg-[#f5f5f5]">
+            <h1 className="text-2xl font-bold">Permisos</h1>
         </Link>
-        <Link href="/miPerfilPage" className=" h-25 bg-slate-700  p-4 rounded-lg shadow cursor-pointer hover:bg-slate-600 transition-colors duration-300">
-            <h1 className="text-2xl font-bold text-slate-300 ">Mi perfil</h1>
+        <Link href="/miPerfilPage" className="h-25 rounded-lg border border-[var(--vz-border-strong)] p-4 transition-colors duration-300 hover:bg-[#f5f5f5]">
+            <h1 className="text-2xl font-bold">Mi perfil</h1>
         </Link>
     </div>
   )

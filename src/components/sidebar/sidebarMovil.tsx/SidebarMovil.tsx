@@ -50,12 +50,12 @@ export default function SidebarMovil({
   return (
     <div className="lg:hidden">
       {!isOpen ? (
-        <Bars3Icon onClick={() => setIsOpen(true)} className="h-12 w-12 cursor-pointer text-white" aria-label="Abrir menú" />
+        <Bars3Icon onClick={() => setIsOpen(true)} className="h-12 w-12 cursor-pointer text-[var(--app-fg)]" aria-label="Abrir menú" />
       ) : (
         <div onClick={cerrarSidebar} className="absolute left-0 top-0 z-50 h-screen w-full bg-gray-900/90">
           <div
             onClick={(e) => e.stopPropagation()}
-            className="desaparecer-scrollbar flex h-screen w-60 animate-slide-in-left flex-col overflow-y-auto bg-slate-800 py-6 pb-32 font-bold"
+            className="desaparecer-scrollbar sidebar-bg flex h-screen w-60 animate-slide-in-left flex-col overflow-y-auto py-6 pb-32 font-bold"
           >
             <section className="flex items-center justify-center">
               <UserDropdown

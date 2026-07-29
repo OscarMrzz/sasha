@@ -44,7 +44,7 @@ export default function ConfirmRefrescarDatosModal({
         onClose={onClose}
         className="fixed inset-0 z-[200] m-auto flex animate-zoom-in border-0 bg-transparent outline-none backdrop:bg-black/50 backdrop:backdrop-blur-xs duration-500"
       >
-        <div className="flex w-sm max-w-[calc(100vw-2rem)] flex-col gap-4 rounded-2xl bg-slate-700 p-6">
+        <div className="flex w-sm max-w-[calc(100vw-2rem)] flex-col gap-4 rounded-2xl modal-bg p-6">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-sky-400/40 bg-sky-500/15">
               <ArrowPathIcon className="h-5 w-5 text-sky-300" aria-hidden />

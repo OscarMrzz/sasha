@@ -19,7 +19,7 @@ export default function CardRowCumplimientos({ cumplimiento, onVer, onEditar, on
       data-testid="card-row"
       data-codigo={cumplimiento.idCumplimiento}
       onDoubleClick={() => onVer(cumplimiento)}
-      className="flex w-full min-h-25 cursor-pointer justify-between rounded-lg bg-slate-700 p-4 shadow-md hover:bg-slate-600"
+      className="flex w-full min-h-25 cursor-pointer justify-between rounded-lg card-row-bg p-4 shadow-md"
     >
       <div className="flex min-w-0 flex-col gap-2">
         <h2 className="line-clamp-2 text-lg font-semibold text-slate-200">{tituloFila}</h2>

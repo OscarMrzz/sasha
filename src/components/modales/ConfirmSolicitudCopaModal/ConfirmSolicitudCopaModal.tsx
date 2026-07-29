@@ -47,7 +47,7 @@ export default function ConfirmSolicitudCopaModal({
         onClose={onClose}
         className="fixed z-[250] inset-0 m-auto flex border-0 outline-none bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-xs animate-zoom-in duration-500"
       >
-        <div className="flex w-sm flex-col gap-4 rounded-2xl bg-slate-700 p-6">
+        <div className="flex w-sm flex-col gap-4 rounded-2xl modal-bg p-6">
           <div className="flex items-center gap-3">
             {esAprobar ? (
               <CheckCircleIcon className="h-7 w-7 shrink-0 text-emerald-400" />

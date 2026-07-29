@@ -10,7 +10,7 @@ export default function CardRowUsuarioLectura({ perfil }: Props) {
     <div
       data-testid="card-row"
       data-codigo={perfil.codigo}
-      className="flex min-h-25 w-full flex-row flex-wrap justify-between gap-2 rounded-lg bg-slate-700 p-4 shadow-md hover:bg-slate-600"
+      className="flex min-h-25 w-full flex-row flex-wrap justify-between gap-2 rounded-lg card-row-bg p-4 shadow-md"
     >
       <div className="min-w-0">
         <h2 className="text-xl font-bold text-white">{perfil.nombre}</h2>

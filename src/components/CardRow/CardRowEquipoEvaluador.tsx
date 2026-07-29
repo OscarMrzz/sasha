@@ -28,7 +28,7 @@ export default function CardRowEquipoEvaluador({ registro, abrirInformacion, abr
       data-testid="card-row"
       data-codigo={registro.idRegistroEvaluador ?? registro.idForaneaPerfil}
       onDoubleClick={() => abrirInformacion(registro)}
-      className="w-full min-h-25 bg-slate-600 flex flex-row justify-between p-4 cursor-pointer hover:bg-slate-500 rounded-lg shadow-md"
+      className="w-full min-h-25 card-row-bg flex flex-row justify-between p-4 cursor-pointer rounded-lg shadow-md"
     >
       <div className="min-w-0">
         <h2 className="text-xl font-bold text-white">{nombre}</h2>

@@ -15,7 +15,7 @@ export default function CardRowCriterios({ criterio, onVer, onEditar, onEliminar
       data-testid="card-row"
       data-codigo={criterio.idCriterio}
       onDoubleClick={() => onVer(criterio)}
-      className="flex w-full min-h-25 cursor-pointer justify-between rounded-lg bg-slate-700 p-4 shadow-md hover:bg-slate-600"
+      className="flex w-full min-h-25 cursor-pointer justify-between rounded-lg card-row-bg p-4 shadow-md"
     >
       <div className="min-w-0">
         <h2 className="text-lg font-semibold text-slate-200">{criterio.nombreCriterio}</h2>

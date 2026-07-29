@@ -21,8 +21,8 @@ export default function CardRowAplicacionSancionLectura({ registro }: Props) {
   const sancionador = nombreSancionador(registro);
 
   return (
-    <div className="flex min-h-[15rem] w-full flex-col rounded-lg border border-slate-500 shadow-md hover:bg-slate-600">
-      <div className="flex items-start justify-between gap-3 p-4 bg-slate-700 rounded-t-lg">
+    <div className="flex min-h-[15rem] w-full flex-col rounded-lg border border-slate-500 shadow-md">
+      <div className="flex items-start justify-between gap-3 p-4 card-row-bg rounded-t-lg">
         <h2 className="min-w-0 flex-1 text-lg font-semibold text-white">
           {registro.nombreBanda ?? "—"}
         </h2>
@@ -30,7 +30,7 @@ export default function CardRowAplicacionSancionLectura({ registro }: Props) {
           -{registro.puntos_sancion ?? 0} pts
         </span>
       </div>
-      <p className=" text-sm text-slate-200 line-clamp-2 p-4 bg-slate-700">
+      <p className="text-sm text-slate-200 line-clamp-2 p-4 card-row-bg">
         {registro.detalles_sancion ?? "—"}
       </p>
       <section className="flex flex-1 flex-col bg-slate-900 p-4 rounded-b-lg">

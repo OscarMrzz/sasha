@@ -204,7 +204,7 @@ export default function RootLayout({
           <link rel="apple-touch-icon" href="/favicon.ico?v=blank" />
         </head>
         <body
-          className={`bg-gray-800 lg:pt-0 w-full text-gray-50 flex min-h-screen font-poppins ${poppins.className}`}
+          className={`app-bg lg:pt-0 w-full flex min-h-screen font-poppins ${poppins.className}`}
           suppressHydrationWarning={true}
         >
           <Providers>
@@ -226,7 +226,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/favicon.ico?v=blank" />
       </head>
       <body
-        className={`bg-slate-800 w-full text-gray-50 flex flex-col h-full font-poppins ${poppins.className}`}
+        className={`app-bg w-full flex flex-col h-full font-poppins ${poppins.className}`}
         suppressHydrationWarning={true}
       >
         <Providers>

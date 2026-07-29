@@ -50,10 +50,10 @@ export default function CardRowCopasTemporada({
       data-testid="card-row-copas-temporada"
       data-codigo={fila.idBanda}
       className={cn(
-        "flex w-full flex-col gap-4 rounded-xl bg-slate-700 p-5 shadow-md sm:gap-5 sm:p-6 animate-blurred-fade-in",
+        "flex w-full flex-col gap-4 rounded-xl card-row-bg p-5 shadow-md sm:gap-5 sm:p-6 animate-blurred-fade-in",
         esMiBanda
           ? "ring-2 ring-amber-400/55 ring-offset-2 ring-offset-slate-950"
-          : "hover:bg-slate-600/95",
+          : "",
       )}
       style={
         index != null && index > 0

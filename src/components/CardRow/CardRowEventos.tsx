@@ -48,7 +48,7 @@ export default function CardRowEventos({
       data-testid="card-row"
       data-codigo={evento.idEvento}
       onDoubleClick={() => abrirInformacion(evento)}
-      className="relative w-full min-h-25 rounded-lg bg-slate-700 p-4 shadow-md flex cursor-pointer flex-row justify-between hover:bg-slate-600"
+      className="relative w-full min-h-25 rounded-lg card-row-bg p-4 shadow-md flex cursor-pointer flex-row justify-between"
     >
       <div className="pointer-events-none absolute right-12 top-3.5 z-[1]" aria-hidden>
         <IndicadorEstadoEvento iniciado={evento.estado_evento === "iniciado"} />
@@ -57,7 +57,7 @@ export default function CardRowEventos({
       <div className="flex w-full flex-row items-center justify-between pr-1">
         <div className="flex min-w-0 flex-1 items-center gap-4 pr-2">
           {index != null ? (
-            <p className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-600 text-lg font-bold text-slate-100">
+            <p className="card-row-index text-lg">
               {index}
             </p>
           ) : null}

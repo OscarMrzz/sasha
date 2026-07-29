@@ -71,7 +71,7 @@ export default function SeccionSolicitudesCopaDashboard({
   };
 
   return (
-    <div className="rounded-xl border border-slate-600/40 bg-slate-800/40 p-5">
+    <div className="panel-outline p-5">
       <ErrorMessage
         titulo="Error"
         open={openError}
@@ -112,18 +112,18 @@ export default function SeccionSolicitudesCopaDashboard({
       </OverleyModalFormulario>
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3 border-l-4 border-[#00b4d8] pl-3">
-        <h2 className="text-xl font-bold text-white">Solicitudes de copa</h2>
+        <h2 className="text-xl font-bold">Solicitudes de copa</h2>
         <div className="flex items-center gap-2 pr-1">
           <div
-            className="relative flex h-10 w-10 items-center justify-center rounded-lg bg-slate-700/80 text-slate-200"
+            className="relative flex h-10 w-10 items-center justify-center rounded-lg border border-neutral-200 bg-[#f5f5f5] text-[var(--app-fg-muted)]"
             title={`${total} solicitud${total === 1 ? "" : "es"} pendiente${total === 1 ? "" : "s"}`}
           >
             <BellIcon className="h-5 w-5" aria-hidden />
             <span
               className={`absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold ${
                 total > 0
-                  ? "bg-[#00b4d8] text-slate-900"
-                  : "bg-slate-500/90 text-slate-100"
+                  ? "bg-[#00b4d8] text-white"
+                  : "bg-neutral-300 text-[var(--app-fg-muted)]"
               }`}
             >
               {textoContadorSolicitudes(total)}
@@ -134,7 +134,7 @@ export default function SeccionSolicitudesCopaDashboard({
               type="button"
               onClick={() => void onRefrescarSolicitudes()}
               disabled={iconoCargando}
-              className="inline-flex h-10 items-center gap-2 rounded-lg border border-slate-500/50 bg-slate-700/80 px-3 text-sm font-medium text-white transition hover:bg-slate-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="btn-surface inline-flex h-10 items-center gap-2 rounded-lg px-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
               title="Actualizar solicitudes de copa"
             >
               <ArrowPathIcon
@@ -147,15 +147,15 @@ export default function SeccionSolicitudesCopaDashboard({
         </div>
       </div>
 
-      <div className="max-h-[38rem] overflow-y-auto rounded-lg border border-slate-600/30 pr-1">
+      <div className="max-h-[38rem] overflow-y-auto rounded-lg border border-[var(--vz-border)] pr-1">
         {cargando ? (
           <div className="space-y-3 p-2">
             {[1, 2, 3, 4, 5].map((i) => (
-              <div key={i} className="h-20 animate-pulse rounded-lg bg-slate-700" />
+              <div key={i} className="h-20 animate-pulse rounded-lg bg-[#f5f5f5]" />
             ))}
           </div>
         ) : lista.length === 0 ? (
-          <p className="p-6 text-center text-slate-400">
+          <p className="empty-state m-2">
             No hay solicitudes de copa pendientes para hoy
           </p>
         ) : (

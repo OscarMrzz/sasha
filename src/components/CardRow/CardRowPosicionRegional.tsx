@@ -21,7 +21,7 @@ function StatBlock({
   children: ReactNode;
 }) {
   return (
-    <div className="rounded-lg  px-4 py-3">
+    <div className="rounded-lg px-4 py-3">
       <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
         {label}
       </p>
@@ -40,10 +40,10 @@ export default function CardRowPosicionRegional({ fila, esMiBanda, index }: Prop
       data-testid="card-row-posicion"
       data-codigo={fila.idBanda}
       className={cn(
-        "flex w-full flex-col gap-5 rounded-xl bg-slate-700 p-5 shadow-md sm:p-6 animate-blurred-fade-in",
+        "flex w-full flex-col gap-5 rounded-xl card-row-bg p-5 shadow-md sm:p-6 animate-blurred-fade-in",
         esMiBanda
           ? "ring-2 ring-amber-400/55 ring-offset-2 ring-offset-slate-950"
-          : "hover:bg-slate-600/95",
+          : "",
       )}
       style={index != null && index > 0 ? { animationDelay: `${index * 0.1}s` } : undefined}
     >
