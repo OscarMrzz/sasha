@@ -28,7 +28,7 @@ export function TasaExito({ porcentaje, className }: TasaExitoProps) {
   return (
     <section
       className={cn(
-        "rounded-2xl border border-slate-700/50 bg-slate-700/60 p-4 backdrop-blur-sm md:p-6",
+        "card-row-bg rounded-2xl border border-[var(--vz-border)] p-4 md:p-6",
         className
       )}
     >

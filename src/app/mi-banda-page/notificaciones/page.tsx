@@ -69,8 +69,8 @@ export default function NotificacionesPage() {
 
   if (!idBanda) {
     return (
-      <div className="py-12 text-center text-slate-400">
-        <h1 className="mb-2 text-2xl font-bold text-white">Notificaciones</h1>
+      <div className="py-12 text-center text-[var(--app-fg-muted)]">
+        <h1 className="mb-2 text-2xl font-bold text-[var(--app-fg)]">Notificaciones</h1>
         <p>Tu perfil no está vinculado a una banda.</p>
       </div>
     );
@@ -80,14 +80,14 @@ export default function NotificacionesPage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-white">Notificaciones</h1>
+      <h1 className="text-2xl font-bold text-[var(--app-fg)]">Notificaciones</h1>
 
       <section className="space-y-3">
    
         {cargando ? (
           <SkeletonTabla />
         ) : llegada.length === 0 ? (
-          <p className="text-sm text-slate-400"></p>
+          <p className="text-sm text-[var(--app-fg-muted)]"></p>
         ) : (
           <div className="flex flex-col gap-3">
             {llegada.map((r) => (
@@ -111,7 +111,7 @@ export default function NotificacionesPage() {
         {cargando ? (
           <SkeletonTabla />
         ) : ingreso.length === 0 ? (
-          <p className="text-sm text-slate-400"></p>
+          <p className="text-sm text-[var(--app-fg-muted)]"></p>
         ) : (
           <div className="flex flex-col gap-3">
             {ingreso.map((r) => (
@@ -132,7 +132,7 @@ export default function NotificacionesPage() {
       <section>
         {
           llegada.length === 0 && ingreso.length === 0 && (
-            <p className="text-sm text-slate-400">Sin notificaciones pendientes.</p>
+            <p className="text-sm text-[var(--app-fg-muted)]">Sin notificaciones pendientes.</p>
           )
         }
       </section>

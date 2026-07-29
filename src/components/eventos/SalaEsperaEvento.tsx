@@ -60,7 +60,6 @@ export default function SalaEsperaEvento({
   mensajeError,
   onRefrescar,
   onContinuar,
-  onVolver,
 }: Props) {
   const esEsperaSiguienteBanda = modo === "espera-siguiente-banda";
   const esInicioDetectado = modo === "inicio-detectado";
@@ -90,14 +89,14 @@ export default function SalaEsperaEvento({
 
   return (
     <section className="flex min-h-[60vh] w-full items-center justify-center px-4 py-10">
-      <div className="flex w-full max-w-xl flex-col items-center gap-6 rounded-3xl border border-slate-600/40 bg-slate-900/45 px-6 py-10 text-center shadow-2xl shadow-black/20 backdrop-blur-sm">
+      <div className="card-row-bg flex w-full max-w-xl flex-col items-center gap-6 rounded-3xl px-6 py-10 text-center shadow-sm">
         <div className="flex min-h-36 items-center justify-center">
           {esListoParaContinuar ? (
             <CirculoOnda size="grande" />
           ) : (
-            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-slate-500/50 bg-slate-800/70">
+            <div className="flex h-28 w-28 items-center justify-center rounded-full border border-[var(--vz-border)] bg-[#e8f8fb]">
               <ArrowPathIcon
-                className={`h-12 w-12 text-sky-300 ${refrescando ? "animate-spin" : ""}`}
+                className={`h-12 w-12 text-[var(--brand)] ${refrescando ? "animate-spin" : ""}`}
                 aria-hidden
               />
             </div>
@@ -105,29 +104,34 @@ export default function SalaEsperaEvento({
         </div>
 
         <div className="space-y-2">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-sky-300">
+          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[var(--brand)]">
             {esListoParaContinuar ? "Listo para continuar" : "Sala de espera"}
           </p>
-          <h1 className="text-3xl font-bold text-white">{titulo}</h1>
+          <h1 className="text-3xl font-bold text-[var(--app-fg)]">{titulo}</h1>
           {nombreEvento ? (
-            <p className="text-base font-semibold text-slate-200">{nombreEvento}</p>
+            <p className="text-base font-semibold text-[var(--app-fg)]">{nombreEvento}</p>
           ) : null}
           {esEsperaSiguienteBanda && nombreBandaEnCancha ? (
-            <p className="text-sm text-slate-300">
-              Banda en cancha: <span className="font-semibold text-slate-100">{nombreBandaEnCancha}</span>
+            <p className="text-sm text-[var(--app-fg-muted)]">
+              Banda en cancha:{" "}
+              <span className="font-semibold text-[var(--app-fg)]">{nombreBandaEnCancha}</span>
               {nombreRubrica ? (
                 <>
                   {" "}
-                  · Rúbrica: <span className="font-semibold text-slate-100">{nombreRubrica}</span>
+                  · Rúbrica: <span className="font-semibold text-[var(--app-fg)]">{nombreRubrica}</span>
                 </>
               ) : null}
             </p>
           ) : null}
-          <p className="mx-auto max-w-md text-sm leading-6 text-slate-300">{descripcion}</p>
+          <p className="mx-auto max-w-md text-sm leading-6 text-[var(--app-fg-muted)]">
+            {descripcion}
+          </p>
           {mensajeAuxiliar ? (
-            <p className="mx-auto max-w-md text-sm font-medium text-amber-200/90">{mensajeAuxiliar}</p>
+            <p className="mx-auto max-w-md text-sm font-medium text-amber-800">{mensajeAuxiliar}</p>
           ) : null}
-          {mensajeError ? <p className="text-sm font-medium text-red-300">{mensajeError}</p> : null}
+          {mensajeError ? (
+            <p className="text-sm font-medium text-rose-700">{mensajeError}</p>
+          ) : null}
         </div>
 
         <div className="flex w-full flex-col items-center gap-3 sm:flex-row sm:justify-center">
@@ -135,7 +139,7 @@ export default function SalaEsperaEvento({
             <button
               type="button"
               onClick={onContinuar}
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-white px-6 text-sm font-bold text-slate-900 transition hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 sm:w-auto"
+              className="btn-surface inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl px-6 text-sm font-bold sm:w-auto"
             >
               Continuar
               <ArrowRightCircleIcon className="h-5 w-5" aria-hidden />
@@ -146,7 +150,7 @@ export default function SalaEsperaEvento({
               type="button"
               onClick={onRefrescar}
               disabled={refrescando || !onRefrescar}
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-sky-300/40 bg-sky-400/15 px-6 text-sm font-bold text-sky-100 transition hover:bg-sky-400/25 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-300 sm:w-auto"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl border border-[var(--brand)]/35 bg-[#e8f8fb] px-6 text-sm font-bold text-[var(--brand)] transition hover:bg-[var(--brand)]/15 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)]/40 sm:w-auto"
             >
               <ArrowPathIcon className={`h-5 w-5 ${refrescando ? "animate-spin" : ""}`} aria-hidden />
               {refrescando
@@ -156,7 +160,6 @@ export default function SalaEsperaEvento({
                   : "Refrescar"}
             </button>
           ) : null}
-        
         </div>
       </div>
     </section>

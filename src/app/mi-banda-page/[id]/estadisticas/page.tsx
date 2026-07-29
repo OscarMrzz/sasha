@@ -55,7 +55,7 @@ export default async function EstadisticasPage({ params }: Props) {
   if (!precarga) {
     return (
       <div className="flex min-h-[40vh] flex-col items-center justify-center gap-2 px-4">
-        <p className="text-center text-slate-400">
+        <p className="text-center text-[var(--app-fg-muted)]">
           No se encontró la banda o faltan datos de federación/categoría.
         </p>
       </div>
@@ -93,7 +93,7 @@ export default async function EstadisticasPage({ params }: Props) {
       >
         <Link
         href={`/mi-banda-page/${id}`}
-        className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 transition hover:text-sky-300"
+        className="inline-flex items-center gap-1 text-sm font-medium text-[var(--brand)] transition hover:text-[var(--brand-hover)]"
       >
         <ChevronLeftIcon className="h-4 w-4" aria-hidden />
         Volver inicio

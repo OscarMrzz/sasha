@@ -34,7 +34,7 @@ type Props = {
 };
 
 const selectBaseClass =
-  "h-11 w-full rounded-lg border border-slate-600 bg-slate-700/50 px-3 text-sm text-slate-100 transition-[border-color,box-shadow] focus:border-[var(--color-primario)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)]";
+  "h-11 w-full rounded-lg border border-[var(--vz-border)] bg-white px-3 text-sm text-[var(--app-fg)] transition-[border-color,box-shadow] focus:border-[var(--color-primario)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)]";
 
 export default function ResultadosPorEventoShell({
   perfil,
@@ -80,19 +80,19 @@ export default function ResultadosPorEventoShell({
     <div className="w-full pb-25">
         <Link
         href={`/mi-banda-page/${banda.idBanda}`}
-        className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 transition hover:text-sky-300"
+        className="inline-flex items-center gap-1 text-sm font-medium text-[var(--brand)] transition hover:opacity-80"
       >
         <ChevronLeftIcon className="h-4 w-4" aria-hidden />
         Volver a mi banda
       </Link>
       <section className="mb-4 flex w-full flex-col gap-4">
-        <h1 className="mb-4 text-2xl font-bold">Resultados</h1>
+        <h1 className="mb-4 text-2xl font-bold text-[var(--app-fg)]">Resultados</h1>
 
-        <div className="flex justify-between gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4  items-center">
-          <div className="min-w-0 w-full sm:max-w-md ">
+        <div className="flex items-center justify-between gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+          <div className="min-w-0 w-full sm:max-w-md">
             <label
               htmlFor="filtro-evento-resultados"
-              className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/70"
+              className="mb-2 block text-xs font-medium uppercase tracking-wide text-[var(--app-fg-muted)]"
             >
               Evento
             </label>
@@ -109,18 +109,17 @@ export default function ResultadosPorEventoShell({
               disabled={eventosOrdenados.length === 0}
             >
               {eventosOrdenados.length === 0 ? (
-                <option className="bg-slate-800 text-slate-100" value="">
+                <option value="">
                   Sin eventos con participación
                 </option>
               ) : (
                 <>
-                  <option className="bg-slate-800 text-slate-100" value="">
+                  <option value="">
                     Seleccionar evento
                   </option>
 
                   {eventosOrdenados.map((evento) => (
                     <option
-                      className="bg-slate-800 text-slate-100"
                       key={evento.idEvento}
                       value={evento.idEvento}
                     >
@@ -136,10 +135,8 @@ export default function ResultadosPorEventoShell({
             <button
               type="button"
               onClick={() => generarPDF()}
-              className="flex cursor-pointer gap-2 rounded-lg bg-slate-100 px-4 py-2 text-slate-700 hover:bg-slate-300 "
+              className="flex cursor-pointer gap-2 rounded-lg border border-[var(--vz-border)] bg-white px-4 py-2 text-[var(--app-fg)] hover:bg-[#fafafa]"
             >
-             
-
               <ArrowDownTrayIcon className="h-5 w-5" />
             </button>
           </div>
@@ -156,7 +153,7 @@ export default function ResultadosPorEventoShell({
             </div>
           </>
         ) : (
-          <p className="py-8 text-center text-lg font-semibold text-slate-400">Seleccione un evento</p>
+          <p className="py-8 text-center text-lg font-semibold text-[var(--app-fg-muted)]">Seleccione un evento</p>
         )}
       </div>
     </div>

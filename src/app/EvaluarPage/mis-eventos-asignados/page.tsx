@@ -29,10 +29,13 @@ export default function MisEventosAsignadosPage() {
   if (eventosAsignados.length === 0) {
     return (
       <div className="flex min-h-[60vh] w-full flex-col items-center justify-center gap-4 px-4">
-        <p className="max-w-md text-center text-lg text-slate-300">
+        <p className="max-w-md text-center text-lg text-[var(--app-fg-muted)]">
           No tienes eventos asignados en este momento.
         </p>
-        <Link href="/EvaluarPage" className="text-sm font-semibold text-sky-300 hover:text-sky-200">
+        <Link
+          href="/EvaluarPage"
+          className="text-sm font-semibold text-[var(--brand)] transition hover:text-[var(--brand-hover)]"
+        >
           Volver al inicio
         </Link>
       </div>
@@ -43,8 +46,8 @@ export default function MisEventosAsignadosPage() {
     <div className="w-full">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-100">Mis eventos asignados</h1>
-          <p className="mt-2 text-sm text-slate-400">
+          <h1 className="text-3xl font-bold text-[var(--app-fg)]">Mis eventos asignados</h1>
+          <p className="mt-2 text-sm text-[var(--app-fg-muted)]">
             Todos los eventos en los que participas como evaluador ({eventosAsignados.length}).
           </p>
         </div>
@@ -52,7 +55,7 @@ export default function MisEventosAsignadosPage() {
           type="button"
           onClick={() => void refrescarEventos({ detectarInicio: false })}
           disabled={refrescandoEventos}
-          className="rounded-xl border border-sky-300/40 bg-sky-400/15 px-4 py-2 text-sm font-semibold text-sky-100 disabled:opacity-60"
+          className="rounded-xl border border-[var(--brand)]/35 bg-[#e8f8fb] px-4 py-2 text-sm font-semibold text-[var(--brand)] transition hover:bg-[var(--brand)]/15 disabled:opacity-60"
         >
           {refrescandoEventos ? "Actualizando..." : "Actualizar"}
         </button>
@@ -64,7 +67,7 @@ export default function MisEventosAsignadosPage() {
 
       <div className="flex flex-col gap-6">
         {eventosFiltrados.length === 0 && (
-          <p className="rounded-md bg-slate-800/60 p-4 text-slate-300">
+          <p className="rounded-xl border border-[var(--vz-border)] bg-white p-4 text-[var(--app-fg-muted)]">
             No hay eventos que coincidan con tu búsqueda.
           </p>
         )}

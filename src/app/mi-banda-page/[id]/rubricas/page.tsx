@@ -42,14 +42,14 @@ export default async function RubricasMiBandaPage({ params }: Props) {
     <div className="mx-auto w-full max-w-5xl space-y-4">
       <Link
         href={`/mi-banda-page/${id}`}
-        className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 transition hover:text-sky-300"
+        className="inline-flex items-center gap-1 text-sm font-medium text-[var(--brand)] transition hover:text-[var(--brand-hover)]"
       >
         <ChevronLeftIcon className="h-4 w-4" aria-hidden />
         Volver a mi banda
       </Link>
 
       {!idCategoria || !idFederacion ? (
-        <p className="rounded-xl border border-dashed border-slate-600 bg-slate-800/50 px-4 py-8 text-center text-sm text-slate-400">
+        <p className="rounded-xl border border-dashed border-[var(--vz-border-strong)] bg-white px-4 py-8 text-center text-sm text-[var(--app-fg-muted)]">
           No se encontró la categoría de esta banda para mostrar las rúbricas.
         </p>
       ) : (

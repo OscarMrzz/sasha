@@ -27,8 +27,8 @@ export default function ListaEquipoEvaluadorLectura({ idEvento, variant = "defau
       <p
         className={
           embedded
-            ? "text-sm text-slate-400"
-            : "rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/60"
+            ? "text-sm text-[var(--app-fg-muted)]"
+            : "rounded-xl border border-[var(--vz-border)] bg-white p-4 text-sm text-[var(--app-fg-muted)]"
         }
       >
         Cargando equipo evaluador...
@@ -41,8 +41,8 @@ export default function ListaEquipoEvaluadorLectura({ idEvento, variant = "defau
       <p
         className={
           embedded
-            ? "text-sm text-slate-500"
-            : "rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-white/60"
+            ? "text-sm text-[var(--app-fg-muted)]"
+            : "rounded-xl border border-[var(--vz-border)] bg-white p-4 text-sm text-[var(--app-fg-muted)]"
         }
       >
         No hay miembros en el equipo evaluador.
@@ -56,7 +56,7 @@ export default function ListaEquipoEvaluadorLectura({ idEvento, variant = "defau
         {equipoEvaluadorList.map((registro) => (
           <li
             key={registro.idRegistroEvaluador ?? registro.idForaneaPerfil}
-            className="rounded-xl border border-slate-600/50 bg-slate-800/80 px-3 py-2"
+            className="rounded-xl border border-[var(--vz-border)] bg-white px-3 py-2"
           >
             <CardRowEquipoEvaluadorLectura registro={registro} compact />
           </li>

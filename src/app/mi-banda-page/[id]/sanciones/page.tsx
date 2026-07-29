@@ -35,23 +35,23 @@ export default async function MiBandaSancionesPage({ params }: Props) {
   }
 
   return (
-    <div className="min-h-full w-full bg-slate-800 px-4 py-8">
+    <div className="min-h-full w-full px-2 py-8 sm:px-4">
       <div className="mx-auto max-w-6xl">
         <Link
           href={`/mi-banda-page/${id}`}
-          className="mb-6 inline-flex items-center gap-2 text-sm text-sky-400 hover:text-sky-300"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-medium text-[var(--brand)] transition hover:text-[var(--brand-hover)]"
         >
           <ArrowLeftIcon className="h-4 w-4" />
           Volver a mi banda
         </Link>
 
-        <header className="mb-6 flex items-center gap-2">
-          <h1 className="text-2xl font-bold text-white">Sanciones de mi banda</h1>
-          <span className="text-sm text-slate-400">{filas.length}</span>
+        <header className="mb-6 flex items-baseline gap-2">
+          <h1 className="text-2xl font-bold text-[var(--app-fg)]">Sanciones de mi banda</h1>
+          <span className="text-sm text-[var(--app-fg-muted)]">{filas.length}</span>
         </header>
 
         {filas.length === 0 ? (
-          <p className="rounded-xl border border-slate-600/40 bg-slate-800/40 px-4 py-8 text-center text-slate-400">
+          <p className="rounded-xl border border-[var(--vz-border)] bg-white px-4 py-8 text-center text-[var(--app-fg-muted)]">
             No hay sanciones aplicadas registradas para esta banda.
           </p>
         ) : (

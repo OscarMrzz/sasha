@@ -26,16 +26,16 @@ export default function CardRowEquipoEvaluadorLectura({ registro, compact = fals
   if (compact) {
     return (
       <div className="text-left">
-        <p className="text-sm font-semibold text-slate-100">{nombre}</p>
-        <p className="text-xs text-slate-400">{rol}</p>
+        <p className="text-sm font-semibold text-[var(--app-fg)]">{nombre}</p>
+        <p className="text-xs text-[var(--app-fg-muted)]">{rol}</p>
       </div>
     );
   }
 
   return (
-    <div className="w-full min-h-20 rounded-lg card-row-bg p-4 shadow-md">
-      <h2 className="text-xl font-bold text-white">{nombre}</h2>
-      <p className="text-slate-200">Rol: {rol}</p>
+    <div className="card-row-bg min-h-20 w-full rounded-lg p-4 shadow-sm">
+      <h2 className="text-xl font-bold text-[var(--app-fg)]">{nombre}</h2>
+      <p className="text-[var(--app-fg-muted)]">Rol: {rol}</p>
     </div>
   );
 }

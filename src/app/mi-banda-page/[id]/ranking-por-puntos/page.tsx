@@ -44,26 +44,26 @@ export default async function TablaDePosicionPage({ params }: Props) {
     <div className="mx-auto flex w-full max-w-4xl flex-col gap-4 pb-8">
       <Link
         href={`/mi-banda-page/${id}`}
-        className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 transition hover:text-sky-300"
+        className="inline-flex items-center gap-1 text-sm font-medium text-[var(--brand)] transition hover:text-[var(--brand-hover)]"
       >
         <ChevronLeftIcon className="h-4 w-4" aria-hidden />
         Volver inicio
       </Link>
-      <header className="rounded-2xl p-5 backdrop-blur-sm">
-        <h1 className="text-xl font-bold text-white md:text-2xl">
+      <header className="rounded-2xl py-2">
+        <h1 className="text-xl font-bold text-[var(--app-fg)] md:text-2xl">
           Ranking por puntos
         </h1>
-        <p className="mt-1 text-sm text-slate-400">
-          <span className="text-slate-200">{tituloContexto.region}</span>
+        <p className="mt-1 text-sm text-[var(--app-fg-muted)]">
+          <span className="font-medium text-[var(--app-fg)]">{tituloContexto.region}</span>
           {" · "}
-          <span className="text-slate-200">{tituloContexto.categoria}</span>
+          <span className="font-medium text-[var(--app-fg)]">{tituloContexto.categoria}</span>
           {" · Temporada "}
           {anio}
         </p>
       </header>
 
       {!filas.length ? (
-        <p className="rounded-xl border border-slate-700/50 bg-slate-900/40 p-6 text-center text-sm text-slate-400">
+        <p className="rounded-xl border border-[var(--vz-border)] bg-white p-6 text-center text-sm text-[var(--app-fg-muted)]">
           No hay resultados de temporada para esta región y categoría.
         </p>
       ) : (

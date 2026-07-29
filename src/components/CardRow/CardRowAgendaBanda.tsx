@@ -29,10 +29,8 @@ function PastillaAsistencia({
   if (estado === "confirmado") {
     return (
       <span
-        className={`${base} border-emerald-500/50 ${
-          tenue
-            ? "bg-emerald-950/35 text-emerald-600/95"
-            : "bg-emerald-500/15 text-emerald-200"
+        className={`${base} border-emerald-200 ${
+          tenue ? "bg-emerald-50/70 text-emerald-700" : "bg-emerald-50 text-emerald-800"
         }`}
       >
         Confirmado
@@ -42,8 +40,8 @@ function PastillaAsistencia({
   if (estado === "denegado") {
     return (
       <span
-        className={`${base} border-red-500/50 ${
-          tenue ? "bg-red-950/40 text-red-500/90" : "bg-red-500/15 text-red-200"
+        className={`${base} border-rose-200 ${
+          tenue ? "bg-rose-50/70 text-rose-700" : "bg-rose-50 text-rose-800"
         }`}
       >
         Denegado
@@ -52,8 +50,8 @@ function PastillaAsistencia({
   }
   return (
     <span
-      className={`${base} border-amber-500/45 ${
-        tenue ? "bg-amber-950/35 text-amber-600/90" : "bg-amber-500/12 text-amber-100/95"
+      className={`${base} border-amber-200 ${
+        tenue ? "bg-amber-50/70 text-amber-700" : "bg-amber-50 text-amber-800"
       }`}
     >
       Pendiente
@@ -102,8 +100,8 @@ export default function CardRowAgendaBanda({
   const etiquetaAsistencia = resolverEtiquetaAsistencia(idBanda, evento.idEvento, mapAsistencia);
 
   const cardClass = tenue
-    ? "border-slate-600/60 bg-slate-800/35 text-slate-500"
-    : "border-slate-600/90 card-row-bg text-slate-100 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]";
+    ? "border-[var(--vz-border)] bg-[#fafafa] text-[var(--app-fg-muted)]"
+    : "card-row-bg text-[var(--app-fg)] shadow-sm";
 
   const ejecutarConfirmar = async () => {
     if (!idBanda?.trim()) return;
@@ -143,31 +141,31 @@ export default function CardRowAgendaBanda({
         <div
           className={`flex min-w-[3rem] flex-col items-center justify-center rounded-lg border px-2 py-2 text-center sm:min-w-[3.5rem] ${
             tenue
-              ? "border-slate-600/50 bg-slate-900/40"
-              : "border-[var(--color-primario)]/35 bg-slate-900/70"
+              ? "border-[var(--vz-border)] bg-white"
+              : "border-[var(--brand)]/30 bg-[#e8f8fb]"
           }`}
         >
           <span
             className={`text-xl font-black tabular-nums leading-none sm:text-2xl ${
-              tenue ? "text-slate-500" : "text-[var(--color-primario)]"
+              tenue ? "text-[var(--app-fg-muted)]" : "text-[var(--brand)]"
             }`}
           >
             {dia}
           </span>
           <span
             className={`mt-0.5 text-[10px] font-semibold uppercase tracking-wider ${
-              tenue ? "text-slate-600" : "text-slate-400"
+              tenue ? "text-[var(--app-fg-muted)]" : "text-[var(--app-fg-muted)]"
             }`}
           >
             {mesCorto}
           </span>
         </div>
-        <div className="min-w-0 flex-1 border-l border-slate-600/50 pl-3 sm:pl-4 flex gap-2 sm:gap-3">
+        <div className="flex min-w-0 flex-1 gap-2 border-l border-[var(--vz-border)] pl-3 sm:gap-3 sm:pl-4">
           <div className="min-w-0 flex-1">
-            <div className="flex flex-row justify-between items-center gap-2 gap-y-1 min-w-0">
+            <div className="flex min-w-0 flex-row items-center justify-between gap-2 gap-y-1">
               <h2
-                className={`min-w-0 flex-1 basis-full sm:basis-auto truncate text-base font-semibold leading-snug sm:text-lg ${
-                  tenue ? "text-slate-500" : "text-white"
+                className={`min-w-0 flex-1 basis-full truncate text-base font-semibold leading-snug sm:basis-auto sm:text-lg ${
+                  tenue ? "text-[var(--app-fg-muted)]" : "text-[var(--app-fg)]"
                 }`}
               >
                 {nombreEvento}
@@ -176,11 +174,19 @@ export default function CardRowAgendaBanda({
                 <PastillaAsistencia estado={etiquetaAsistencia} tenue={tenue} />
               ) : null}
             </div>
-            <p className={`mt-1 text-xs sm:text-sm ${tenue ? "text-slate-600" : "text-slate-400"}`}>
-              <span className="font-medium text-slate-500">Región:</span>{" "}
+            <p
+              className={`mt-1 text-xs sm:text-sm ${
+                tenue ? "text-[var(--app-fg-muted)]" : "text-[var(--app-fg-muted)]"
+              }`}
+            >
+              <span className="font-medium">Región:</span>{" "}
               {evento.regiones?.nombreRegion ?? "—"}
             </p>
-            <p className={`text-xs sm:text-sm ${tenue ? "text-slate-600" : "text-slate-400"}`}>
+            <p
+              className={`text-xs sm:text-sm ${
+                tenue ? "text-[var(--app-fg-muted)]" : "text-[var(--app-fg-muted)]"
+              }`}
+            >
               {d.toLocaleDateString("es", {
                 weekday: "long",
                 day: "numeric",

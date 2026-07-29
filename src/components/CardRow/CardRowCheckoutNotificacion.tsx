@@ -33,21 +33,21 @@ export default function CardRowCheckoutNotificacion({
   return (
     <div
       onDoubleClick={onView}
-      className="flex min-h-[5rem] w-full flex-wrap items-center justify-between gap-3 rounded-lg card-row-bg p-4 shadow-md cursor-pointer"
+      className="card-row-bg flex min-h-[5rem] w-full cursor-pointer flex-wrap items-center justify-between gap-3 rounded-lg p-4 shadow-sm"
     >
       <div className="min-w-0 flex-1 pr-4">
         <div className="flex flex-wrap items-center gap-2">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className="text-lg font-semibold text-[var(--app-fg)]">
             {registro.LugarEvento ?? "Evento"}
           </h2>
-          <span className="rounded-full border border-amber-500/40 bg-amber-500/20 px-3 py-0.5 text-xs font-medium text-amber-200">
+          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-0.5 text-xs font-medium text-amber-800">
             Confirmar {etiqueta.toLowerCase()}
           </span>
         </div>
-        <p className="mt-1 text-sm text-slate-300">
-          {etiqueta}: <span className="font-medium text-white">{hora}</span>
+        <p className="mt-1 text-sm text-[var(--app-fg-muted)]">
+          {etiqueta}: <span className="font-medium text-[var(--app-fg)]">{hora}</span>
         </p>
-        <p className="mt-1 text-xs text-slate-400">
+        <p className="mt-1 text-xs text-[var(--app-fg-muted)]">
           Enviado por: {encargado || "Comité de disciplina"}
         </p>
       </div>

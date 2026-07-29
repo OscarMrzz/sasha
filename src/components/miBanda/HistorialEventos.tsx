@@ -27,18 +27,18 @@ export function HistorialEventos({
   return (
     <section
       className={cn(
-        "rounded-2xl border border-slate-700/50 bg-slate-700/60} p-4 backdrop-blur-sm md:p-6",
+        "card-row-bg rounded-2xl border border-[var(--vz-border)] p-4 md:p-6",
         className
       )}
     >
-      <h2 className="mb-1 text-lg font-semibold text-white">
+      <h2 className="mb-1 text-lg font-semibold text-[var(--app-fg)]">
         Historial de eventos
       </h2>
-      <p className="mb-4 text-xs text-slate-400">
+      <p className="mb-4 text-xs text-[var(--app-fg-muted)]">
         Lugar y puntos por cada participación este año
       </p>
       {!sorted.length ? (
-        <p className="py-8 text-center text-sm text-slate-500">
+        <p className="py-8 text-center text-sm text-[var(--app-fg-muted)]">
           Aún no hay eventos registrados para esta temporada.
         </p>
       ) : (
@@ -46,16 +46,16 @@ export function HistorialEventos({
           {sorted.map((e) => (
             <li
               key={e.idForaneaEvento}
-              className="flex flex-col gap-2 rounded-xl border border-slate-600/40 bg-slate-900/50 p-4 sm:flex-row sm:items-center sm:justify-between"
+              className="flex flex-col gap-2 rounded-xl border border-[var(--vz-border)] bg-[#fafafa] p-4 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{rankBadge(Number(e.rankin))}</span>
-                  <span className="truncate font-medium text-white">
+                  <span className="truncate font-medium text-[var(--app-fg)]">
                     {e.LugarEvento || "Evento"}
                   </span>
                 </div>
-                <div className="flex flex-wrap items-center gap-x-3 text-xs text-slate-500">
+                <div className="flex flex-wrap items-center gap-x-3 text-xs text-[var(--app-fg-muted)]">
                   <span>{e.fechaEvento}</span>
                   {e.nombreRegion && (
                     <span className="inline-flex items-center gap-1">
@@ -64,24 +64,24 @@ export function HistorialEventos({
                     </span>
                   )}
                   {e.nombreCategoria && (
-                    <span className="text-slate-600">{e.nombreCategoria}</span>
+                    <span>{e.nombreCategoria}</span>
                   )}
                 </div>
               </div>
               <div className="flex shrink-0 flex-row gap-6 sm:flex-col sm:items-end sm:text-right">
                 <div>
-                  <p className="text-[10px] uppercase text-slate-500">
+                  <p className="text-[10px] uppercase text-[var(--app-fg-muted)]">
                     Posición
                   </p>
-                  <p className="text-lg font-bold tabular-nums text-amber-200">
+                  <p className="text-lg font-bold tabular-nums text-amber-800">
                     {Number(e.rankin)}°
                   </p>
                 </div>
                 <div>
-                  <p className="text-[10px] uppercase text-slate-500">
+                  <p className="text-[10px] uppercase text-[var(--app-fg-muted)]">
                     Puntos
                   </p>
-                  <p className="text-lg font-bold tabular-nums text-blue-200">
+                  <p className="text-lg font-bold tabular-nums text-[var(--brand)]">
                     {Number(e.total ?? 0).toFixed(2)}
                   </p>
                 </div>

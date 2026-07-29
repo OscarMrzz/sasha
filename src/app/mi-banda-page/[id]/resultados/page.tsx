@@ -170,7 +170,7 @@ export default async function ResultadosPorBandaPage({ params }: Props) {
   if (!precarga) {
     return (
       <div className="flex min-h-[40vh] flex-col items-center justify-center gap-2 px-4">
-        <p className="text-center text-slate-400">
+        <p className="text-center text-[var(--app-fg-muted)]">
           No se encontró la banda o faltan datos de federación.
         </p>
       </div>

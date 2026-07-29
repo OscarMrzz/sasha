@@ -14,16 +14,16 @@ export default function RendimientoPorRubricagrup({
   return (
     <section
       className={cn(
-        "rounded-2xl border border-slate-700/50 bg-slate-800/60 p-4 backdrop-blur-sm md:p-6",
+        "card-row-bg rounded-2xl border border-[var(--vz-border)] p-4 md:p-6",
         className
       )}
     >
-      <h2 className="mb-1 text-lg font-semibold text-white">
+      <h2 className="mb-1 text-lg font-semibold text-[var(--app-fg)]">
         Rendimiento por rúbrica
       </h2>
-      <p className="mb-4 text-xs text-slate-400"></p>
+      <p className="mb-4 text-xs text-[var(--app-fg-muted)]"></p>
       {!rendimientoPorRubricaList.length ? (
-        <p className="py-8 text-center text-sm text-slate-500">
+        <p className="py-8 text-center text-sm text-[var(--app-fg-muted)]">
           No hay datos de rendimiento por rúbrica para esta temporada.
         </p>
       ) : (

@@ -10,7 +10,7 @@ import type { RubricaStats } from "@/helpers/utils/estadisticasHelpers";
 import { cn } from "@/lib/utils";
 import { Label, PolarGrid, RadialBar, RadialBarChart } from "recharts";
 
-/** Colores claros y legibles sobre fondo slate oscuro */
+/** Colores legibles sobre fondo claro */
 function fillForPct(p: number) {
   if (p >= 85) return "hsl(46 92% 64%)";
   if (p >= 70) return "hsl(165 55% 52%)";
@@ -18,7 +18,7 @@ function fillForPct(p: number) {
   return "hsl(218 28% 58%)";
 }
 
-const TRACK_FILL = "hsl(222 18% 22%)";
+const TRACK_FILL = "hsl(0 0% 90%)";
 
 /** Hasta dos líneas para el centro del círculo */
 function nombreLineas(nombre: string): [string] | [string, string] {
@@ -55,7 +55,7 @@ function RubricaRadialCell({ stat }: { stat: RubricaStats }) {
   const escalaOk = stat.maxPosible > 0;
 
   return (
-    <div className="flex flex-col items-center rounded-2xl border border-slate-500/25 bg-slate-900/40 p-4">
+    <div className="flex flex-col items-center rounded-2xl border border-[var(--vz-border)] bg-[#fafafa] p-4">
       <ChartContainer
         config={chartConfig}
         className="mx-auto aspect-square w-full max-w-[148px]"
@@ -72,7 +72,7 @@ function RubricaRadialCell({ stat }: { stat: RubricaStats }) {
             gridType="circle"
             radialLines={false}
             stroke="none"
-            className="first:fill-[hsl(222_16%_16%)] last:fill-[hsl(222_16%_16%)]"
+            className="first:fill-[#f0f0f0] last:fill-[#f0f0f0]"
             polarRadius={[72, 60]}
           />
           <RadialBar
@@ -100,7 +100,7 @@ function RubricaRadialCell({ stat }: { stat: RubricaStats }) {
                     <tspan
                       x={cx}
                       dy={0}
-                      className="fill-slate-200 text-[9px] font-medium"
+                      className="fill-[#404040] text-[9px] font-medium"
                     >
                       {lineas[0]}
                     </tspan>
@@ -108,7 +108,7 @@ function RubricaRadialCell({ stat }: { stat: RubricaStats }) {
                       <tspan
                         x={cx}
                         dy={10}
-                        className="fill-slate-200 text-[9px] font-medium"
+                        className="fill-[#404040] text-[9px] font-medium"
                       >
                         {lineas[1]}
                       </tspan>
@@ -116,14 +116,14 @@ function RubricaRadialCell({ stat }: { stat: RubricaStats }) {
                     <tspan
                       x={cx}
                       dy={lineas[1] ? 14 : 12}
-                      className="fill-sky-100 text-base font-bold tabular-nums"
+                      className="fill-[#00b4d8] text-base font-bold tabular-nums"
                     >
                       {escalaOk ? `${v.toFixed(1)}%` : "—"}
                     </tspan>
                     <tspan
                       x={cx}
                       dy={11}
-                      className="fill-slate-400 text-[8.5px]"
+                      className="fill-[#737373] text-[8.5px]"
                     >
                       {escalaOk
                         ? `${stat.totalPuntos} / ${stat.maxPosible} pts`
@@ -149,18 +149,18 @@ export function RubricasChart({ rubricas, className }: RubricasChartProps) {
   return (
     <section
       className={cn(
-        "rounded-2xl border border-slate-700/50 bg-slate-800/60 p-4 backdrop-blur-sm md:p-6",
+        "card-row-bg rounded-2xl border border-[var(--vz-border)] p-4 md:p-6",
         className
       )}
     >
-      <h2 className="mb-1 text-lg font-semibold text-white">
+      <h2 className="mb-1 text-lg font-semibold text-[var(--app-fg)]">
         Rendimiento por rúbrica
       </h2>
-      <p className="mb-4 text-xs text-slate-400">
+      <p className="mb-4 text-xs text-[var(--app-fg-muted)]">
     
       </p>
       {!rubricas.length ? (
-        <p className="py-8 text-center text-sm text-slate-500">
+        <p className="py-8 text-center text-sm text-[var(--app-fg-muted)]">
           No hay evaluaciones por rúbrica en esta temporada.
         </p>
       ) : (

@@ -18,7 +18,7 @@ if (p <= 79) return "hsl(0 84% 60%)";   // Rojo
 return "hsl(218 28% 58%)";              // Color base / Por debajo de 70
 }
 
-const TRACK_FILL = "hsl(222 18% 22%)";
+const TRACK_FILL = "hsl(0 0% 90%)";
 
 function nombreLineas(nombre: string): [string] | [string, string] {
   const t = nombre.trim();
@@ -70,7 +70,7 @@ export default function RendimientoPorRubrica({
   return (
     <div
       className={cn(
-        "flex min-w-0 flex-col items-center rounded-2xl border border-slate-500/25 bg-slate-900/40 p-4",
+        "flex min-w-0 flex-col items-center rounded-2xl border border-[var(--vz-border)] bg-[#fafafa] p-4",
         className
       )}
     >
@@ -112,7 +112,7 @@ export default function RendimientoPorRubrica({
                     <tspan
                       x={cx}
                       dy={0}
-                      className="fill-slate-200 text-[9px] font-medium"
+                      className="fill-[#404040] text-[9px] font-medium"
                     >
                       {lineas[0]}
                     </tspan>
@@ -120,7 +120,7 @@ export default function RendimientoPorRubrica({
                       <tspan
                         x={cx}
                         dy={10}
-                        className="fill-slate-200 text-[9px] font-medium"
+                        className="fill-[#404040] text-[9px] font-medium"
                       >
                         {lineas[1]}
                       </tspan>
@@ -128,7 +128,7 @@ export default function RendimientoPorRubrica({
                     <tspan
                       x={cx}
                       dy={lineas[1] ? 18 : 16}
-                      className="fill-sky-100 text-base font-bold tabular-nums"
+                      className="fill-[#00b4d8] text-base font-bold tabular-nums"
                     >
                       {`${v.toFixed(1)}%`}
                     </tspan>
@@ -139,9 +139,9 @@ export default function RendimientoPorRubrica({
           />
         </RadialBarChart>
       </ChartContainer>
-      <p className="mt-1 text-center text-[10px] leading-tight text-slate-500">
+      <p className="mt-1 text-center text-[10px] leading-tight text-[var(--app-fg-muted)]">
         Total{" "}
-        <span className="text-slate-500/90">
+        <span>
           · {total.toLocaleString("es")} pts
         </span>
       </p>

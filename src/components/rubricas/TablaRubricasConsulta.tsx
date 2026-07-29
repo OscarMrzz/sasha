@@ -22,7 +22,10 @@ type TablaRubricasConsultaProps = {
 };
 
 const labelClassName =
-  "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-400";
+  "mb-1.5 block text-xs font-semibold uppercase tracking-wide text-[var(--app-fg-muted)]";
+
+const emptyBoxClass =
+  "rounded-xl border border-dashed border-[var(--vz-border-strong)] bg-white px-4 py-8 text-center text-sm text-[var(--app-fg-muted)]";
 
 export default function TablaRubricasConsulta({
   titulo = "Rúbricas",
@@ -118,16 +121,16 @@ export default function TablaRubricasConsulta({
     <div className="mx-auto w-full max-w-5xl space-y-6 pb-8">
       <header className="space-y-2">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-50">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--app-fg)]">
             {titulo}
           </h1>
           {filtrosListos && !cargandoRubricas ? (
-            <span className="rounded-full border border-slate-600 bg-slate-700/60 px-3 py-0.5 text-xs font-medium text-slate-300">
+            <span className="rounded-full border border-[var(--vz-border)] bg-[#f5f5f5] px-3 py-0.5 text-xs font-medium text-[var(--app-fg)]">
               {rubricas.length} rúbrica{rubricas.length === 1 ? "" : "s"}
             </span>
           ) : null}
         </div>
-        <p className="text-sm text-slate-400">
+        <p className="text-sm text-[var(--app-fg-muted)]">
           {mostrarFiltroCategorias
             ? "Consulta las rúbricas con todos sus criterios y niveles de cumplimiento."
             : nombreCategoriaActiva
@@ -153,23 +156,23 @@ export default function TablaRubricasConsulta({
       ) : null}
 
       {!idFederacion.trim() ? (
-        <p className="rounded-xl border border-dashed border-slate-600 bg-slate-800/50 px-4 py-8 text-center text-sm text-slate-400">
+        <p className={emptyBoxClass}>
           No se pudo determinar la federación del usuario.
         </p>
       ) : null}
 
       {idFederacion.trim() && requiereCategoria && !idCategoriaConsulta.trim() ? (
-        <p className="rounded-xl border border-dashed border-slate-600 bg-slate-800/50 px-4 py-8 text-center text-sm text-slate-400">
+        <p className={emptyBoxClass}>
           Selecciona una categoría para ver las rúbricas.
         </p>
       ) : null}
 
       {filtrosListos && cargandoRubricas ? (
-        <p className="text-center text-sm text-slate-400">Cargando rúbricas…</p>
+        <p className="text-center text-sm text-[var(--app-fg-muted)]">Cargando rúbricas…</p>
       ) : null}
 
       {filtrosListos && isError ? (
-        <p className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-6 text-center text-sm text-red-200">
+        <p className="rounded-xl border border-rose-200 bg-rose-50 px-4 py-6 text-center text-sm text-rose-800">
           {error instanceof Error
             ? error.message
             : "No se pudieron cargar las rúbricas."}
@@ -177,14 +180,14 @@ export default function TablaRubricasConsulta({
       ) : null}
 
       {filtrosListos && !cargandoRubricas && !isError && rubricas.length === 0 ? (
-        <p className="rounded-xl border border-dashed border-slate-600 bg-slate-800/50 px-4 py-8 text-center text-sm text-slate-400">
+        <p className={emptyBoxClass}>
           No hay rúbricas registradas
           {nombreCategoriaActiva ? ` para ${nombreCategoriaActiva}` : ""}.
         </p>
       ) : null}
 
       {filtrosListos && !cargandoRubricas && rubricas.length > 0 ? (
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-[var(--app-fg-muted)]">
           {totalCriterios} criterio{totalCriterios === 1 ? "" : "s"} en total
         </p>
       ) : null}

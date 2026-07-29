@@ -22,31 +22,31 @@ export default function CardRubricaConsulta({
     rubrica.categorias?.nombreCategoria ?? "Sin categoría";
 
   return (
-    <article className="w-full rounded-2xl border border-slate-600/90 bg-slate-800/95 p-6 shadow-lg shadow-black/20 sm:p-8">
-      <header className="flex flex-col gap-4 border-b border-slate-600/80 pb-5 sm:flex-row sm:items-start sm:justify-between">
+    <article className="card-row-bg w-full rounded-2xl p-6 shadow-sm sm:p-8">
+      <header className="flex flex-col gap-4 border-b border-[var(--vz-border)] pb-5 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-widest text-[var(--app-fg-muted)]">
             Rúbrica {indice + 1}
           </p>
-          <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-50 sm:text-3xl">
+          <h2 className="mt-1 text-2xl font-bold tracking-tight text-[var(--app-fg)] sm:text-3xl">
             {rubrica.nombreRubrica}
           </h2>
           {rubrica.datalleRubrica?.trim() ? (
-            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-300">
+            <p className="mt-3 max-w-3xl text-sm leading-relaxed text-[var(--app-fg-muted)]">
               {rubrica.datalleRubrica}
             </p>
           ) : null}
         </div>
         <div className="flex shrink-0 flex-wrap items-center gap-2">
-          <span className="rounded-full border border-sky-500/40 bg-sky-500/15 px-3 py-1 text-xs font-semibold text-sky-200">
+          <span className="rounded-full border border-[var(--brand)]/30 bg-[#e8f8fb] px-3 py-1 text-xs font-semibold text-[var(--brand)]">
             {nombreCategoria}
           </span>
           {rubrica.versionRubrica?.trim() ? (
-            <span className="rounded-full border border-slate-500 bg-slate-700/80 px-3 py-1 text-xs font-medium text-slate-200">
+            <span className="rounded-full border border-[var(--vz-border)] bg-[#f5f5f5] px-3 py-1 text-xs font-medium text-[var(--app-fg)]">
               v{rubrica.versionRubrica}
             </span>
           ) : null}
-          <span className="rounded-full border border-amber-500/40 bg-amber-500/15 px-3 py-1 text-xs font-bold tabular-nums text-amber-100">
+          <span className="rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-bold tabular-nums text-amber-800">
             {formatearPuntos(rubrica.puntosRubrica)} pts
           </span>
         </div>
@@ -54,7 +54,7 @@ export default function CardRubricaConsulta({
 
       <div className="mt-6 space-y-6">
         {criterios.length === 0 ? (
-          <p className="rounded-lg border border-dashed border-slate-600 bg-slate-900/40 px-4 py-6 text-center text-sm text-slate-400">
+          <p className="rounded-lg border border-dashed border-[var(--vz-border-strong)] bg-[#fafafa] px-4 py-6 text-center text-sm text-[var(--app-fg-muted)]">
             Esta rúbrica no tiene criterios registrados.
           </p>
         ) : (
@@ -63,29 +63,29 @@ export default function CardRubricaConsulta({
             return (
               <section
                 key={criterio.idCriterio}
-                className="rounded-xl border border-slate-600/70 bg-slate-900/45 p-4 sm:p-5"
+                className="rounded-xl border border-[var(--vz-border)] bg-[#fafafa] p-4 sm:p-5"
               >
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0 flex-1">
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--app-fg-muted)]">
                       Criterio {idxCriterio + 1}
                     </p>
-                    <h3 className="text-lg font-semibold text-slate-100">
+                    <h3 className="text-lg font-semibold text-[var(--app-fg)]">
                       {criterio.nombreCriterio}
                     </h3>
                     {criterio.detallesCriterio?.trim() ? (
-                      <p className="mt-2 text-sm leading-relaxed text-slate-400">
+                      <p className="mt-2 text-sm leading-relaxed text-[var(--app-fg-muted)]">
                         {criterio.detallesCriterio}
                       </p>
                     ) : null}
                   </div>
-                  <span className="inline-flex w-fit shrink-0 rounded-md border border-slate-500 bg-slate-700/80 px-2.5 py-1 text-xs font-semibold tabular-nums text-slate-200">
+                  <span className="inline-flex w-fit shrink-0 rounded-md border border-[var(--vz-border)] bg-white px-2.5 py-1 text-xs font-semibold tabular-nums text-[var(--app-fg)]">
                     Máx. {formatearPuntos(criterio.puntosCriterio)} pts
                   </span>
                 </div>
 
                 {cumplimientos.length === 0 ? (
-                  <p className="mt-4 text-sm text-slate-500">
+                  <p className="mt-4 text-sm text-[var(--app-fg-muted)]">
                     Sin niveles de cumplimiento definidos.
                   </p>
                 ) : (
@@ -93,18 +93,18 @@ export default function CardRubricaConsulta({
                     {cumplimientos.map((cumplimiento) => (
                       <li
                         key={cumplimiento.idCumplimiento}
-                        className="flex gap-3 rounded-lg border border-slate-700/80 bg-slate-800/60 px-3 py-2.5 sm:items-start"
+                        className="flex gap-3 rounded-lg border border-[var(--vz-border)] bg-white px-3 py-2.5 sm:items-start"
                       >
                         <span
                           className={`inline-flex min-w-[3.25rem] shrink-0 justify-center rounded-md px-2 py-1 text-xs font-bold tabular-nums ${
                             (cumplimiento.puntosCumplimiento ?? 0) < 0
-                              ? "border border-red-500/40 bg-red-500/15 text-red-200"
-                              : "border border-emerald-500/35 bg-emerald-500/15 text-emerald-100"
+                              ? "border border-rose-200 bg-rose-50 text-rose-800"
+                              : "border border-emerald-200 bg-emerald-50 text-emerald-800"
                           }`}
                         >
                           {formatearPuntos(cumplimiento.puntosCumplimiento)} pts
                         </span>
-                        <p className="min-w-0 flex-1 text-sm leading-relaxed text-slate-200">
+                        <p className="min-w-0 flex-1 text-sm leading-relaxed text-[var(--app-fg)]">
                           {cumplimiento.detalleCumplimiento}
                         </p>
                       </li>

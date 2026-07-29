@@ -616,7 +616,7 @@ export default function EvaluarHomePage() {
   if (!cargaInicialCompletada || restaurandoSesion) {
     return (
       <div className="flex h-full w-full items-center justify-center px-4">
-        <p className="text-center text-slate-300">
+        <p className="text-center text-[var(--app-fg-muted)]">
           {restaurandoSesion ? "Recuperando tu sesión…" : "Cargando…"}
         </p>
       </div>
@@ -632,7 +632,7 @@ export default function EvaluarHomePage() {
   ) {
     return (
       <div className="flex w-full items-center justify-center px-4">
-        <p className="max-w-md text-center text-lg text-slate-300">
+        <p className="max-w-md text-center text-lg text-[var(--app-fg-muted)]">
           No tienes eventos asignados para el día de hoy.
         </p>
       </div>
@@ -724,13 +724,13 @@ export default function EvaluarHomePage() {
 
       {etapa === "elegirEvento" && (
         <section className="w-full px-4">
-          <h1 className="mb-4 text-3xl font-bold text-slate-300">Eventos</h1>
+          <h1 className="mb-4 text-3xl font-bold text-[var(--app-fg)]">Eventos</h1>
           <div className="mb-4">
             <BuscadorRow filtrarBuscador={(e) => setBusquedaEventos(e.target.value)} />
           </div>
           <div className="flex w-full flex-col gap-4">
             {eventosHoyFiltrados.length === 0 && (
-              <p className="rounded-md bg-slate-800/60 p-4 text-slate-300">
+              <p className="rounded-xl border border-[var(--vz-border)] bg-white p-4 text-[var(--app-fg-muted)]">
                 No hay eventos que coincidan con tu búsqueda.
               </p>
             )}
@@ -744,18 +744,20 @@ export default function EvaluarHomePage() {
                   }}
                   style={{ animationDelay: `${index * 120}ms` }}
                   className={[
-                    "animate-fade-in min-h-24 w-full rounded-md bg-slate-700 p-4 shadow transition-colors duration-300",
-                    seleccionable ? "cursor-pointer hover:bg-slate-600" : "cursor-not-allowed opacity-60",
+                    "card-row-bg animate-fade-in min-h-24 w-full rounded-xl p-4 shadow-sm transition-colors duration-300",
+                    seleccionable
+                      ? "cursor-pointer hover:bg-[#fafafa]"
+                      : "cursor-not-allowed opacity-60",
                   ].join(" ")}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <h2 className="font-semibold text-slate-100">{evento.LugarEvento}</h2>
-                      <p className="mt-1 text-sm text-slate-400">
+                      <h2 className="font-semibold text-[var(--app-fg)]">{evento.LugarEvento}</h2>
+                      <p className="mt-1 text-sm text-[var(--app-fg-muted)]">
                         {formatearFechaEvento(evento.fechaEvento)} · {evento.tipo_evento}
                       </p>
                     </div>
-                    <span className="shrink-0 rounded-full bg-slate-800 px-3 py-1 text-xs font-medium text-slate-200">
+                    <span className="shrink-0 rounded-full border border-[var(--vz-border)] bg-[#f5f5f5] px-3 py-1 text-xs font-medium text-[var(--app-fg)]">
                       {ETIQUETA_ESTADO_EVENTO[evento.estado_evento]}
                     </span>
                   </div>
@@ -768,26 +770,28 @@ export default function EvaluarHomePage() {
 
       {etapa === "cargandoBanda" && (
         <section className="flex h-96 w-full items-center justify-center px-4">
-          <p className="text-center text-lg text-slate-300">Buscando banda en cancha…</p>
+          <p className="text-center text-lg text-[var(--app-fg-muted)]">Buscando banda en cancha…</p>
         </section>
       )}
 
       {etapa === "sinBanda" && eventoSeleccionado && (
         <section className="flex h-96 w-full flex-col items-center justify-center gap-8 px-4 text-center">
-          <div className="max-w-lg rounded-2xl border border-slate-600/40 bg-slate-800/50 p-6">
+          <div className="card-row-bg max-w-lg rounded-2xl p-6 shadow-sm">
             {vistaEnCancha ? (
               <>
-                <p className="text-sm font-semibold uppercase tracking-wide text-[#00b4d8]">
+                <p className="text-sm font-semibold uppercase tracking-wide text-[var(--brand)]">
                   Banda en cancha
                 </p>
-                <h2 className="mt-3 text-2xl font-bold text-slate-100">{vistaEnCancha.nombreBanda}</h2>
+                <h2 className="mt-3 text-2xl font-bold text-[var(--app-fg)]">
+                  {vistaEnCancha.nombreBanda}
+                </h2>
                 {vistaEnCancha.AliasBanda?.trim() ? (
-                  <p className="mt-1 text-sm text-slate-300">{vistaEnCancha.AliasBanda}</p>
+                  <p className="mt-1 text-sm text-[var(--app-fg-muted)]">{vistaEnCancha.AliasBanda}</p>
                 ) : null}
-                <p className="mt-2 text-sm text-slate-400">
+                <p className="mt-2 text-sm text-[var(--app-fg-muted)]">
                   Categoría: {vistaEnCancha.nombreCategoria}
                 </p>
-                <p className="mt-4 text-sm text-slate-300">
+                <p className="mt-4 text-sm text-[var(--app-fg)]">
                   {motivoSinBanda === "sin_rubrica"
                     ? "Aún no tiene una rúbrica asignada para evaluar. Consulte al responsable de mesa y presione Continuar."
                     : "La banda está en cancha. Presione Continuar para iniciar la evaluación."}
@@ -795,19 +799,21 @@ export default function EvaluarHomePage() {
               </>
             ) : (
               <>
-                <h2 className="text-xl font-bold text-slate-100">Sin banda asignada</h2>
-                <p className="mt-3 text-sm text-slate-300">
+                <h2 className="text-xl font-bold text-[var(--app-fg)]">Sin banda asignada</h2>
+                <p className="mt-3 text-sm text-[var(--app-fg-muted)]">
                   Todavía no hay una banda asignada para evaluar. Espere un momento y presione Continuar,
                   o consulte al responsable de mesa.
                 </p>
               </>
             )}
-            <p className="mt-2 text-xs text-slate-500">Evento: {eventoSeleccionado.LugarEvento}</p>
+            <p className="mt-2 text-xs text-[var(--app-fg-muted)]">
+              Evento: {eventoSeleccionado.LugarEvento}
+            </p>
           </div>
           <button
             type="button"
             onClick={continuarSinBanda}
-            className="animate-pulsing h-16 w-60 rounded-2xl bg-white text-2xl font-bold text-slate-800"
+            className="btn-surface animate-pulsing h-16 w-60 rounded-2xl text-2xl font-bold"
           >
             Continuar
             <ArrowRightCircleIcon className="ml-2 inline-block h-6 w-6" />
@@ -815,7 +821,7 @@ export default function EvaluarHomePage() {
           <button
             type="button"
             onClick={volverAElegirEvento}
-            className="flex animate-zoom-in gap-2 text-slate-500"
+            className="flex animate-zoom-in gap-2 text-[var(--app-fg-muted)] transition hover:text-[var(--app-fg)]"
           >
             <ArrowPathIcon className="inline-block h-6 w-6" />
             Elegir otro evento
@@ -828,7 +834,7 @@ export default function EvaluarHomePage() {
           <button
             type="button"
             onClick={continuarEvaluacion}
-            className="animate-pulsing h-16 w-60 rounded-2xl bg-white text-2xl font-bold text-slate-800"
+            className="btn-surface animate-pulsing h-16 w-60 rounded-2xl text-2xl font-bold"
           >
             Continuar
             <ArrowRightCircleIcon className="ml-2 inline-block h-6 w-6" />
@@ -836,7 +842,7 @@ export default function EvaluarHomePage() {
           <button
             type="button"
             onClick={reiniciarEvaluacion}
-            className="flex animate-zoom-in gap-2 text-slate-500"
+            className="flex animate-zoom-in gap-2 text-[var(--app-fg-muted)] transition hover:text-[var(--app-fg)]"
           >
             <ArrowPathIcon className="inline-block h-6 w-6" />
             Reiniciar

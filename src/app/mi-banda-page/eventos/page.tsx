@@ -18,7 +18,7 @@ import Link from "next/link";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 
 const selectBaseClass =
-  "h-11 w-full rounded-lg border border-slate-600 bg-slate-700/50 px-3 text-sm text-slate-100 transition-[border-color,box-shadow] focus:border-[var(--color-primario)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)]";
+  "h-11 w-full rounded-lg border border-[var(--vz-border-strong)] bg-white px-3 text-sm text-[var(--app-fg)] transition-[border-color,box-shadow] focus:border-[var(--color-primario)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)]";
 
 const MESES = [
   { idMes: "1", nombreMes: "Enero" },
@@ -181,7 +181,7 @@ export default function MiBandaEventosPage() {
       {idBanda ? (
         <Link
           href={`/mi-banda-page/${idBanda}`}
-          className="inline-flex items-center gap-1 text-sm font-medium text-sky-400 transition hover:text-sky-300"
+          className="inline-flex items-center gap-1 text-sm font-medium text-[var(--brand)] transition hover:text-[var(--brand-hover)]"
         >
           <ChevronLeftIcon className="h-4 w-4" aria-hidden />
           Volver inicio
@@ -189,7 +189,7 @@ export default function MiBandaEventosPage() {
       ) : null}
       <section className="mb-6 flex w-full flex-col gap-4">
         <header>
-          <h1 className="text-2xl font-bold text-white">Agenda de eventos</h1>
+          <h1 className="text-2xl font-bold text-[var(--app-fg)]">Agenda de eventos</h1>
          
         </header>
 
@@ -201,7 +201,7 @@ export default function MiBandaEventosPage() {
           <div className="min-w-0">
             <label
               htmlFor="agenda-filtro-region"
-              className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/70"
+              className="mb-2 block text-xs font-medium uppercase tracking-wide text-[var(--app-fg-muted)]"
             >
               Región
             </label>
@@ -212,12 +212,11 @@ export default function MiBandaEventosPage() {
               onChange={(e) => setRegionSeleccionada(e.target.value)}
               disabled={cargandoFiltros}
             >
-              <option className="bg-slate-800 text-slate-100" value="">
+              <option value="">
                 Todas las regiones
               </option>
               {regionesLista.map((r) => (
                 <option
-                  className="bg-slate-800 text-slate-100"
                   key={r.idRegion}
                   value={r.idRegion}
                 >
@@ -229,7 +228,7 @@ export default function MiBandaEventosPage() {
           <div className="min-w-0">
             <label
               htmlFor="agenda-filtro-mes"
-              className="mb-2 block text-xs font-medium uppercase tracking-wide text-white/70"
+              className="mb-2 block text-xs font-medium uppercase tracking-wide text-[var(--app-fg-muted)]"
             >
               Mes
             </label>
@@ -239,12 +238,11 @@ export default function MiBandaEventosPage() {
               value={mesSeleccionado}
               onChange={(e) => setMesSeleccionado(e.target.value)}
             >
-              <option className="bg-slate-800 text-slate-100" value="">
+              <option value="">
                 Todos los meses
               </option>
               {MESES.map((m) => (
                 <option
-                  className="bg-slate-800 text-slate-100"
                   key={m.idMes}
                   value={m.idMes}
                 >
@@ -259,7 +257,7 @@ export default function MiBandaEventosPage() {
       {isPending ? (
         <SkeletonTabla />
       ) : isError ? (
-        <p className="rounded-lg border border-red-900/50 bg-red-950/30 px-4 py-3 text-sm text-red-200">
+        <p className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
           No se pudieron cargar los eventos. Comprueba tu sesión y que el perfil tenga federación
           asignada.
         </p>
@@ -267,15 +265,15 @@ export default function MiBandaEventosPage() {
         <>
           <section aria-label="Próximos eventos" className="relative">
             <div className="mb-4 flex items-center gap-3">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-600 to-slate-600/30" />
-              <h2 className="shrink-0 text-xs font-semibold uppercase tracking-[0.2em] text-sky-300/90">
+              <div className="h-px flex-1 bg-[var(--vz-border)]" />
+              <h2 className="shrink-0 text-xs font-semibold uppercase tracking-[0.2em] text-[var(--brand)]">
                 Próximos
               </h2>
-              <div className="h-px flex-1 bg-gradient-to-l from-transparent via-slate-600 to-slate-600/30" />
+              <div className="h-px flex-1 bg-[var(--vz-border)]" />
             </div>
 
             {proximosFiltrados.length === 0 ? (
-              <p className="rounded-xl border border-dashed border-slate-600 bg-slate-800/40 px-4 py-8 text-center text-sm text-slate-400">
+              <p className="rounded-xl border border-dashed border-[var(--vz-border-strong)] bg-white px-4 py-8 text-center text-sm text-[var(--app-fg-muted)]">
                 {proximos.length === 0
                   ? "No hay eventos programados a futuro."
                   : "No hay próximos eventos que coincidan con los filtros."}
@@ -283,7 +281,7 @@ export default function MiBandaEventosPage() {
             ) : (
               <div className="relative pl-2 sm:pl-3">
                 <div
-                  className="absolute bottom-6 left-[1.45rem] top-2 w-px bg-gradient-to-b from-[var(--color-primario)]/50 via-slate-600/80 to-transparent sm:left-[1.6rem]"
+                  className="absolute bottom-6 left-[1.45rem] top-2 w-px bg-[var(--vz-border-strong)] sm:left-[1.6rem]"
                   aria-hidden
                 />
                 <ul className="relative z-[1] flex flex-col gap-4 sm:gap-5">
@@ -305,20 +303,20 @@ export default function MiBandaEventosPage() {
             )}
           </section>
 
-          <details className="group mt-12 overflow-hidden rounded-xl border border-slate-600 bg-slate-800/30 [&_summary::-webkit-details-marker]:hidden">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 transition hover:bg-slate-700/30">
-              <span className="text-sm font-medium text-slate-300">
+          <details className="group mt-12 overflow-hidden rounded-xl border border-[var(--vz-border)] bg-white [&_summary::-webkit-details-marker]:hidden">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 transition hover:bg-[#fafafa]">
+              <span className="text-sm font-medium text-[var(--app-fg)]">
                 Ver eventos pasados
-                <span className="ml-2 tabular-nums text-slate-500">
+                <span className="ml-2 tabular-nums text-[var(--app-fg-muted)]">
                   ({pasadosFiltrados.length}
                   {pasadosFiltrados.length !== pasados.length ? ` de ${pasados.length}` : ""})
                 </span>
               </span>
-              <ChevronDownIcon className="h-5 w-5 shrink-0 text-slate-500 transition group-open:rotate-180" />
+              <ChevronDownIcon className="h-5 w-5 shrink-0 text-[var(--app-fg-muted)] transition group-open:rotate-180" />
             </summary>
-            <div className="border-t border-slate-700/80 px-3 py-4 sm:px-4">
+            <div className="border-t border-[var(--vz-border)] px-3 py-4 sm:px-4">
               {pasadosFiltrados.length === 0 ? (
-                <p className="py-4 text-center text-sm text-slate-500">
+                <p className="py-4 text-center text-sm text-[var(--app-fg-muted)]">
                   {pasados.length === 0
                     ? "No hay eventos pasados registrados."
                     : "Ningún evento pasado coincide con los filtros."}
