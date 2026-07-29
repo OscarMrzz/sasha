@@ -1,0 +1,10 @@
+{"timestamp":"2026-07-29T01:44:31.401Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:31.403Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:35.395Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:35.400Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:39.393Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:39.393Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:43.395Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:43.395Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:47.389Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
+{"timestamp":"2026-07-29T01:44:47.393Z","level":"error","message":"readConfig error: Error: ENOENT: no such file or directory, open 'c:\\trabajos\\sasha\\testsprite_tests\\tmp\\config.json'"}
