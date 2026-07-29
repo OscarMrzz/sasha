@@ -9,7 +9,7 @@
 do $$
 declare
     id_user uuid := gen_random_uuid();
-    user_email text := 'admin@sasha.net';
+    user_email text := 'admin@sasha.com';
     user_password text := 'adminsasha';
     id_user_secretaria uuid := gen_random_uuid();
     user_email_secretaria text := 'secretaria@sasha.com';
