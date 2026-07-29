@@ -60,9 +60,9 @@ export default function SeccionEventosDelDia({
         </p>
         <div className="max-h-[40rem] min-h-[14rem] overflow-y-auto pr-1">
           {cargando ? (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="h-36 animate-pulse rounded-xl border border-neutral-200 bg-[#f5f5f5]" />
+            <div className="flex w-full flex-col gap-4">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-28 w-full animate-pulse rounded-xl border border-neutral-200 bg-[#f5f5f5]" />
               ))}
             </div>
           ) : eventosDelDia.length === 0 ? (
@@ -70,7 +70,7 @@ export default function SeccionEventosDelDia({
               No hay eventos programados para hoy
             </p>
           ) : (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <div className="flex w-full flex-col gap-4">
               {eventosDelDia.map((ev) => {
                 const p = progresoEvento[ev.idEvento] ?? { confirmadas: 0, participaron: 0 };
                 return (

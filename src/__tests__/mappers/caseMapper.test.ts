@@ -25,6 +25,12 @@ describe("caseMapper", () => {
     expect(snakeToCamelKey("alias_banda")).toBe("AliasBanda");
     expect(snakeToCamelKey("lugar_evento")).toBe("LugarEvento");
     expect(snakeToCamelKey("detalles_rol")).toBe("DetallesRol");
+    expect(snakeToCamelKey("estado_evento")).toBe("estado_evento");
+    expect(snakeToCamelKey("id_foranea_rubrica")).toBe("idForaneaRubrica");
+    expect(fromDb({ estado_evento: "iniciado", id_foranea_rubrica: "rub-1" })).toEqual({
+      estado_evento: "iniciado",
+      idForaneaRubrica: "rub-1",
+    });
   });
 
   it("toDb skips undefined and maps nested objects/arrays", () => {

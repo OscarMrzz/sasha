@@ -847,21 +847,21 @@ export default function EvaluarHomePage() {
       {selectionTrail.length > 0 && (etapa === "evaluando" || etapa === "finalizacion") && (
         <nav
           aria-label="Selección actual"
-          className="mx-4 mt-4 w-full max-w-full rounded-2xl border border-slate-600/35 bg-slate-800/35 px-4 py-3 backdrop-blur-sm"
+          className="mx-4 mt-4 w-full max-w-full rounded-2xl border border-[var(--vz-border)] bg-white px-4 py-3 shadow-sm"
         >
           <ol className="flex flex-wrap items-baseline gap-x-0 text-sm">
             {selectionTrail.map((text, i) => (
               <li key={`${i}-${text}`} className="flex items-baseline">
                 {i > 0 && (
-                  <span className="mx-2 select-none font-normal text-slate-600" aria-hidden>
+                  <span className="mx-2 select-none font-normal text-[var(--app-fg-muted)]" aria-hidden>
                     /
                   </span>
                 )}
                 <span
                   className={
                     i === selectionTrail.length - 1
-                      ? "font-semibold tracking-tight text-slate-100"
-                      : "font-medium tracking-tight text-slate-400"
+                      ? "font-semibold tracking-tight text-[var(--app-fg)]"
+                      : "font-medium tracking-tight text-[var(--app-fg-muted)]"
                   }
                 >
                   {text}

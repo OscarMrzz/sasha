@@ -177,28 +177,28 @@ export default async function RankingPorCopasPage({ params }: Props) {
     const db = getSupabaseAdmin();
     const bandRes = await db
       .from("bandas")
-      .select("idBanda, idForaneaCategoria, idForaneaRegion")
-      .eq("idBanda", id)
+      .select("id_banda, id_foranea_categoria, id_foranea_region")
+      .eq("id_banda", id)
       .maybeSingle();
 
     if (bandRes.error) throw bandRes.error;
 
-    const idCat = bandRes.data?.idForaneaCategoria;
-    const idReg = bandRes.data?.idForaneaRegion;
+    const idCat = bandRes.data?.id_foranea_categoria as string | undefined;
+    const idReg = bandRes.data?.id_foranea_region as string | undefined;
 
     const [regionRes, categoriaRes, copasGlobal] = await Promise.all([
       idReg
         ? db
             .from("regiones")
-            .select("nombreRegion")
-            .eq("idRegion", idReg)
+            .select("nombre_region")
+            .eq("id_region", idReg)
             .maybeSingle()
         : Promise.resolve({ data: null, error: null }),
       idCat
         ? db
             .from("categorias")
-            .select("nombreCategoria")
-            .eq("idCategoria", idCat)
+            .select("nombre_categoria")
+            .eq("id_categoria", idCat)
             .maybeSingle()
         : Promise.resolve({ data: null, error: null }),
       getVistaCopasGlobal(),
@@ -207,8 +207,11 @@ export default async function RankingPorCopasPage({ params }: Props) {
     if (regionRes.error) throw regionRes.error;
     if (categoriaRes.error) throw categoriaRes.error;
 
-    nombreRegion = regionRes.data?.nombreRegion ?? "";
-    nombreCategoria = categoriaRes.data?.nombreCategoria ?? "";
+    nombreRegion =
+      (regionRes.data as { nombre_region?: string } | null)?.nombre_region ?? "";
+    nombreCategoria =
+      (categoriaRes.data as { nombre_categoria?: string } | null)?.nombre_categoria ??
+      "";
 
     if (idCat && idReg) {
       filas = agruparYOrdenarCopas(copasGlobal, idReg, idCat);

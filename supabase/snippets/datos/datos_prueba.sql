@@ -911,11 +911,29 @@ END seed_eventos_sasha_2026;
 
 /* ====================================================================== */
 /* EQUIPO EVALUADOR: personal global en los 4 eventos                     */
+/* Jurados: 1 rúbrica cada uno (BASICA Rubrica 1..5) para poder evaluar.  */
 /* ====================================================================== */
     FOREACH v_evento IN ARRAY idEventosSeed LOOP
-      FOREACH tmp_id IN ARRAY idPerfilJurados LOOP
-        INSERT INTO public.registro_equipo_evaluador (id_registro_evaluador, "created_at", id_foranea_evento, id_foranea_perfil)
-        VALUES (gen_random_uuid(), now(), v_evento, tmp_id);
+      v_idx_rub := 0;
+      FOR v_rubrica IN
+        SELECT r.id_rubrica AS id_rubrica, r.nombre_rubrica AS nombre_rubrica
+        FROM public.rubricas r
+        WHERE r.id_foranea_categoria = idCategoriaBasica
+          AND r.id_foranea_federacion = id_federacion
+        ORDER BY r.nombre_rubrica
+      LOOP
+        v_idx_rub := v_idx_rub + 1;
+        EXIT WHEN v_idx_rub > coalesce(array_length(idPerfilJurados, 1), 0);
+        v_jurado := idPerfilJurados[v_idx_rub];
+
+        INSERT INTO public.registro_equipo_evaluador (
+          id_registro_evaluador,
+          "created_at",
+          id_foranea_evento,
+          id_foranea_perfil,
+          id_foranea_rubrica
+        )
+        VALUES (gen_random_uuid(), now(), v_evento, v_jurado, v_rubrica.id_rubrica);
       END LOOP;
 
       FOREACH tmp_id IN ARRAY ARRAY[

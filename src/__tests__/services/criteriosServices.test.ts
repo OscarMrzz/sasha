@@ -32,6 +32,7 @@ describe("CriteriosServices", () => {
     expect(result[0]).toMatchObject({
       idCriterio: "crit-1",
       nombreCriterio: "Criterio A",
+      idForaneaRubrica: "rub-1",
     });
     expect(result[0]).not.toHaveProperty("rubricas");
   });
@@ -51,6 +52,7 @@ describe("CriteriosServices", () => {
     const service = assignPerfil(new CriteriosServices());
     const result = await service.getOne("crit-1");
     expect(result.nombreCriterio).toBe("Criterio A");
+    expect(result.idForaneaRubrica).toBe("rub-1");
   });
 
   it("get propagates supabase error", async () => {

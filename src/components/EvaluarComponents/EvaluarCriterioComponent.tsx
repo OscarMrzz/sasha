@@ -12,7 +12,7 @@ import { RootState } from "@/app/store";
 
 type Props = {
   criterioSelecionado: criterioEvaluacionDatosAmpleosInterface;
-  criterioNoEvaluado: string
+  criterioNoEvaluado: string;
   onSeleccionarCumplimiento: (item: EvaluarDraftItem) => void;
 };
 
@@ -21,34 +21,27 @@ export default function EvaluarCriterioComponent({
   criterioNoEvaluado,
   onSeleccionarCumplimiento,
 }: Props) {
-
-
-
   const dispatch = useDispatch();
   const criterioEvaluado = useSelector(
     (state: RootState) => state.evaluarCriterio.evaluaciones[criterioSelecionado.idCriterio]
   );
 
-
-
-  const [listCumplimientoOriginales, setListCumplimientoOriginales] =
-    React.useState<cumplimientosDatosAmpleosInterface[]>([]);
   const [listCumplimiento, setListCumplimiento] = React.useState<
     cumplimientosDatosAmpleosInterface[]
   >([]);
   const [cumplimientoSelecionado, setCumplimientoSelecionado] =
     React.useState<cumplimientosDatosAmpleosInterface | null>(null);
 
-  const [cargandoCumplimientos, setCargandoCumplimientos] =
-    React.useState<boolean>(true);
+  const [cargandoCumplimientos, setCargandoCumplimientos] = React.useState<boolean>(true);
 
   useEffect(() => {
     const fetchCumplimientos = async () => {
       setCargandoCumplimientos(true);
       try {
         const cumplimientoServices = new cumplimientossServices();
-        const datosCumplimientos = await cumplimientoServices.getByIdCriterio(criterioSelecionado.idCriterio);
-        setListCumplimientoOriginales(datosCumplimientos);
+        const datosCumplimientos = await cumplimientoServices.getByIdCriterio(
+          criterioSelecionado.idCriterio
+        );
         setListCumplimiento(datosCumplimientos);
       } catch (error) {
         console.error("Error fetching cumplimientos:", error);
@@ -56,8 +49,8 @@ export default function EvaluarCriterioComponent({
         setCargandoCumplimientos(false);
       }
     };
-    fetchCumplimientos();
-  }, []);
+    void fetchCumplimientos();
+  }, [criterioSelecionado.idCriterio]);
 
   useEffect(() => {
     if (!criterioEvaluado?.idCumplimiento) {
@@ -74,9 +67,7 @@ export default function EvaluarCriterioComponent({
     }
   }, [criterioEvaluado?.idCumplimiento, listCumplimiento]);
 
- 
-
- const  onclickCumplimientoSelecionado= (cumplimiento: cumplimientosDatosAmpleosInterface) =>{
+  const onclickCumplimientoSelecionado = (cumplimiento: cumplimientosDatosAmpleosInterface) => {
     const evaluacion = {
       idCriterio: criterioSelecionado.idCriterio,
       idCumplimiento: cumplimiento.idCumplimiento,
@@ -86,61 +77,80 @@ export default function EvaluarCriterioComponent({
     setCumplimientoSelecionado(cumplimiento);
     dispatch(agregarCriterioEvaluar(evaluacion));
     onSeleccionarCumplimiento(evaluacion);
-  }
+  };
+
+  const incompleto = criterioSelecionado.idCriterio === criterioNoEvaluado;
 
   return (
-    <div 
-    className={` min-h-120     
-      ${criterioSelecionado.idCriterio === criterioNoEvaluado? " border-4 border-red-500" : "border-2 border-transparent"}
-    `}>
-      <div className="p-2">
-        <h3 className="text-2xl font-bold">
+    <div
+      className={[
+        "card-row-bg w-full overflow-hidden rounded-2xl p-4 shadow-sm sm:p-5",
+        incompleto ? "ring-2 ring-rose-400 ring-offset-2 ring-offset-[var(--app-bg)]" : "",
+      ].join(" ")}
+    >
+      <div className="mb-4">
+        <h3 className="text-lg font-bold text-[var(--app-fg)] sm:text-xl">
           {criterioSelecionado.nombreCriterio}
         </h3>
-        <details>
-          <summary className="text-slate-500">Detalles</summary>
-          <p className="text-slate-300">{criterioSelecionado.detallesCriterio}</p>
+        <details className="mt-1">
+          <summary className="cursor-pointer text-sm text-[var(--app-fg-muted)] hover:text-[var(--app-fg)]">
+            Detalles
+          </summary>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--app-fg-muted)]">
+            {criterioSelecionado.detallesCriterio}
+          </p>
         </details>
-     
-     
       </div>
+
       {cargandoCumplimientos ? (
-        <div className="w-full">
-          <div className="animate-pulse space-y-4">
-            <div className="h-10 bg-slate-500  w-3/4"></div>
-            <div className="h-10 bg-slate-500  w-5/6"></div>
-            <div className="h-10 bg-slate-500  w-2/3"></div>
-          </div>
+        <div className="w-full animate-pulse space-y-3">
+          <div className="h-14 rounded-xl bg-[var(--vz-surface)]" />
+          <div className="h-14 rounded-xl bg-[var(--vz-surface)]" />
+          <div className="h-14 w-5/6 rounded-xl bg-[var(--vz-surface)]" />
         </div>
       ) : (
-        <section className="flex flex-col gap-4">
-          {listCumplimiento.map((cumplimiento,index) => (
-            <label
-              key={cumplimiento.idCumplimiento}
-              style={{animationDelay: `${index * 120}ms`}}
-              className={`animate-zoom-in flex flex-row cursor-pointer border-2 border-transparent p-2 rounded-lg shadow transition-colors
-        ${
-          cumplimientoSelecionado?.idCumplimiento ===
-          cumplimiento.idCumplimiento
-            ? "evaluar-cumplimiento-neon-selected"
-            : "bg-slate-700 hover:bg-slate-600"
-        }`}
-            >
-              <input
-                type="radio"
-                name={`cum-${criterioSelecionado.idCriterio}`}
-                value={cumplimiento.idCumplimiento}
-                checked={criterioEvaluado?.idCumplimiento === cumplimiento.idCumplimiento}
-                onChange={() => onclickCumplimientoSelecionado(cumplimiento)}
-                className="hidden"
-              />
-              <div className="flex  min-h-16 flex-row gap-4 ml-4">
-                <span className="text-2xl font-bold flex justify-end items-center pr-4 border-r-2 border-slate-400  w-14 max-w-14 min-w-14">{cumplimiento.puntosCumplimiento}</span>
-         
-                <span>{cumplimiento.detalleCumplimiento}</span>
-              </div>
-            </label>
-          ))}
+        <section className="flex flex-col gap-2.5" aria-label="Opciones de cumplimiento">
+          {listCumplimiento.map((cumplimiento, index) => {
+            const seleccionado =
+              cumplimientoSelecionado?.idCumplimiento === cumplimiento.idCumplimiento;
+
+            return (
+              <label
+                key={cumplimiento.idCumplimiento}
+                style={{ animationDelay: `${index * 80}ms` }}
+                className={[
+                  "animate-zoom-in flex cursor-pointer flex-row items-stretch rounded-xl border-2 p-0 transition-colors",
+                  seleccionado
+                    ? "evaluar-cumplimiento-neon-selected"
+                    : "border-[var(--vz-border)] bg-[#fafafa] hover:border-[var(--vz-border-strong)] hover:bg-white",
+                ].join(" ")}
+              >
+                <input
+                  type="radio"
+                  name={`cum-${criterioSelecionado.idCriterio}`}
+                  value={cumplimiento.idCumplimiento}
+                  checked={criterioEvaluado?.idCumplimiento === cumplimiento.idCumplimiento}
+                  onChange={() => onclickCumplimientoSelecionado(cumplimiento)}
+                  className="sr-only"
+                />
+                <div className="flex min-h-14 w-full flex-row items-center gap-3 px-3 py-2.5 sm:gap-4 sm:px-4">
+                  <span
+                    className={[
+                      "flex w-12 shrink-0 items-center justify-center border-r-2 pr-3 text-xl font-bold tabular-nums sm:w-14",
+                      seleccionado
+                        ? "border-[var(--brand)]/35 text-[var(--brand)]"
+                        : "border-[var(--vz-border)] text-[var(--app-fg)]",
+                    ].join(" ")}
+                  >
+                    {cumplimiento.puntosCumplimiento}
+                  </span>
+                  <span className="min-w-0 flex-1 text-sm font-medium text-[var(--app-fg)] sm:text-base">
+                    {cumplimiento.detalleCumplimiento}
+                  </span>
+                </div>
+              </label>
+            );
+          })}
         </section>
       )}
     </div>

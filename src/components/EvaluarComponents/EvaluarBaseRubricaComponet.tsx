@@ -135,39 +135,54 @@ export default function EvaluarBaseRubricaComponet({
   useEffect(() => {
     const fetchCriterios = async () => {
       setCargandoCriterios(true);
-      const criteriosServices = new CriteriosServices();
-      const dataCriterios = await criteriosServices.getDatosAmpleos();
-      const criteriosFiltrados = dataCriterios.filter(
-        (criterio) => criterio.idForaneaRubrica === rubricaSelecionada.idRubrica
-      );
-      setListCriterios(criteriosFiltrados);
-
-      const borradorGuardado = readEvaluarDraftCookie();
-      const borradorValido = esBorradorDeEstaEvaluacion(borradorGuardado) ? borradorGuardado : null;
-
-      setComentarios(borradorValido?.comentarios ?? "");
-      dispatch(recetiarCriteriosEvaluados());
       setCargandoFichaResultados(true);
-      criteriosFiltrados.forEach((criterio) => {
-        const criterioGuardado = borradorValido?.evaluaciones[criterio.idCriterio];
-
-        dispatch(
-          agregarCriterioEvaluar({
-            idCriterio: criterio.idCriterio,
-            idCumplimiento: criterioGuardado?.idCumplimiento ?? "",
-            valor: typeof criterioGuardado?.valor === "number" ? criterioGuardado.valor : 0,
-          })
+      try {
+        const criteriosServices = new CriteriosServices();
+        await criteriosServices.initPerfil();
+        const dataCriterios = await criteriosServices.getDatosAmpleos();
+        const criteriosFiltrados = dataCriterios.filter(
+          (criterio) => criterio.idForaneaRubrica === rubricaSelecionada.idRubrica
         );
-      });
+        setListCriterios(criteriosFiltrados);
 
-      setCargandoCriterios(false);
-      setCargandoFichaResultados(false);
-      if (dataCriterios.length !== 0) {
+        const borradorGuardado = readEvaluarDraftCookie();
+        const borradorValido = esBorradorDeEstaEvaluacion(borradorGuardado) ? borradorGuardado : null;
+
+        setComentarios(borradorValido?.comentarios ?? "");
+        dispatch(recetiarCriteriosEvaluados());
+        criteriosFiltrados.forEach((criterio) => {
+          const criterioGuardado = borradorValido?.evaluaciones[criterio.idCriterio];
+
+          dispatch(
+            agregarCriterioEvaluar({
+              idCriterio: criterio.idCriterio,
+              idCumplimiento: criterioGuardado?.idCumplimiento ?? "",
+              valor: typeof criterioGuardado?.valor === "number" ? criterioGuardado.valor : 0,
+            })
+          );
+        });
+
+        if (criteriosFiltrados.length === 0) {
+          lanzarErrorRef.current(
+            "Esta rúbrica no tiene criterios configurados. Contacta al administrador."
+          );
+        }
+      } catch (error) {
+        console.error("❌ Error cargando criterios de la rúbrica:", error);
+        setListCriterios([]);
+        dispatch(recetiarCriteriosEvaluados());
+        lanzarErrorRef.current(
+          error instanceof Error
+            ? error.message
+            : "No se pudieron cargar los criterios de la rúbrica."
+        );
+      } finally {
         setCargandoCriterios(false);
+        setCargandoFichaResultados(false);
       }
     };
 
-    fetchCriterios();
+    void fetchCriterios();
   }, [dispatch, esBorradorDeEstaEvaluacion, rubricaSelecionada.idRubrica]);
 
   const guardarCumplimientoEnBorrador = useCallback(
@@ -469,24 +484,27 @@ export default function EvaluarBaseRubricaComponet({
     }
   };
   const criteriosListos = Array.isArray(listCriterios) && listCriterios.length > 0;
-const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriteriosEvaluar).length > 0;
+  const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriteriosEvaluar).length > 0;
+  const cargandoRubrica = verificandoEvaluacionExistente || cargandoCriterios;
 
-  if (verificandoEvaluacionExistente) {
+  if (cargandoRubrica) {
     return (
-      <div className="flex min-h-[10rem] w-full max-w-full flex-col items-center justify-center gap-3 rounded-2xl border border-slate-600/40 bg-slate-800/40 px-4 py-8">
+      <div className="flex min-h-[10rem] w-full max-w-full flex-col items-center justify-center gap-3 rounded-2xl border border-[var(--vz-border)] bg-white px-4 py-8 shadow-sm">
         <Lottie animationData={loading2} loop className="max-h-28 w-28" aria-hidden />
-        <p className="text-center text-sm text-slate-400">Verificando evaluación…</p>
+        <p className="text-center text-sm text-[var(--app-fg-muted)]">
+          {verificandoEvaluacionExistente ? "Verificando evaluación…" : "Cargando rúbrica…"}
+        </p>
       </div>
     );
   }
 
   if (evaluacionBloqueada) {
     return (
-      <div className="mx-4 my-6 rounded-2xl border border-amber-500/40 bg-amber-950/30 px-4 py-6 text-center">
-        <p className="text-base font-semibold text-amber-100">
+      <div className="mx-4 my-6 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-6 text-center">
+        <p className="text-base font-semibold text-amber-900">
           Esta banda ya fue evaluada con esta rúbrica en el evento.
         </p>
-        <p className="mt-2 text-sm text-amber-200/80">
+        <p className="mt-2 text-sm text-amber-800/80">
           Espera a que cambie la banda en cancha y usa Actualizar en la sala de espera.
         </p>
       </div>
@@ -495,9 +513,12 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
 
   if (!criteriosListos || !criteriosEvaluarListos) {
     return (
-      <div className="flex min-h-[10rem] w-full max-w-full flex-col items-center justify-center gap-3 rounded-2xl border border-slate-600/40 bg-slate-800/40 px-4 py-8">
-        <Lottie animationData={loading2} loop className="max-h-28 w-28" aria-hidden />
-        <p className="text-center text-sm text-slate-400">Cargando rúbrica…</p>
+      <div className="mx-4 my-6 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-6 text-center">
+        <p className="text-base font-semibold text-amber-900">No se pudo cargar la rúbrica</p>
+        <p className="mt-2 text-sm text-amber-800/80">
+          No hay criterios asociados a esta rúbrica o falló la carga. Revisa la configuración o vuelve a
+          intentar.
+        </p>
       </div>
     );
   }
@@ -534,11 +555,11 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
     <div className="flex w-full max-w-full min-w-0 flex-col gap-4 px-1 pb-[env(safe-area-inset-bottom,0px)] sm:px-2">
       {criteriosParcialesGuardados > 0 && listCriterios.length > 0 ? (
         <div
-          className="rounded-xl border border-sky-500/40 bg-sky-950/40 px-4 py-3 text-sm text-sky-100"
+          className="rounded-xl border border-[var(--brand)]/30 bg-[var(--brand)]/10 px-4 py-3 text-sm text-[var(--app-fg)]"
           role="status"
         >
-          Guardado incompleto: {criteriosParcialesGuardados} de {listCriterios.length} criterios ya están en el
-          sistema. Completa la evaluación y vuelve a guardar.
+          Guardado incompleto: {criteriosParcialesGuardados} de {listCriterios.length} criterios ya
+          están en el sistema. Completa la evaluación y vuelve a guardar.
         </div>
       ) : null}
       <div className="w-full min-w-0">
@@ -548,9 +569,9 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
           </div>
         ) : null}
 
-        <div className="flex flex-col gap-5 sm:gap-6">
+        <div className="flex flex-col gap-4 sm:gap-5">
           {cargandoCriterios ? (
-            <p className="text-center text-sm text-slate-400">Cargando criterios…</p>
+            <p className="text-center text-sm text-[var(--app-fg-muted)]">Cargando criterios…</p>
           ) : (
             listCriterios.map((criterio) => (
               <EvaluarCriterioComponent
@@ -565,22 +586,24 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
 
         {Object.keys(dataCriteriosEvaluar).length === 0 ? null : (
           <section
-            className="mt-2 w-full min-w-0 overflow-hidden rounded-2xl border border-slate-600/45 bg-slate-800/95 text-slate-100 shadow-xl backdrop-blur-sm sm:mt-4"
+            className="card-row-bg mt-2 w-full min-w-0 overflow-hidden rounded-2xl shadow-sm sm:mt-4"
             aria-label="Resumen y comentarios de evaluación"
           >
-            <header className="flex flex-col gap-2 border-b border-slate-600/50 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3.5">
-              <h2 className="min-w-0 text-lg font-semibold leading-snug tracking-tight text-slate-50 sm:text-xl">
+            <header className="flex flex-col gap-2 border-b border-[var(--vz-border)] px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3.5">
+              <h2 className="min-w-0 text-lg font-semibold leading-snug tracking-tight text-[var(--app-fg)] sm:text-xl">
                 <span className="block truncate">{bandaSelecionada.nombreBanda}</span>
               </h2>
               <div className="flex shrink-0 items-center gap-2">
-                <span className="text-xs font-medium uppercase tracking-wide text-slate-500">Total</span>
-                <span className="rounded-lg bg-sky-500/20 px-3 py-1.5 text-base font-bold tabular-nums text-sky-100 ring-1 ring-sky-500/30">
+                <span className="text-xs font-medium uppercase tracking-wide text-[var(--app-fg-muted)]">
+                  Total
+                </span>
+                <span className="rounded-lg bg-[var(--brand)]/15 px-3 py-1.5 text-base font-bold tabular-nums text-[var(--brand)] ring-1 ring-[var(--brand)]/25">
                   {totalPuntos}
                 </span>
               </div>
             </header>
 
-            <div className="scrollbar-estetica max-h-[min(40vh,16rem)] overflow-y-auto border-b border-slate-600/40 px-3 py-2 sm:max-h-[min(45vh,20rem)] sm:px-4">
+            <div className="scrollbar-estetica max-h-[min(40vh,16rem)] overflow-y-auto border-b border-[var(--vz-border)] px-3 py-2 sm:max-h-[min(45vh,20rem)] sm:px-4">
               {Object.keys(dataCriteriosEvaluar).length > 0 ? (
                 <ul className="grid grid-cols-1 gap-1.5 sm:grid-cols-2 sm:gap-2">
                   {Object.entries(dataCriteriosEvaluar).map(([idCriterio, item]) => {
@@ -589,12 +612,12 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
                     return (
                       <li
                         key={idCriterio}
-                        className="flex min-w-0 items-center justify-between gap-2 rounded-lg bg-slate-700/50 px-2.5 py-2 sm:px-3"
+                        className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-[var(--vz-border)] bg-[#fafafa] px-2.5 py-2 sm:px-3"
                       >
-                        <span className="min-w-0 flex-1 truncate text-xs font-medium text-slate-200 sm:text-sm">
+                        <span className="min-w-0 flex-1 truncate text-xs font-medium text-[var(--app-fg)] sm:text-sm">
                           {criterio.nombreCriterio}
                         </span>
-                        <span className="shrink-0 tabular-nums text-sm font-semibold text-sky-200 sm:text-base">
+                        <span className="shrink-0 tabular-nums text-sm font-semibold text-[var(--brand)] sm:text-base">
                           {item.valor}
                         </span>
                       </li>
@@ -602,12 +625,17 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
                   })}
                 </ul>
               ) : (
-                <p className="py-2 text-center text-sm text-slate-400">No hay criterios para evaluar.</p>
+                <p className="py-2 text-center text-sm text-[var(--app-fg-muted)]">
+                  No hay criterios para evaluar.
+                </p>
               )}
             </div>
 
             <div className="px-3 py-3 sm:px-4 sm:py-4">
-              <label htmlFor="evaluar-comentarios" className="mb-1.5 block text-xs font-medium text-slate-400">
+              <label
+                htmlFor="evaluar-comentarios"
+                className="mb-1.5 block text-xs font-medium text-[var(--app-fg-muted)]"
+              >
                 Comentarios u observaciones
               </label>
               <textarea
@@ -618,23 +646,25 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
                 rows={4}
                 autoComplete="off"
                 className={[
-                  "w-full min-h-[6.5rem] resize-y rounded-xl border bg-slate-900/60 p-3 text-base text-slate-100 placeholder:text-slate-500",
-                  "focus-visible:ring-2 focus-visible:ring-sky-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900",
+                  "w-full min-h-[6.5rem] resize-y rounded-xl border bg-white p-3 text-base text-[var(--app-fg)] placeholder:text-[var(--app-fg-muted)]",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand)]/40 focus-visible:ring-offset-2 focus-visible:ring-offset-white",
                   comentarios.length === 0 && sePrecionoElBotoGuardar
-                    ? "border-rose-500/80 ring-1 ring-rose-500/40"
-                    : "border-slate-600",
+                    ? "border-rose-400 ring-1 ring-rose-300"
+                    : "border-[var(--vz-border-strong)]",
                 ].join(" ")}
                 placeholder="Observaciones, comentarios y sugerencias…"
               />
-              <p className="mt-1 text-right text-xs tabular-nums text-slate-500">{comentarios.length}/250</p>
+              <p className="mt-1 text-right text-xs tabular-nums text-[var(--app-fg-muted)]">
+                {comentarios.length}/250
+              </p>
             </div>
 
-            <footer className="sticky bottom-0 z-[1] flex flex-col gap-2 border-t border-slate-600/50 bg-slate-900/90 px-3 py-3 backdrop-blur-md supports-[backdrop-filter]:bg-slate-900/75 sm:static sm:flex-row sm:justify-end sm:bg-transparent sm:px-4 sm:py-4 sm:backdrop-blur-none">
+            <footer className="sticky bottom-0 z-[1] flex flex-col gap-2 border-t border-[var(--vz-border)] bg-white/95 px-3 py-3 backdrop-blur-md sm:static sm:flex-row sm:justify-end sm:bg-transparent sm:px-4 sm:py-4 sm:backdrop-blur-none">
               <button
                 type="button"
                 disabled={guardando}
                 onClick={() => setModalConfirmacion("guardar")}
-                className="min-h-11 w-full touch-manipulation rounded-xl bg-white px-4 py-3 text-base font-semibold text-slate-900 shadow-sm transition-colors hover:bg-slate-100 active:bg-slate-200 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-[10.5rem]"
+                className="btn-surface min-h-11 w-full touch-manipulation rounded-xl px-4 py-3 text-base font-semibold shadow-sm disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-[10.5rem]"
               >
                 {guardando ? "Guardando…" : "Guardar"}
               </button>
@@ -642,7 +672,7 @@ const criteriosEvaluarListos = dataCriteriosEvaluar && Object.keys(dataCriterios
                 type="button"
                 disabled={guardando}
                 onClick={() => setModalConfirmacion("cancelar")}
-                className="min-h-11 w-full touch-manipulation rounded-xl border border-slate-500/80 bg-slate-700/40 px-4 py-3 text-base font-medium text-slate-200 transition-colors hover:bg-slate-600/50 active:bg-slate-600/70 sm:w-auto sm:min-w-[10.5rem]"
+                className="min-h-11 w-full touch-manipulation rounded-xl border border-[var(--vz-border-strong)] bg-white px-4 py-3 text-base font-medium text-[var(--app-fg)] transition-colors hover:bg-[#fafafa] sm:w-auto sm:min-w-[10.5rem]"
               >
                 Cancelar
               </button>

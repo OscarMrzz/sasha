@@ -1,51 +1,62 @@
-import MiBandaNavMovil from '@/components/miBanda/MiBandaNavMovil'
+import MiBandaNavMovil from "@/components/miBanda/MiBandaNavMovil";
 import {
   redirectPorErrorServidorMiBanda,
   redirectSiFaltanCredencialesServidorMiBanda,
-} from '@/helpers/mi-banda/servidorMiBandaHealth'
-import { getAllBandasIds, getResultadosByIdBanda } from '@/services/servidor/resultadosServices'
-import React from 'react'
+} from "@/helpers/mi-banda/servidorMiBandaHealth";
+import { getAllBandasIds, getResultadosByIdBanda } from "@/services/servidor/resultadosServices";
+import React from "react";
 
 /** Permite entrar al servidor y redirigir a aviso si falla Supabase (p. ej. sin env en build). */
-export const dynamicParams = true
+export const dynamicParams = true;
 /** Evita servir HTML/cache de build cuando cambian resultados en Supabase. */
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
-  const bandas = await getAllBandasIds()
-  return bandas.map((b) => ({ id: b.idBanda }))
+  const bandas = await getAllBandasIds();
+  return bandas.map((b) => ({ id: b.idBanda }));
 }
 
 type Props = {
   params: Promise<{
-    id: string
-  }>
-}
+    id: string;
+  }>;
+};
 
-export default async function page({ params }: Props) {
-    const {id} = await params;
-
-    function esPodio(rank: unknown): boolean {
+function esPodio(rank: unknown): boolean {
   const n = Number(rank);
   return n === 1 || n === 2 || n === 3;
 }
 
-  redirectSiFaltanCredencialesServidorMiBanda()
+function formatoNumero(valor: unknown, decimals?: number): string | null {
+  if (valor == null || Number.isNaN(Number(valor))) return null;
+  const n = Number(valor);
+  return decimals != null ? n.toFixed(decimals) : String(n);
+}
 
-  let resultadosMiBanda: Awaited<ReturnType<typeof getResultadosByIdBanda>>
+export default async function page({ params }: Props) {
+  const { id } = await params;
+
+  redirectSiFaltanCredencialesServidorMiBanda();
+
+  let resultadosMiBanda: Awaited<ReturnType<typeof getResultadosByIdBanda>>;
   try {
-    resultadosMiBanda = await getResultadosByIdBanda(id)
+    resultadosMiBanda = await getResultadosByIdBanda(id);
   } catch (err) {
-    redirectPorErrorServidorMiBanda(err)
+    redirectPorErrorServidorMiBanda(err);
   }
 
   if (!resultadosMiBanda) {
     return (
-      <div className="flex min-h-full w-full justify-center bg-slate-800 px-4 py-8">
-        <div className="flex w-full max-w-md flex-col items-center gap-8">
-          <header className="flex flex-col items-center gap-4 text-center">
-            <h1 className="text-2xl font-bold tracking-tight text-sky-300">Mi banda</h1>
-            <p className="text-sm text-slate-400">
+      <div className="flex min-h-[70vh] w-full justify-center px-2 py-10 sm:px-4">
+        <div className="flex w-full max-w-lg flex-col items-center gap-8">
+          <header className="text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand)]">
+              Mi banda
+            </p>
+            <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--app-fg)]">
+              Sin resultados aún
+            </h1>
+            <p className="mt-3 text-sm text-[var(--app-fg-muted)]">
               Aún no hay resultados de temporada para esta banda.
             </p>
           </header>
@@ -56,72 +67,81 @@ export default async function page({ params }: Props) {
   }
 
   const isPodium = esPodio(resultadosMiBanda.rankin);
+  const posicion = formatoNumero(resultadosMiBanda.rankin) ?? "?";
+  const promedio = formatoNumero(resultadosMiBanda.promedio, 2);
+  const total = formatoNumero(resultadosMiBanda.total_despues_sanciones);
 
-  const accentTitle = isPodium ? "text-amber-300" : "text-sky-300";
-  const accentBright = isPodium ? "text-amber-200" : "text-sky-200";
-  const ringBorder = isPodium ? "border-amber-400/90" : "border-sky-400/85";
-  const pulseClass = isPodium ? "pulse-golden" : "pulse-blue";
-return (
-    <div className="flex min-h-full w-full justify-center    py-8">
-      <div className="flex w-full max-w-md flex-col items-center gap-8 ">
-        <header className="flex flex-col items-center gap-4 text-center animate-slide-in-top ">
-          <div>
-            <h1 className={`text-2xl font-bold tracking-tight ${accentTitle}`}>{resultadosMiBanda.nombreBanda}</h1>
-            <p className="text-xs font-medium uppercase tracking-widest text-slate-400">Temporada actual</p>
-          </div>
+  const ringClass = isPodium
+    ? "border-amber-400 text-amber-700"
+    : "border-[var(--brand)] text-[var(--brand)]";
+  const ringBg = isPodium ? "bg-amber-50" : "bg-[#e8f8fb]";
+  const badgeClass = isPodium
+    ? "bg-amber-50 text-amber-800 border-amber-200"
+    : "bg-[#e8f8fb] text-[var(--brand)] border-[var(--brand)]/30";
+
+  return (
+    <div className="flex min-h-[70vh] w-full justify-center px-2 py-8 sm:px-4 sm:py-12">
+      <div className="flex w-full max-w-lg flex-col items-center gap-8">
+        <header className="animate-slide-in-top w-full text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--brand)]">
+            Temporada actual
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-[var(--app-fg)] sm:text-4xl">
+            {resultadosMiBanda.nombreBanda}
+          </h1>
+          {resultadosMiBanda.nombreCategoria ? (
+            <p className="mt-2 text-sm text-[var(--app-fg-muted)]">
+              Categoría {resultadosMiBanda.nombreCategoria}
+            </p>
+          ) : null}
+          {isPodium ? (
+            <span
+              className={`mt-4 inline-flex items-center rounded-full border px-3 py-1 text-xs font-semibold ${badgeClass}`}
+            >
+              En el podio
+            </span>
+          ) : null}
         </header>
 
-        <div className="w-fit shrink-0 animate-zoom-in duration-500">
+        <div className="animate-zoom-in">
           <div
-            className={`flex aspect-square size-60 flex-col items-center justify-center gap-1 overflow-hidden rounded-full border-[6px] bg-slate-900 ${ringBorder} text-center shadow-lg ${pulseClass}`}
+            className={`flex size-52 flex-col items-center justify-center rounded-full border-[5px] ${ringClass} ${ringBg} text-center shadow-sm sm:size-56`}
           >
-            <span className={`tabular-nums text-7xl font-black leading-none sm:text-8xl ${accentBright}`}>
-              {resultadosMiBanda.rankin != null && !Number.isNaN(Number(resultadosMiBanda.rankin))
-                ? String(resultadosMiBanda.rankin)
-                : "?"}
+            <span className="tabular-nums text-7xl font-black leading-none sm:text-8xl">
+              {posicion}
             </span>
-            <span className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${accentBright} opacity-90`}>
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] opacity-80">
               Posición
             </span>
           </div>
         </div>
 
-        <div className="flex w-full max-w-md items-stretch justify-center gap-4 sm:gap-6">
-          <div className="flex min-h-[5.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-2 rounded-xl border border-slate-600/80 bg-slate-900/50 px-4 py-3 text-center">
-            {resultadosMiBanda.promedio != null && !Number.isNaN(Number(resultadosMiBanda.promedio)) ? (
-              <>
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Promedio</span>
-                <span className={`text-2xl font-bold tabular-nums leading-tight ${accentBright} opacity-85`}>
-                {Number(resultadosMiBanda.promedio).toFixed(2)}
-                </span>
-              </>
-            ) : (
-              <span className={`text-xl font-medium uppercase tracking-wide ${accentBright} opacity-85`}>Promedio</span>
-            )}
+        <div className="grid w-full grid-cols-2 gap-3 sm:gap-4">
+          <div className="card-row-bg flex min-h-[5.5rem] flex-col items-center justify-center gap-1.5 rounded-2xl px-4 py-4 text-center shadow-sm">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--app-fg-muted)]">
+              Promedio
+            </span>
+            <span className="text-2xl font-bold tabular-nums text-[var(--app-fg)]">
+              {promedio ?? "—"}
+            </span>
           </div>
-          <div className="flex min-h-[5.5rem] min-w-0 flex-1 flex-col items-center justify-center gap-2 rounded-xl border border-slate-600/80 bg-slate-900/50 px-4 py-3 text-center">
-            {resultadosMiBanda.total_despues_sanciones != null &&
-            !Number.isNaN(Number(resultadosMiBanda.total_despues_sanciones)) ? (
-              <>
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Total</span>
-                <span className={`text-2xl font-bold tabular-nums leading-tight ${accentBright} opacity-85`}>
-                  {resultadosMiBanda.total_despues_sanciones}
-                </span>
-              </>
-            ) : (
-              <>
-                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Total</span>
-                <span className={`text-4xl font-black tabular-nums leading-none ${accentBright}`}>?</span>
-              </>
-            )}
+          <div className="card-row-bg flex min-h-[5.5rem] flex-col items-center justify-center gap-1.5 rounded-2xl px-4 py-4 text-center shadow-sm">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--app-fg-muted)]">
+              Total
+            </span>
+            <span className="text-2xl font-bold tabular-nums text-[var(--app-fg)]">
+              {total ?? "—"}
+            </span>
           </div>
         </div>
 
         <div className="animate-fade-in-up w-full">
+          <p className="mb-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-[var(--app-fg-muted)] lg:hidden">
+            Accesos
+          </p>
           <MiBandaNavMovil id={id} isPodium={isPodium} />
         </div>
       </div>
     </div>
   );
 }
-

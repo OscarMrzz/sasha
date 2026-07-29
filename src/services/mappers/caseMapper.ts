@@ -7,7 +7,7 @@ const SNAKE_TO_CAMEL_EXCEPTIONS: Record<string, string> = {
   alias_banda: "AliasBanda",
   lugar_evento: "LugarEvento",
   detalles_rol: "DetallesRol",
-  // Campos de registro_eventos que el modelo TS mantiene en snake_case
+  // Campos que el modelo TS mantiene en snake_case
   estado_evento: "estado_evento",
   tipo_evento: "tipo_evento",
   dimensiones_cancha: "dimensiones_cancha",

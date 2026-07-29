@@ -8,7 +8,7 @@ import {
   registroEquipoEvaluadorInsertSchema,
   registroEquipoEvaluadorUpdateSchema,
 } from "@/models/equipoEvaluador/registroEquipoEvaluadorSchema";
-import { fromDb, fromDbMany, toDb } from "@/services/mappers/caseMapper";
+import { fromDb, toDb } from "@/services/mappers/caseMapper";
 import { parseCamel } from "@/services/mappers/parseCamel";
 
 type Interface = registroEquipoEvaluadorInterface;
@@ -16,6 +16,25 @@ type Interface = registroEquipoEvaluadorInterface;
 const tabla = "registro_equipo_evaluador";
 const elId = "id_registro_evaluador";
 const RUBRICA_DUPLICADA_MSG = "Esta rúbrica ya está asignada a otro jurado en este evento.";
+
+/**
+ * El modelo de equipo evaluador mantiene `id_foranea_rubrica` en snake_case;
+ * el mapper global lo convierte a camelCase, así que lo restauramos aquí.
+ */
+function mapEquipoEvaluadorRow<T extends Record<string, unknown>>(row: Record<string, unknown>): T {
+  const mapped = fromDb<Record<string, unknown>>(row);
+  if ("idForaneaRubrica" in mapped) {
+    mapped.id_foranea_rubrica = mapped.idForaneaRubrica ?? null;
+    delete mapped.idForaneaRubrica;
+  }
+  return mapped as T;
+}
+
+function mapEquipoEvaluadorMany<T extends Record<string, unknown>>(
+  rows: Record<string, unknown>[],
+): T[] {
+  return rows.map((row) => mapEquipoEvaluadorRow<T>(row));
+}
 
 export default class RegistroEquipoEvaluadorServices {
   perfil: perfilDatosAmpleosInterface | null = null;
@@ -91,7 +110,7 @@ export default class RegistroEquipoEvaluadorServices {
         throw error;
       }
 
-      return fromDbMany<registroEquipoEvaluadorDatosAmpleosInterface>(data ?? []);
+      return mapEquipoEvaluadorMany<registroEquipoEvaluadorDatosAmpleosInterface>(data ?? []);
     } catch (error) {
       console.error("❌ Error general en getDatosAmpleos:", error);
       throw error;
@@ -101,7 +120,7 @@ export default class RegistroEquipoEvaluadorServices {
   async get() {
     const { data, error } = await dataBaseSupabase.from(tabla).select("*");
     if (error) throw error;
-    return fromDbMany<registroEquipoEvaluadorInterface>(data ?? []);
+    return mapEquipoEvaluadorMany<registroEquipoEvaluadorInterface>(data ?? []);
   }
 
   async getporPerfil(idUsuario: string) {
@@ -118,14 +137,14 @@ export default class RegistroEquipoEvaluadorServices {
       .eq("id_foranea_perfil", idUsuario);
     if (error) throw error;
 
-    return fromDbMany<registroEquipoEvaluadorDatosAmpleosInterface>(data ?? []);
+    return mapEquipoEvaluadorMany<registroEquipoEvaluadorDatosAmpleosInterface>(data ?? []);
   }
 
   async getOne(id: string) {
     const { data, error } = await dataBaseSupabase.from(tabla).select("*").eq(elId, id).single();
 
     if (error) throw error;
-    return fromDb<registroEquipoEvaluadorInterface>(data);
+    return mapEquipoEvaluadorRow<registroEquipoEvaluadorInterface>(data);
   }
 
   async create(dataCreate: Interface) {
@@ -145,7 +164,7 @@ export default class RegistroEquipoEvaluadorServices {
         .single();
 
       if (error) this.throwIfRubricaDuplicada(error);
-      return fromDb<registroEquipoEvaluadorInterface>(data);
+      return mapEquipoEvaluadorRow<registroEquipoEvaluadorInterface>(data);
     } catch (error) {
       this.throwIfRubricaDuplicada(error);
     }
@@ -170,7 +189,7 @@ export default class RegistroEquipoEvaluadorServices {
         .single();
 
       if (error) this.throwIfRubricaDuplicada(error);
-      return fromDb<registroEquipoEvaluadorInterface>(data);
+      return mapEquipoEvaluadorRow<registroEquipoEvaluadorInterface>(data);
     } catch (error) {
       this.throwIfRubricaDuplicada(error);
     }
@@ -203,7 +222,7 @@ export default class RegistroEquipoEvaluadorServices {
         .single();
 
       if (error) this.throwIfRubricaDuplicada(error);
-      return fromDb<registroEquipoEvaluadorInterface>(data);
+      return mapEquipoEvaluadorRow<registroEquipoEvaluadorInterface>(data);
     } catch (error) {
       this.throwIfRubricaDuplicada(error);
     }

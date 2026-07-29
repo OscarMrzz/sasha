@@ -865,31 +865,16 @@ body:has(dialog:modal) {
 }
 
 .evaluar-cumplimiento-neon-selected {
-  background: linear-gradient(
-    155deg,
-    rgb(255 255 255) 0%,
-    rgb(224 242 254) 35%,
-    rgb(186 230 253) 70%,
-    rgb(125 211 252) 100%
-  );
-  border-color: rgb(2 132 199) !important;
-  color: rgb(15 23 42);
-  animation: evaluar-neon-pulse 2.2s ease-in-out infinite;
-  transition: background 0.25s ease, border-color 0.25s ease;
+  background: color-mix(in srgb, var(--brand) 12%, white);
+  border-color: var(--brand) !important;
+  color: var(--app-fg);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 25%, transparent);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .evaluar-cumplimiento-neon-selected:hover {
-  background: linear-gradient(
-    155deg,
-    rgb(248 250 252) 0%,
-    rgb(240 249 255) 40%,
-    rgb(186 230 253) 100%
-  );
-  border-color: rgb(14 165 233) !important;
-}
-
-.evaluar-cumplimiento-neon-selected span.border-slate-400 {
-  border-right-color: rgb(59 130 246 / 0.4);
+  background: color-mix(in srgb, var(--brand) 18%, white);
+  border-color: var(--brand-hover) !important;
 }
 
 @layer base {
