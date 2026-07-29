@@ -1,4 +1,4 @@
--- Datos de prueba SASHA-DEV (region general, 3 categorías, 9 bandas, 4 eventos).
+-- Datos de prueba SASHA-DEV (region general, 3 categorías, 9 bandas, 5 eventos).
 -- Orden en Supabase Studio / SQL Editor:
 --   1) supabase/snippets/datos/datos_prueba.sql   (este archivo)
 --   2) supabase/snippets/politicas/politicas.sql
@@ -830,8 +830,8 @@ END seed_bandas_y_dirigentes;
 
 /* ====================================================================== */
 /* EVENTOS SASHA 2026                                                    */
-/* 4 eventos: Dionisio 8 ago + test 2/3/4 los domingos siguientes.       */
-/* Todos en región general.                                              */
+/* evento test 1 = siempre CURRENT_DATE (día en que se corre el seed).   */
+/* + Dionisio 8 ago + test 2/3/4. Todos en región general.               */
 /* ====================================================================== */
 <<seed_eventos_sasha_2026>>
 DECLARE
@@ -841,6 +841,7 @@ BEGIN
   FOR evento_row IN
     SELECT *
     FROM (VALUES
+      ('evento test 1', CURRENT_DATE),
       ('Dionisio de Herrera SPS', '2026-08-08'::date),
       ('evento test 2', '2026-08-09'::date),
       ('evento test 3', '2026-08-16'::date),
