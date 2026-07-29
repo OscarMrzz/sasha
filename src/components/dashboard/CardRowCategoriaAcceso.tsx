@@ -52,7 +52,7 @@ export default function CardRowCategoriaAcceso({
 
   return (
     <>
-      <label className="group flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-slate-600/40 bg-slate-800/50 px-3 py-2.5 transition hover:border-slate-500/70 hover:bg-slate-800/80">
+      <label className="group flex cursor-pointer items-center justify-between gap-3 rounded-lg border border-[var(--vz-border)] bg-white px-3 py-2.5 transition hover:border-[var(--vz-border-strong)] hover:bg-[#fafafa]">
         <input
           type="checkbox"
           className="peer sr-only"
@@ -61,21 +61,21 @@ export default function CardRowCategoriaAcceso({
           disabled={procesando}
         />
         <div className="min-w-0 flex-1">
-          <span className="block truncate text-sm font-semibold text-white">
+          <span className="block truncate text-sm font-semibold text-[var(--vz-black)]">
             {categoria.nombreCategoria || "—"}
           </span>
           <span
             className={`mt-1 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
               acceso
-                ? "bg-emerald-500/20 text-emerald-300"
-                : "bg-slate-700/80 text-slate-300"
+                ? "bg-emerald-50 text-emerald-700"
+                : "bg-[var(--vz-surface)] text-[var(--app-fg-muted)]"
             }`}
           >
             {acceso ? "Acceso activo" : "Acceso bloqueado"}
           </span>
         </div>
         <div
-          className="relative h-8 w-[2.75rem] shrink-0 rounded-full bg-slate-600 transition-colors duration-300 peer-focus-visible:ring-2 peer-focus-visible:ring-[#00b4d8] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-slate-900 peer-checked:bg-emerald-500 peer-disabled:opacity-50"
+          className="relative h-8 w-[2.75rem] shrink-0 rounded-full bg-[var(--vz-border-strong)] transition-colors duration-300 peer-focus-visible:ring-2 peer-focus-visible:ring-emerald-500 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-white peer-checked:bg-emerald-500 peer-disabled:opacity-50"
           aria-hidden
         >
           <span

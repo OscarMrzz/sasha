@@ -192,12 +192,7 @@ export default function ResponsableMesaPage() {
           onRefresh={refetchDashboard}
         />
 
-        <SeccionBandasConfirmadas
-          eventosColumna={eventosBandasColumnas}
-          bandasPorEvento={bandasPorEventoRelevante}
-          fechaHoyISO={hoy}
-          cargando={cargandoEventos}
-        />
+     
 
         <SeccionAccesos
           eventos={eventosBandasColumnas}

@@ -1,7 +1,7 @@
 "use client";
 
 import SeccionAccesos from "@/components/dashboard/SeccionAccesos";
-import SeccionBandasConfirmadas from "@/components/dashboard/SeccionBandasConfirmadas";
+
 import SeccionEventosDelDia from "@/components/dashboard/SeccionEventosDelDia";
 import SeccionSolicitudesDashboard from "@/components/dashboard/SeccionSolicitudesDashboard";
 import SeccionSolicitudesCopaDashboard from "@/components/dashboard/SeccionSolicitudesCopaDashboard";
@@ -95,12 +95,7 @@ export default function DashboardPage() {
         onRefresh={refetchDashboard}
       />
 
-      <SeccionBandasConfirmadas
-        eventosColumna={eventosBandasColumnas}
-        bandasPorEvento={bandasPorEventoRelevante}
-        fechaHoyISO={hoy}
-        cargando={cargandoEventos}
-      />
+    
       
 
       <SeccionAccesos
