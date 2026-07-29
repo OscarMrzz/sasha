@@ -15,6 +15,9 @@ type prop = {
   RutaMiPerfil: string;
 };
 
+const AVATAR_CLASS =
+  "relative flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-[var(--vz-border-strong)] bg-[var(--vz-surface)] shadow-sm";
+
 export default function UserDropdown({
   urlFotoPerfil,
   haySesion,
@@ -37,7 +40,7 @@ export default function UserDropdown({
     if (triggerRef.current?.contains(target)) return;
     setOpenMenu(false);
   };
-  
+
   useEffect(() => {
     document.addEventListener("click", clickFueraMenu);
     return () => {
@@ -54,17 +57,14 @@ export default function UserDropdown({
     if (!openMenu && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       const isLg = window.matchMedia("(min-width: 1024px)").matches;
-      
+
       let left = rect.left;
       if (isLg) {
-        // lg:right-5 behavior: align right edge of menu 20px from right edge of trigger
-        // menu width is w-72 (18rem = 288px)
-        // 20px offset
         left = rect.right - 20 - 288;
       }
 
       setMenuCoords({
-        top: rect.bottom,
+        top: rect.bottom + 8,
         left: left,
       });
     }
@@ -82,71 +82,77 @@ export default function UserDropdown({
   if (!haySesionIniciada) {
     return (
       <div>
-        <div className="bg-slate-500 rounded-full p-2 ">
-          <UserIcon className="h-6 w-6 text-slate-200 " />
+        <div className="rounded-full border border-[var(--vz-border-strong)] bg-[var(--vz-surface)] p-2">
+          <UserIcon className="h-6 w-6 text-[var(--app-fg-muted)]" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className=" relative   ">
-      
-      <div
-        ref={triggerRef}
-        onClick={handleClickMenu}
-        className="relative overflow-hidden p-2 w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center shadow-lg cursor-pointer "
-      >
+    <div className="relative">
+      <div ref={triggerRef} onClick={handleClickMenu} className={AVATAR_CLASS}>
         <FotoPerfilImage
           src={urlFotoPerfilActual}
           alt="Foto de perfil"
           fill
-          className="object-cover rounded-full"
-          fallbackIconClassName="w-6 h-6"
+          className="rounded-full object-cover"
+          fallbackIconClassName="h-6 w-6 text-[var(--brand)]"
         />
       </div>
-      {openMenu && createPortal(
-        <div
-          ref={menuRef}
-          style={{ 
-            top: menuCoords.top, 
-            left: menuCoords.left,
-            position: 'fixed',
-            zIndex: 9999 
-          }}
-          className="p-4 h-90 min-h-60 w-72 bg-slate-600 rounded-xl shadow-lg"
-        >
-          <Link href={RutaMiPerfil} className="flex gap-2 items-center border-b border-slate-300 pb-4">
-            <div>
-              <div className="relative overflow-hidden p-2 w-12 h-12 rounded-full bg-gray-400 flex items-center justify-center shadow-lg cursor-pointer ">
+      {openMenu &&
+        createPortal(
+          <div
+            ref={menuRef}
+            style={{
+              top: menuCoords.top,
+              left: menuCoords.left,
+              position: "fixed",
+              zIndex: 9999,
+            }}
+            className="min-h-60 w-72 rounded-xl border border-[var(--vz-border)] bg-white p-4 text-[var(--app-fg)] shadow-[0_16px_40px_-20px_rgba(15,23,42,0.25)]"
+          >
+            <Link
+              href={RutaMiPerfil}
+              className="flex items-center gap-3 border-b border-[var(--vz-border)] pb-4"
+            >
+              <div className={AVATAR_CLASS}>
                 <FotoPerfilImage
                   src={urlFotoPerfilActual}
                   alt="Foto de perfil"
                   fill
-                  className="object-cover rounded-full"
-                  fallbackIconClassName="w-6 h-6"
+                  className="rounded-full object-cover"
+                  fallbackIconClassName="h-6 w-6 text-[var(--brand)]"
                 />
               </div>
-            </div>
-            <div>
-              <p className="font-light">
-                {nombreUsuario} {apellidoUsuario}
-              </p>
-            </div>
-          </Link>
-          <div className="flex flex-col gap-2 pt-4 font-light">
-            <Link href={RutaMiPerfil} className="flex items-center gap-2" onClick={handleClickAbrirPerfil}>
-              <UserIcon className="w-6 h-6" />
-              Perfil
+              <div>
+                <p className="text-sm font-semibold text-[var(--vz-black)]">
+                  {nombreUsuario} {apellidoUsuario}
+                </p>
+                <p className="mt-0.5 text-xs text-[var(--app-fg-muted)]">Ver perfil</p>
+              </div>
             </Link>
-            <p onClick={handleClickCerrarSesion} className="flex items-center gap-2 cursor-pointer">
-              <ArrowRightOnRectangleIcon className="w-6 h-6" />
-              Cerrar sesión
-            </p>
-          </div>
-        </div>,
-        document.body
-      )}
+            <div className="flex flex-col gap-1 pt-3">
+              <Link
+                href={RutaMiPerfil}
+                className="flex items-center gap-2 rounded-lg px-2 py-2 text-sm text-[var(--app-fg)] transition-colors hover:bg-[var(--vz-surface)]"
+                onClick={handleClickAbrirPerfil}
+              >
+                <UserIcon className="h-5 w-5 text-[var(--brand)]" />
+                Perfil
+              </Link>
+              <button
+                type="button"
+                onClick={handleClickCerrarSesion}
+                className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-red-600 transition-colors hover:bg-red-50"
+              >
+                <ArrowRightOnRectangleIcon className="h-5 w-5" />
+                Cerrar sesión
+              </button>
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 }

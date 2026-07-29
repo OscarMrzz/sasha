@@ -12,21 +12,38 @@ import {
 } from "@/helpers/usuarios/validarAccesoPerfil";
 
 const INPUT_CLASS =
-  "h-11 w-full rounded-lg border border-slate-600 bg-slate-800 pl-10 pr-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-[var(--color-primario)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primario)]/25 disabled:cursor-not-allowed disabled:opacity-60";
+  "h-12 w-full rounded-xl border border-[var(--vz-border-strong)] bg-white pl-11 pr-3 text-sm text-[var(--app-fg)] placeholder:text-[var(--app-fg-muted)] transition-[border-color,box-shadow] focus:border-[var(--brand)] focus:outline-none focus:shadow-[0_0_0_3px_rgba(0,180,216,0.18)] disabled:cursor-not-allowed disabled:opacity-60";
 
 function LoginWelcomePanel() {
   return (
-    <aside className="flex flex-col justify-center border-b border-slate-700 bg-slate-800 p-8 md:w-1/2 md:border-b-0 md:border-r md:p-12">
+    <aside className="login-panel-in relative flex flex-col justify-between overflow-hidden bg-[var(--brand)] px-8 py-10 text-white md:w-[44%] md:px-12 md:py-14">
       <div
-        className="mb-8 flex aspect-[4/3] max-h-40 w-full max-w-xs items-center justify-center rounded-xl border-2 border-dashed border-slate-600 bg-slate-900"
-        aria-label="Espacio reservado para el logo"
-      >
-        <span className="text-2xl font-bold tracking-[0.2em] text-[var(--color-primario)]">SASHA</span>
+        className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full border-[28px] border-white/15"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-20 -left-10 size-44 rounded-full border-[22px] border-white/10"
+        aria-hidden
+      />
+
+      <div className="relative">
+        <p className="text-xs font-semibold uppercase tracking-[0.28em] text-white/80">
+          Federación
+        </p>
+        <h1 className="mt-4 text-5xl font-bold tracking-tight text-white md:text-6xl">
+          SASHA
+        </h1>
+        <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/90 md:text-base">
+          Gestiona bandas, eventos, evaluaciones y resultados desde un solo lugar.
+        </p>
       </div>
-      <h1 className="text-2xl font-semibold text-white md:text-3xl">Bienvenido</h1>
-      <p className="mt-3 max-w-sm text-sm leading-relaxed text-slate-400 md:text-base">
-        Accede a la plataforma para gestionar bandas, eventos, evaluaciones y resultados de tu federación.
-      </p>
+
+      <div className="relative mt-10 space-y-3 border-t border-white/25 pt-8 md:mt-0">
+        <p className="text-sm font-medium text-white">Acceso seguro</p>
+        <p className="max-w-xs text-xs leading-relaxed text-white/75">
+          Usa el correo y la contraseña asignados por tu administrador.
+        </p>
+      </div>
     </aside>
   );
 }
@@ -134,24 +151,31 @@ const SignInPage = () => {
   };
 
   return (
-    <div className="login flex min-h-screen w-full items-center justify-center p-4 sm:p-6">
-      <div className="flex w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-slate-700 bg-slate-900 md:min-h-[520px] md:flex-row">
+    <div className="login flex min-h-screen w-full items-center justify-center p-4 sm:p-6 md:p-8">
+      <div className="login-shell-in flex w-full max-w-5xl flex-col overflow-hidden rounded-2xl border border-[var(--vz-border)] bg-white shadow-[0_24px_64px_-28px_rgba(15,23,42,0.18)] md:min-h-[560px] md:flex-row">
         <LoginWelcomePanel />
 
-        <section className="flex flex-col justify-center p-8 md:w-1/2 md:p-12">
+        <section className="login-form-in flex flex-col justify-center bg-white px-8 py-10 md:w-[56%] md:px-14 md:py-14">
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white">Iniciar sesión</h2>
-            <p className="mt-1 text-sm text-slate-400">Ingresa tu correo y contraseña.</p>
+            <h2 className="text-2xl font-semibold tracking-tight text-[var(--vz-black)]">
+              Iniciar sesión
+            </h2>
+            <p className="mt-2 text-sm text-[var(--app-fg-muted)]">
+              Ingresa tu correo y contraseña para continuar.
+            </p>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit} noValidate>
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="email">
+              <label
+                className="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-[var(--app-fg-muted)]"
+                htmlFor="email"
+              >
                 Correo electrónico
               </label>
               <div className="relative">
                 <EnvelopeIcon
-                  className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-500"
+                  className="pointer-events-none absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-[var(--app-fg-muted)]"
                   aria-hidden
                 />
                 <input
@@ -173,19 +197,22 @@ const SignInPage = () => {
             </div>
 
             <div>
-              <label className="mb-2 block text-sm font-medium text-slate-300" htmlFor="password">
+              <label
+                className="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-[var(--app-fg-muted)]"
+                htmlFor="password"
+              >
                 Contraseña
               </label>
               <div className="relative">
                 <LockClosedIcon
-                  className="pointer-events-none absolute left-3 top-1/2 size-5 -translate-y-1/2 text-slate-500"
+                  className="pointer-events-none absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-[var(--app-fg-muted)]"
                   aria-hidden
                 />
                 <input
                   type={mostrarPassword ? "text" : "password"}
                   id="password"
                   autoComplete="current-password"
-                  className={`${INPUT_CLASS} pr-10`}
+                  className={`${INPUT_CLASS} pr-12`}
                   placeholder="••••••••"
                   value={form.password}
                   onChange={handleChange}
@@ -198,7 +225,7 @@ const SignInPage = () => {
                 />
                 <button
                   type="button"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-slate-400 hover:bg-slate-700 hover:text-slate-200"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg p-2 text-[var(--app-fg-muted)] transition-colors hover:bg-[var(--vz-surface)] hover:text-[var(--app-fg)]"
                   onClick={() => setMostrarPassword((v) => !v)}
                   aria-label={mostrarPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                   tabIndex={-1}
@@ -210,7 +237,7 @@ const SignInPage = () => {
 
             {mensaje ? (
               <div
-                className="rounded-lg border border-red-500/40 bg-red-950/50 px-3 py-2.5 text-sm text-red-200"
+                className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700"
                 role="alert"
                 data-testid="error-message"
               >
@@ -220,16 +247,16 @@ const SignInPage = () => {
 
             <button
               type="submit"
-              className="flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[var(--color-primario)] text-sm font-semibold text-slate-950 hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[var(--brand)] text-sm font-semibold text-white transition-colors hover:bg-[var(--brand-hover)] disabled:cursor-not-allowed disabled:opacity-60"
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <span className="size-4 animate-spin rounded-full border-2 border-slate-950/30 border-t-slate-950" />
+                  <span className="size-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   Entrando…
                 </>
               ) : (
-                "Iniciar sesión"
+                "Iniciar Sesión"
               )}
             </button>
           </form>

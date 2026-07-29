@@ -97,9 +97,14 @@ export default function ControlesIniciarPararEvento({
       ? "¿Volver a iniciar el evento?"
       : "¿Iniciar el evento?";
 
-  const btnCls = compact
-    ? "inline-flex items-center gap-1.5 rounded-lg border border-slate-500/70 bg-slate-600/50 px-2.5 py-1 text-xs font-semibold text-white transition hover:bg-slate-600"
-    : "inline-flex items-center gap-2 rounded-lg border border-sky-400/35 bg-[#00b4d8]/15 px-3 py-1.5 text-sm font-semibold text-sky-100 transition hover:bg-[#00b4d8]/25";
+  const btnCls =
+    estado === "iniciado"
+      ? compact
+        ? "inline-flex items-center gap-1.5 rounded-lg border border-amber-300 bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-800 transition hover:bg-amber-100"
+        : "inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-800 transition hover:bg-amber-100"
+      : compact
+        ? "inline-flex items-center gap-1.5 rounded-lg border border-[var(--brand)]/35 bg-[var(--brand)]/10 px-2.5 py-1 text-xs font-semibold text-[var(--brand-hover)] transition hover:bg-[var(--brand)]/18"
+        : "inline-flex items-center gap-2 rounded-lg border border-[var(--brand)]/35 bg-[var(--brand)]/10 px-3 py-1.5 text-sm font-semibold text-[var(--brand-hover)] transition hover:bg-[var(--brand)]/18";
 
   return (
     <div className={className} onDoubleClick={(e) => e.stopPropagation()}>

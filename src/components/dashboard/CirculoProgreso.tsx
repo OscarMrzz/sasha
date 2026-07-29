@@ -12,10 +12,8 @@ type Props = {
 };
 
 function colorPorRango(p: number): string {
-  if (Number.isNaN(p) || p < 0) return "#64748b";
-  if (p < 40) return "#00b4d8";
-  if (p < 70) return "#f59e0b";
-  return "#22c55e";
+  if (Number.isNaN(p) || p < 0) return "#a3a3a3";
+  return "#00b4d8";
 }
 
 export default function CirculoProgreso({
@@ -55,7 +53,7 @@ export default function CirculoProgreso({
           fill="none"
           stroke="currentColor"
           strokeWidth={stroke}
-          className="text-slate-600/80"
+          className="text-[var(--vz-border-strong)]"
         />
         <circle
           cx={cx}
@@ -71,9 +69,11 @@ export default function CirculoProgreso({
         />
       </svg>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-lg font-bold tabular-nums text-white">{Math.round(max)}%</span>
+        <span className="text-lg font-bold tabular-nums text-[var(--vz-black)]">
+          {Math.round(max)}%
+        </span>
         {label ? (
-          <span className="mt-0.5 max-w-[90%] truncate text-center text-[10px] text-slate-400">
+          <span className="mt-0.5 max-w-[90%] truncate text-center text-[10px] text-[var(--app-fg-muted)]">
             {label}
           </span>
         ) : null}

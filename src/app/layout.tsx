@@ -231,7 +231,7 @@ export default function RootLayout({
       >
         <Providers>
           <NavBard />
-          <div className="flex  w-full h-full min-h-screen">
+          <div className="flex w-full min-h-screen items-stretch">
             {mostrarSidebar && <Sidebar />}
             <main
               className={cn("min-w-0 flex-1", !esRutaPublica(pathname) && "pt-18")}
