@@ -10,14 +10,14 @@ type Props = {
 export default function IndicadorEstadoEvento({ iniciado, className = "" }: Props) {
   return (
     <div
-      className={`flex h-fit shrink-0 items-start justify-start ${className}`.trim()}
+      className={`flex h-8 w-8 shrink-0 items-center justify-center overflow-visible ${className}`.trim()}
       role="img"
       aria-label={iniciado ? "Evento activo / en curso" : "Evento inactivo"}
     >
       {iniciado ? (
         <CirculoOnda size="mini" />
       ) : (
-        <div className="h-4 w-4 shrink-0 rounded-full bg-slate-400" />
+        <div className="h-3.5 w-3.5 shrink-0 rounded-full bg-slate-400" />
       )}
     </div>
   );

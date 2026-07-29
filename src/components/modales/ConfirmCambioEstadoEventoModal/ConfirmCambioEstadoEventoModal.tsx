@@ -1,4 +1,6 @@
-import React, { useEffect, useRef } from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
 
@@ -20,12 +22,12 @@ const variantStyles: Record<
   { icon: string; button: string; iconGlyph: typeof PlayIcon }
 > = {
   iniciar: {
-    icon: "text-sky-400",
-    button: "bg-sky-600 hover:bg-sky-700",
+    icon: "text-[var(--brand)]",
+    button: "bg-[var(--brand)] hover:bg-[var(--brand-hover)]",
     iconGlyph: PlayIcon,
   },
   finalizar: {
-    icon: "text-amber-400",
+    icon: "text-amber-600",
     button: "bg-amber-600 hover:bg-amber-700",
     iconGlyph: PauseIcon,
   },
@@ -41,59 +43,73 @@ const ConfirmCambioEstadoEventoModal = ({
   confirmLabel,
   variant,
 }: ConfirmCambioEstadoEventoModalProps) => {
-  const modalRef = useRef<HTMLDialogElement>(null);
   const styles = variantStyles[variant];
   const Icon = styles.iconGlyph;
 
   useEffect(() => {
-    if (open) {
-      modalRef.current?.showModal();
-    } else {
-      modalRef.current?.close();
-    }
-  }, [open]);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !loading) onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open, loading, onClose]);
 
-  const dialogNode =
-    open && typeof document !== "undefined" ? (
-      <dialog
-        ref={modalRef}
-        onClose={onClose}
-        className="fixed z-[200] inset-0 m-auto flex border-0 outline-none bg-transparent backdrop:bg-black/50 backdrop:backdrop-blur-xs animate-zoom-in duration-500"
+  if (!open || typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-4 backdrop-blur-[2px]"
+      role="presentation"
+      onClick={() => {
+        if (!loading) onClose();
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-cambio-estado-titulo"
+        className="modal-bg flex w-full max-w-sm flex-col gap-4 rounded-2xl border border-[var(--vz-border)] p-6 shadow-lg"
+        onClick={(e) => e.stopPropagation()}
       >
-        <div className="modal-bg rounded-2xl w-sm max-w-[calc(100vw-2rem)] flex flex-col gap-4 p-6">
-          <div className="flex items-center gap-3">
-            <Icon className={`h-7 w-7 shrink-0 ${styles.icon}`} aria-hidden />
-            <h2 className="text-white text-lg font-bold">{titulo}</h2>
-          </div>
-          <div className="text-slate-300 text-sm leading-relaxed">{descripcion}</div>
-          <div className="flex justify-end gap-3 mt-2">
-            <button
-              type="button"
-              disabled={loading}
-              onClick={onClose}
-              className="px-4 py-2 text-white border-2 border-slate-500 rounded-lg cursor-pointer hover:bg-slate-600 transition-colors disabled:opacity-50"
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              disabled={loading}
-              onClick={() => void onConfirm()}
-              className={`px-4 py-2 text-white rounded-lg cursor-pointer transition-colors font-semibold disabled:opacity-50 ${styles.button}`}
-            >
-              {loading ? "…" : confirmLabel}
-            </button>
-          </div>
+        <div className="flex items-center gap-3">
+          <Icon className={`h-7 w-7 shrink-0 ${styles.icon}`} aria-hidden />
+          <h2
+            id="confirm-cambio-estado-titulo"
+            className="text-lg font-bold text-[var(--vz-black)]"
+          >
+            {titulo}
+          </h2>
         </div>
-      </dialog>
-    ) : null;
-
-  return (
-    <>
-      {dialogNode && typeof document !== "undefined"
-        ? createPortal(dialogNode, document.body)
-        : null}
-    </>
+        <div className="text-sm leading-relaxed text-[var(--app-fg-muted)]">{descripcion}</div>
+        <div className="mt-2 flex justify-end gap-3">
+          <button
+            type="button"
+            disabled={loading}
+            onClick={onClose}
+            className="cursor-pointer rounded-lg border border-[var(--vz-border-strong)] px-4 py-2 text-[var(--app-fg)] transition-colors hover:bg-[var(--vz-surface)] disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            disabled={loading}
+            onClick={() => void onConfirm()}
+            className={`cursor-pointer rounded-lg px-4 py-2 font-semibold text-white transition-colors disabled:opacity-50 ${styles.button}`}
+          >
+            {loading ? "…" : confirmLabel}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body,
   );
 };
 

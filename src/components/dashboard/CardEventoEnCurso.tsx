@@ -49,7 +49,7 @@ export default function CardEventoEnCurso({
       onDoubleClick={() => onDoubleClick?.(evento)}
       className="relative flex cursor-pointer flex-col items-center justify-center gap-4 rounded-xl border border-[var(--vz-border-strong)] bg-white p-4 transition-colors hover:bg-[#fafafa]"
     >
-      <div className="absolute right-3 top-3 z-[1]" onDoubleClick={(e) => e.stopPropagation()}>
+      <div className="absolute right-2 top-2 z-[1] overflow-visible" onDoubleClick={(e) => e.stopPropagation()}>
         <IndicadorEstadoEvento iniciado={evento.estado_evento === "iniciado"} />
       </div>
       <CirculoProgreso porcentaje={porcentaje} size={100} stroke={9} />

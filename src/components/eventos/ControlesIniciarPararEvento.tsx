@@ -84,6 +84,9 @@ export default function ControlesIniciarPararEvento({
       setIniciarEsReanudacion(false);
     } catch (err) {
       console.error("❌ Error al cambiar el estado del evento:", err);
+      const mensaje =
+        err instanceof Error ? err.message : "No se pudo cambiar el estado del evento.";
+      alert(mensaje);
     } finally {
       setLoading(false);
     }
@@ -142,24 +145,35 @@ export default function ControlesIniciarPararEvento({
           confirmCambio === "finalizar" ? (
             <>
               El evento en{" "}
-              <span className="font-semibold text-white">{evento.LugarEvento || "este lugar"}</span> pasará a{" "}
-              <span className="font-semibold text-white">finalizado</span>. Confirma solo si la jornada ha concluido.
+              <span className="font-semibold text-[var(--vz-black)]">
+                {evento.LugarEvento || "este lugar"}
+              </span>{" "}
+              pasará a{" "}
+              <span className="font-semibold text-[var(--vz-black)]">finalizado</span>. Confirma solo
+              si la jornada ha concluido.
             </>
           ) : iniciarEsReanudacion ? (
             <>
               Este evento en{" "}
-              <span className="font-semibold text-white">{evento.LugarEvento || "este lugar"}</span> está{" "}
-              <span className="font-semibold text-white">finalizado</span>. Al confirmar pasará de nuevo a{" "}
-              <span className="font-semibold text-white">iniciado</span> para continuar usando el evento.
+              <span className="font-semibold text-[var(--vz-black)]">
+                {evento.LugarEvento || "este lugar"}
+              </span>{" "}
+              está <span className="font-semibold text-[var(--vz-black)]">finalizado</span>. Al
+              confirmar pasará de nuevo a{" "}
+              <span className="font-semibold text-[var(--vz-black)]">iniciado</span> para continuar
+              usando el evento.
             </>
           ) : (
             <>
-              Vas a marcar como <span className="font-semibold text-white">iniciado</span> el evento en{" "}
-              <span className="font-semibold text-white">{evento.LugarEvento || "este lugar"}</span>
+              Vas a marcar como{" "}
+              <span className="font-semibold text-[var(--vz-black)]">iniciado</span> el evento en{" "}
+              <span className="font-semibold text-[var(--vz-black)]">
+                {evento.LugarEvento || "este lugar"}
+              </span>
               {evento.fechaEvento ? (
                 <>
                   {" "}
-                  (<span className="text-white/90">{evento.fechaEvento}</span>)
+                  (<span className="text-[var(--app-fg)]">{evento.fechaEvento}</span>)
                 </>
               ) : null}
               .

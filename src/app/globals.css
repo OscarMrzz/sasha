@@ -914,15 +914,18 @@ body:has(dialog:modal) {
   /* Diámetro base controlado por CirculoOnda vía --ripple-diameter */
   --ripple-diameter: 50px;
   /* Espacio para ondas con scale(4) desde el centro */
+  width: calc(var(--ripple-diameter) * 4);
+  height: calc(var(--ripple-diameter) * 4);
   min-width: calc(var(--ripple-diameter) * 4);
   min-height: calc(var(--ripple-diameter) * 4);
+  pointer-events: none;
 }
 
 /* El círculo central sólido */
 .circleOnda {
   width: var(--ripple-diameter);
   height: var(--ripple-diameter);
-  background-color: rgb(0, 255, 81);
+  background-color: #22c55e;
   border-radius: 50%;
   z-index: 2;
 }
@@ -934,7 +937,7 @@ body:has(dialog:modal) {
   top: 50%;
   width: var(--ripple-diameter);
   height: var(--ripple-diameter);
-  background-color: rgb(0, 255, 81);
+  background-color: #22c55e;
   border-radius: 50%;
   z-index: 1;
   animation: ripple 3s infinite linear;

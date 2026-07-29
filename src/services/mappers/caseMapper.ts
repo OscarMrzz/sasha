@@ -7,12 +7,21 @@ const SNAKE_TO_CAMEL_EXCEPTIONS: Record<string, string> = {
   alias_banda: "AliasBanda",
   lugar_evento: "LugarEvento",
   detalles_rol: "DetallesRol",
+  // Campos de registro_eventos que el modelo TS mantiene en snake_case
+  estado_evento: "estado_evento",
+  tipo_evento: "tipo_evento",
+  dimensiones_cancha: "dimensiones_cancha",
+  tipo_lugar: "tipo_lugar",
 };
 
 const CAMEL_TO_SNAKE_EXCEPTIONS: Record<string, string> = {
   AliasBanda: "alias_banda",
   LugarEvento: "lugar_evento",
   DetallesRol: "detalles_rol",
+  estado_evento: "estado_evento",
+  tipo_evento: "tipo_evento",
+  dimensiones_cancha: "dimensiones_cancha",
+  tipo_lugar: "tipo_lugar",
 };
 
 export function camelToSnakeKey(key: string): string {

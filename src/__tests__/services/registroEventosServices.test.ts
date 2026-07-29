@@ -32,6 +32,7 @@ describe("RegistroEventossServices", () => {
     expect(rows).toHaveLength(1);
     expect(rows[0].idEvento).toBe("evt-1");
     expect(rows[0].LugarEvento).toBe("Estadio");
+    expect(rows[0].estado_evento).toBe("programado");
   });
 
   it("iniciarEvento actualiza estado_evento a iniciado", async () => {
@@ -47,7 +48,7 @@ describe("RegistroEventossServices", () => {
     const svc = assignPerfil(new RegistroEventossServices());
     const updated = await svc.iniciarEvento("evt-1");
 
-    expect((updated as unknown as { estadoEvento: string }).estadoEvento).toBe("iniciado");
+    expect(updated.estado_evento).toBe("iniciado");
     const handle = supabaseMock.fromCalls.at(-1)?.handle;
     expect(handle?.calls.some((c) => c.method === "update")).toBe(true);
   });
