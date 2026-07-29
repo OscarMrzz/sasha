@@ -2,7 +2,7 @@
 
 import SeccionActualizarDatosMiBanda from "@/components/controladores/SeccionActualizarDatosMiBanda";
 import SeccionActualizarDatosPorEvento from "@/components/controladores/SeccionActualizarDatosPorEvento";
-import Switches from "@/components/UI/toggle switches/Switches";
+import Switches from "@/components/ui/toggle switches/Switches";
 import { rolInterface } from "@/models";
 import RolesServices from "@/services/rolServices";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";

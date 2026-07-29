@@ -1,5 +1,5 @@
 "use client";
-import Switches from "@/components/UI/toggle switches/Switches";
+import Switches from "@/components/ui/toggle switches/Switches";
 import { rolInterface } from "@/models";
 import RolesServices from "@/services/rolServices";
 import { div } from "framer-motion/client";

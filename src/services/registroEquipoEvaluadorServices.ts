@@ -21,7 +21,7 @@ const RUBRICA_DUPLICADA_MSG = "Esta rúbrica ya está asignada a otro jurado en 
  * El modelo de equipo evaluador mantiene `id_foranea_rubrica` en snake_case;
  * el mapper global lo convierte a camelCase, así que lo restauramos aquí.
  */
-function mapEquipoEvaluadorRow<T extends Record<string, unknown>>(row: Record<string, unknown>): T {
+function mapEquipoEvaluadorRow<T>(row: Record<string, unknown>): T {
   const mapped = fromDb<Record<string, unknown>>(row);
   if ("idForaneaRubrica" in mapped) {
     mapped.id_foranea_rubrica = mapped.idForaneaRubrica ?? null;
@@ -30,9 +30,7 @@ function mapEquipoEvaluadorRow<T extends Record<string, unknown>>(row: Record<st
   return mapped as T;
 }
 
-function mapEquipoEvaluadorMany<T extends Record<string, unknown>>(
-  rows: Record<string, unknown>[],
-): T[] {
+function mapEquipoEvaluadorMany<T>(rows: Record<string, unknown>[]): T[] {
   return rows.map((row) => mapEquipoEvaluadorRow<T>(row));
 }
 
