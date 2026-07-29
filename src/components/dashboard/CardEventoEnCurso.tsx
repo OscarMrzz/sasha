@@ -62,6 +62,9 @@ export default function CardEventoEnCurso({
           <span className="font-semibold text-[#00b4d8]">{participaron}</span>
           <span className="text-[var(--app-fg-muted)]"> / </span>
           <span className="font-medium">{confirmadas}</span>
+          <span className="mt-0.5 block text-xs text-[var(--app-fg-muted)]">
+            participaron / confirmadas
+          </span>
         </p>
       </div>
       <div onDoubleClick={(e) => e.stopPropagation()} className="w-full shrink-0">

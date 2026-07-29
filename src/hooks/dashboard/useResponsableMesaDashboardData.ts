@@ -76,16 +76,17 @@ async function cargarPayloadEventosResponsableMesa(): Promise<DashboardEventosPa
   const entradas = await Promise.all(
     columnas.map(async (ev) => {
       try {
-        const [bandasEvaluadas, bandasConfirmadasList] = await Promise.all([
-          reg.getAsistenciaBandasEvento(ev.idEvento),
+        const [bandasConfirmadasList, confirmaciones] = await Promise.all([
           confirmacionSvc.getBandasConfirmadasParaEvento(ev.idEvento, todasBandasFederacion),
+          confirmacionSvc.getConfirmacionesConBandaParaEvento(ev.idEvento),
         ]);
         bandasMapAcumulado[ev.idEvento] = bandasConfirmadasList;
+        const participaron = confirmaciones.filter((c) => c.estado_cancha === "finalizado").length;
         return [
           ev.idEvento,
           {
             confirmadas: bandasConfirmadasList.length,
-            participaron: bandasEvaluadas.length,
+            participaron,
           },
         ] as const;
       } catch {
